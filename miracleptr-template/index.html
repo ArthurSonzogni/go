@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiraclePtr Container Enforcement Dashboard</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Highlight.js for Python syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <style>
+        /* Custom scrollbar for containers */
+        .custom-scroll::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        /* Details summary arrow animation */
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] summary svg {
+            transform: rotate(180deg);
+        }
+        .pie-tooltip {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.2s;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-slate-800 p-6 md:p-10 font-sans pb-24">
+
+    <!-- Swapped max-w-7xl for max-w-6xl to enforce a slightly tighter max-width on large screens -->
+    <div class="max-w-6xl mx-auto space-y-8">
+        
+        <!-- Header & Script Section -->
+        <div>
+            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">MiraclePtr Container Enforcement</h1>
+            <p class="text-slate-500 mt-2">Analysis of <code class="bg-gray-200 px-1 rounded text-sm text-pink-600">raw_ptr&lt;T&gt;</code> protection across standard and not-supported container members.</p>
+            
+            <!-- Script Collapsible Section -->
+            <details class="mt-6 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden group">
+                <summary class="px-6 py-4 font-semibold text-slate-800 cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors flex justify-between items-center select-none">
+                    <span class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                        View Data Collection Script (Python / Tree-sitter)
+                    </span>
+                    <svg class="w-5 h-5 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <div class="overflow-x-auto text-sm bg-[#0d1117] custom-scroll border-t border-slate-200">
+<pre class="!m-0 !p-6"><code class="language-python !bg-transparent"></code></pre>
+                </div>
+            </details>
+        </div>
+
+        <!-- Row 2: Readme & Volume Proportion -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- About this Dashboard (Readme) -->
+            <div class="lg:col-span-2 flex flex-col h-full">
+                <div class="p-6 bg-blue-50 text-blue-900 rounded-xl text-sm border border-blue-100 shadow-sm h-full flex flex-col justify-center">
+                    <h2 class="text-lg font-semibold text-blue-900 mb-4">About this Dashboard</h2>
+                    <div class="flex items-start mb-4">
+                        <svg class="w-5 h-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <p class="leading-relaxed"><strong>Context & Documentation:</strong> This dashboard tracks the effort to enforce <code class="bg-blue-100/50 px-1 rounded">raw_ptr&lt;T&gt;</code> usage in templated containers to mitigate Use-After-Free (UAF) vulnerabilities. Read the full <a href="https://docs.google.com/document/d/1JDMdJ9tOs5-AG4WtYHPqfKeBuSmWfFYiRHzSa-iikTI/edit?tab=t.0" target="_blank" class="text-blue-600 font-semibold hover:underline">MiraclePtr Container Enforcement Design Doc</a> for more details.</p>
+                    </div>
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <p class="leading-relaxed"><strong>Raw Data:</strong> The data behind these visualizations is available in this <a href="https://docs.google.com/spreadsheets/d/1AxizPP7FbWs-Ec7YtzNT2wIrINF8igk-YOpF6dUoaY4/edit?usp=sharing" target="_blank" class="text-blue-600 font-semibold hover:underline">Google Sheet</a>. Feel free to leave comments there.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proportion Donut Chart -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col relative lg:col-span-1">
+                <div class="px-6 py-4 border-b border-slate-200 bg-slate-50">
+                    <h2 class="text-lg font-semibold text-slate-800">Volume Proportion</h2>
+                </div>
+                <div class="p-6 flex-grow flex flex-col items-center justify-center relative">
+                    <div id="proportion-chart" class="relative flex justify-center w-full"></div>
+                    <div id="proportion-legend" class="mt-6 w-full flex flex-col justify-center items-center gap-2 text-sm">
+                        <!-- Legend Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 3: KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            
+            <!-- Supported Elements KPI -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col justify-center">
+                    <div class="flex justify-between items-center mb-1">
+                        <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Protected (Supported Elements)</h3>
+                        <span class="p-1.5 rounded-md bg-indigo-50 text-indigo-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </span>
+                    </div>
+                    <div class="mt-2 flex items-baseline gap-2">
+                        <span id="kpi-supported-pct" class="text-4xl font-extrabold text-indigo-600">0%</span>
+                        <span id="kpi-supported-text" class="text-sm font-medium text-slate-500">0 / 0 protected</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2.5 mt-5">
+                        <div id="kpi-supported-bar" class="bg-indigo-500 h-2.5 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Unsupported Elements KPI -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col justify-center">
+                    <div class="flex justify-between items-center mb-1">
+                        <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Protected (Unsupported Elements)</h3>
+                        <span class="p-1.5 rounded-md bg-slate-100 text-slate-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        </span>
+                    </div>
+                    <div class="mt-2 flex items-baseline gap-2">
+                        <span id="kpi-unsupported-pct" class="text-4xl font-extrabold text-slate-700">0%</span>
+                        <span id="kpi-unsupported-text" class="text-sm font-medium text-slate-500">0 / 0 protected</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2.5 mt-5">
+                        <div id="kpi-unsupported-bar" class="bg-slate-400 h-2.5 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Split Chart Section wrapper with tighter max-width for better block wrapping -->
+        <div class="pt-8 pb-12 max-w-5xl mx-auto w-full">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="px-6 py-5 border-b border-slate-200 bg-slate-50 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                    <div class="max-w-3xl">
+                        <h2 class="text-lg font-semibold text-slate-800">Protected Member Coverage by Type</h2>
+                        <p class="text-sm text-slate-500 mt-1 leading-relaxed">Each small block represents <strong>one single instance</strong> of the container type. Blocks naturally wrap to multiple lines to accommodate large volumes, allowing for visual estimation of absolute quantities. Dark segments represent protected <code class="bg-gray-200 px-1 rounded text-xs">raw_ptr</code> elements.</p>
+                    </div>
+                    <div class="flex items-center space-x-4 mt-4 sm:mt-0 text-xs font-medium text-slate-600 flex-shrink-0">
+                        <div class="flex items-center"><span class="w-3 h-3 rounded bg-blue-500 mr-1.5"></span>Production</div>
+                        <div class="flex items-center"><span class="w-3 h-3 rounded bg-orange-500 mr-1.5"></span>Test</div>
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto custom-scroll max-h-[800px]">
+                    <table class="w-full text-left text-sm whitespace-nowrap">
+                        <thead class="bg-white sticky top-0 z-10 shadow-sm border-b border-slate-200">
+                            <tr class="text-slate-500">
+                                <th scope="col" class="px-6 py-4 font-medium w-px whitespace-nowrap">Member Type</th>
+                                <th scope="col" class="px-6 py-4 font-medium w-1/2 min-w-[200px]">Production</th>
+                                <th scope="col" class="px-6 py-4 font-medium w-1/2 min-w-[200px]">Test</th>
+                            </tr>
+                        </thead>
+                        <tbody id="chart-body" class="divide-y divide-slate-100 bg-white">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tooltip for Pie Chart -->
+    <div id="pie-tooltip" class="pie-tooltip text-slate-700"></div>
+
+    <!-- Sticky Bottom Bar for Date Selection -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] z-50">
+        <div class="w-full max-w-6xl mx-auto">
+            <div id="date-scroll-container" class="p-4 flex justify-start items-center gap-4 transition-transform duration-300 overflow-x-auto custom-scroll">
+                <div class="flex-grow flex justify-center w-full min-w-max">
+                    <div id="date-buttons-container" class="flex items-center gap-2">
+                        <span class="text-sm text-slate-500">Loading dates...</span>
+                    </div>
+                    <div id="loading-indicator" class="hidden text-sm text-blue-600 flex items-center gap-2 font-medium ml-2">
+                        <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span class="hidden sm:inline">Loading data...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fetch the script content from "./script.py" and insert it into the
+        // code block in the collapsible section
+        fetch('./script.py').then(async response => {
+            if(response.ok) {
+                const scriptText = await response.text();
+                const codeBlock = document.querySelector('.language-python');
+                codeBlock.textContent = scriptText;
+                
+                // Trigger syntax highlighting
+                if (typeof hljs !== 'undefined') {
+                    hljs.highlightElement(codeBlock);
+                }
+            }
+        }).catch(err => console.warn("Failed to load script.py"));
+
+        // Derived Supported Containers based on Clang Rewriter Rules
+        const clangSupported = new Set([
+            "vector", "set", "unordered_set", "flat_set", "flat_hash_set", 
+            "deque", "circular_deque", "queue", "stack", "list",
+            "map", "flat_map"
+        ]);
+
+        // Main rendering function that processes CSV and updates the UI
+        function renderDashboard(csvString) {
+            // Parse Data
+            const data = d3.csvParse(csvString, d => {
+                return {
+                    memberType: d["Member Type"],
+                    prodRaw: +d["Production raw_ptr<T>"] || 0,
+                    prodTotal: +d["Production Total"] || 0,
+                    testRaw: +d["Test raw_ptr<T>"] || 0,
+                    testTotal: +d["Test Total"] || 0,
+                    grandTotal: +d["Grand Total"] || 0,
+                    grandRaw: (+d["Production raw_ptr<T>"] || 0) + (+d["Test raw_ptr<T>"] || 0),
+                    isSupported: clangSupported.has(d["Member Type"])
+                };
+            });
+
+            // 1. POPULATE THE GRID (Summary Matrix)
+            let gridStats = {
+                supported: { prodRaw: 0, prodTotal: 0, testRaw: 0, testTotal: 0, grandRaw: 0, grandTotal: 0 },
+                notSupported: { prodRaw: 0, prodTotal: 0, testRaw: 0, testTotal: 0, grandRaw: 0, grandTotal: 0 },
+                overall: { prodRaw: 0, prodTotal: 0, testRaw: 0, testTotal: 0, grandRaw: 0, grandTotal: 0 }
+            };
+
+            data.forEach(d => {
+                const cat = d.isSupported ? 'supported' : 'notSupported';
+                
+                gridStats[cat].prodRaw += d.prodRaw;
+                gridStats[cat].prodTotal += d.prodTotal;
+                gridStats[cat].testRaw += d.testRaw;
+                gridStats[cat].testTotal += d.testTotal;
+                gridStats[cat].grandRaw += d.grandRaw;
+                gridStats[cat].grandTotal += d.grandTotal;
+                
+                gridStats.overall.prodRaw += d.prodRaw;
+                gridStats.overall.prodTotal += d.prodTotal;
+                gridStats.overall.testRaw += d.testRaw;
+                gridStats.overall.testTotal += d.testTotal;
+                gridStats.overall.grandRaw += d.grandRaw;
+                gridStats.overall.grandTotal += d.grandTotal;
+            });
+
+            // 2. DRAW THE DONUT CHART PROPORTION (using D3 update pattern)
+            const width = 320, height = 320, margin = 10;
+            const radius = Math.min(width, height) / 2 - margin;
+            
+            const chartContainer = d3.select("#proportion-chart");
+            let svg = chartContainer.select("svg");
+
+            // Initialize SVG elements only if they don't exist
+            if (svg.empty()) {
+                svg = chartContainer
+                    .append("svg")
+                    .attr("viewBox", `0 0 ${width} ${height}`)
+                    .style("width", "100%")
+                    .style("max-width", "320px")
+                    .style("height", "auto")
+                    .append("g")
+                    .attr("transform", `translate(${width/2},${height/2})`);
+
+                svg.append("g").attr("class", "slices");
+                svg.append("g").attr("class", "labels");
+                
+                svg.append("text")
+                    .attr("class", "title-text")
+                    .attr("text-anchor", "middle")
+                    .attr("dy", "-0.3em")
+                    .style("font-size", "14px")
+                    .style("fill", "#64748b")
+                    .text("Total Volume");
+                
+                svg.append("text")
+                    .attr("class", "total-text")
+                    .attr("text-anchor", "middle")
+                    .attr("dy", "1.1em")
+                    .style("font-size", "28px")
+                    .style("font-weight", "bold")
+                    .style("fill", "#0f172a")
+                    .text("0");
+            } else {
+                svg = chartContainer.select("svg > g"); // Re-select the transformed inner group
+            }
+
+            const pieData = [
+                { name: "Supported by Clang Rewriter", value: gridStats.supported.grandTotal, color: "#6366f1" }, 
+                { name: "Not Supported", value: gridStats.notSupported.grandTotal, color: "#cbd5e1" } 
+            ];
+
+            const pie = d3.pie()
+                .value(d => d.value)
+                .sort(null);
+
+            const arc = d3.arc()
+                .innerRadius(radius * 0.55)
+                .outerRadius(radius);
+
+            if (gridStats.overall.grandTotal > 0) {
+                const tooltip = d3.select("#pie-tooltip");
+
+                // --- UPDATE ARCS ---
+                const slices = svg.select(".slices").selectAll("path")
+                    .data(pie(pieData), d => d.data.name);
+
+                const slicesEnter = slices.enter()
+                    .append("path")
+                    .attr("fill", d => d.data.color)
+                    .attr("stroke", "white")
+                    .style("stroke-width", "2px")
+                    .style("cursor", "pointer")
+                    .each(function(d) { this._current = d; }); // Store initial angles
+
+                slicesEnter.on("mouseover", function(event, d) {
+                        d3.select(this).style("opacity", 0.8);
+                        tooltip.style("opacity", 1);
+                    })
+                    .on("mousemove", function(event, d) {
+                        const percent = ((d.data.value / gridStats.overall.grandTotal) * 100).toFixed(1);
+                        tooltip.html(`
+                            <div class="font-bold text-slate-800">${d.data.name}</div>
+                            <div>Total Elements: <span class="font-semibold">${d.data.value}</span></div>
+                            <div class="text-slate-500">${percent}% of volume</div>
+                        `)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                    })
+                    .on("mouseout", function() {
+                        d3.select(this).style("opacity", 1);
+                        tooltip.style("opacity", 0);
+                    });
+
+                slicesEnter.merge(slices)
+                    .transition()
+                    .duration(800)
+                    .attrTween("d", function(d) {
+                        const interpolate = d3.interpolate(this._current || d, d);
+                        this._current = interpolate(1); // update current for next iteration
+                        return function(t) { return arc(interpolate(t)); };
+                    });
+
+                slices.exit().remove();
+
+                // --- UPDATE PIE LABELS ---
+                const labels = svg.select(".labels").selectAll("text")
+                    .data(pie(pieData), d => d.data.name);
+
+                const labelsEnter = labels.enter()
+                    .append("text")
+                    .attr("dy", "0.35em")
+                    .style("text-anchor", "middle")
+                    .style("font-size", "14px")
+                    .style("font-weight", "600")
+                    .style("pointer-events", "none")
+                    .style("fill", d => d.data.name.includes("Supported by Clang Rewriter") ? "white" : "#475569");
+
+                labelsEnter.merge(labels)
+                    .transition()
+                    .duration(800)
+                    .attr("transform", d => `translate(${arc.centroid(d)})`)
+                    .style("opacity", d => ((d.data.value / gridStats.overall.grandTotal) * 100) >= 4 ? 1 : 0)
+                    .text(d => { 
+                        const percent = ((d.data.value / gridStats.overall.grandTotal) * 100).toFixed(1);
+                        return percent >= 4 ? percent + "%" : ""; 
+                    });
+
+                labels.exit().remove();
+
+                // --- UPDATE CENTER TEXT SMOOTHLY ---
+                svg.select(".total-text")
+                    .transition()
+                    .duration(800)
+                    .tween("text", function() {
+                        const oldText = this.textContent.replace(/,/g, '');
+                        const oldVal = parseInt(oldText) || 0;
+                        const newVal = gridStats.overall.grandTotal;
+                        const i = d3.interpolateRound(oldVal, newVal);
+                        return function(t) {
+                            this.textContent = d3.format(",")(i(t));
+                        };
+                    });
+            }
+
+            // Legend Updates
+            const overallTotal = gridStats.overall.grandTotal || 1; // prevent div by zero
+            const supportedPercent = ((gridStats.supported.grandTotal / overallTotal) * 100).toFixed(1);
+            const notSupportedPercent = ((gridStats.notSupported.grandTotal / overallTotal) * 100).toFixed(1);
+            
+            document.getElementById('proportion-legend').innerHTML = `
+                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-indigo-500 mr-2"></span>Supported (${supportedPercent}%)</div>
+                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-slate-300 mr-2"></span>Not Supported (${notSupportedPercent}%)</div>
+            `;
+
+            // 2b. UPDATE KPI CARDS
+            const suppPct = gridStats.supported.grandTotal > 0 
+                ? ((gridStats.supported.grandRaw / gridStats.supported.grandTotal) * 100).toFixed(1) 
+                : "0.0";
+            document.getElementById("kpi-supported-pct").textContent = `${suppPct}%`;
+            document.getElementById("kpi-supported-text").textContent = `${gridStats.supported.grandRaw.toLocaleString()} / ${gridStats.supported.grandTotal.toLocaleString()} protected`;
+            document.getElementById("kpi-supported-bar").style.width = `${suppPct}%`;
+
+            const unsuppPct = gridStats.notSupported.grandTotal > 0 
+                ? ((gridStats.notSupported.grandRaw / gridStats.notSupported.grandTotal) * 100).toFixed(1) 
+                : "0.0";
+            document.getElementById("kpi-unsupported-pct").textContent = `${unsuppPct}%`;
+            document.getElementById("kpi-unsupported-text").textContent = `${gridStats.notSupported.grandRaw.toLocaleString()} / ${gridStats.notSupported.grandTotal.toLocaleString()} protected`;
+            document.getElementById("kpi-unsupported-bar").style.width = `${unsuppPct}%`;
+
+            // 3. POPULATE THE SPLIT CHART VISUALIZATION
+            const chartData = data
+                .filter(d => d.grandTotal > 0)
+                .sort((a, b) => b.grandTotal - a.grandTotal);
+
+            const generateUnitBlocks = (raw, total, colorDark, colorLight) => {
+                if (total === 0) return ``;
+                
+                let blocksHtml = '<div class="flex flex-wrap gap-[2px] w-full mb-2">';
+                for(let i=0; i<raw; i++) {
+                    blocksHtml += `<div class="w-[8px] h-[8px] ${colorDark} rounded-[1px] flex-shrink-0"></div>`;
+                }
+                const unprotected = total - raw;
+                for(let i=0; i<unprotected; i++) {
+                    blocksHtml += `<div class="w-[8px] h-[8px] ${colorLight} rounded-[1px] flex-shrink-0"></div>`;
+                }
+                blocksHtml += '</div>';
+
+                const percentage = ((raw / total) * 100).toFixed(1);
+
+                return `
+                    <div class="flex flex-col w-full">
+                        ${blocksHtml}
+                        <div class="text-[11px] leading-none text-slate-500 font-medium flex items-center justify-between pt-1 border-t border-slate-100/70">
+                            <div><span class="text-slate-700">${raw}</span> / ${total}</div>
+                            <div class="text-slate-400 ml-2 bg-white px-1.5 py-0.5 rounded shadow-sm border border-slate-100">${percentage}%</div>
+                        </div>
+                    </div>
+                `;
+            };
+
+            const chartBody = document.getElementById("chart-body");
+            let chartRowsHtml = '';
+
+            chartData.forEach(d => {
+                const isSupportedClass = d.isSupported ? '' : 'text-slate-500 italic';
+                const badge = d.isSupported ? '' : `<span class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded text-[10px] font-medium bg-white border border-slate-200 text-slate-600">Not Supported</span>`;
+                const rowBgClass = d.isSupported ? 'bg-white' : 'bg-slate-100';
+                
+                const prodDark = 'bg-blue-500';
+                const prodLight = 'bg-blue-200';
+                const testDark = 'bg-orange-500';
+                const testLight = 'bg-orange-200';
+                
+                chartRowsHtml += `
+                    <tr class="hover:bg-slate-50 transition-colors group ${rowBgClass}">
+                        <td class="px-6 py-4 border-r border-slate-100/50 align-top">
+                            <div class="font-medium text-slate-800 ${isSupportedClass} flex flex-wrap items-center gap-1.5">
+                                ${d.memberType} ${badge}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 border-r border-slate-100/50 align-top">
+                            ${generateUnitBlocks(d.prodRaw, d.prodTotal, prodDark, prodLight)}
+                        </td>
+                        <td class="px-6 py-4 align-top">
+                            ${generateUnitBlocks(d.testRaw, d.testTotal, testDark, testLight)}
+                        </td>
+                    </tr>
+                `;
+            });
+
+            chartBody.innerHTML = chartRowsHtml;
+        }
+
+        // --- FETCHING LOGIC ---
+        
+        async function fetchCsvData(url) {
+            const loading = document.getElementById('loading-indicator');
+            loading.classList.remove('hidden');
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const csvText = await response.text();
+                renderDashboard(csvText);
+            } catch (error) {
+                console.error(`Error loading CSV (${url}):`, error);
+                if (!url.includes('mock')) alert(`Failed to load data from ${url}. See console for details.`);
+            } finally {
+                loading.classList.add('hidden');
+            }
+        }
+
+        async function init() {
+            try {
+                const response = await fetch('./index.json');
+                if (!response.ok) throw new Error("index.json not found");
+                
+                const dateMapping = await response.json();
+                
+                let dates = [];
+                let fileMap = {};
+                
+                if (Array.isArray(dateMapping)) {
+                    dates = dateMapping.map(d => d.date);
+                    dateMapping.forEach(d => { fileMap[d.date] = d.file; });
+                } else {
+                    dates = Object.keys(dateMapping);
+                    fileMap = dateMapping;
+                }
+
+                // SORT DATES ASCENDING (oldest left, newest right)
+                dates.sort((a, b) => new Date(a) - new Date(b));
+                
+                const container = document.getElementById('date-buttons-container');
+                container.innerHTML = '';
+                
+                if (dates.length === 0) {
+                    container.innerHTML = '<span class="text-sm text-slate-500">No data available</span>';
+                    return;
+                }
+
+                let activeButton = null;
+
+                dates.forEach((date, index) => {
+                    const btn = document.createElement('button');
+                    btn.textContent = date;
+                    btn.value = fileMap[date];
+                    
+                    btn.className = "px-4 py-2 text-sm font-medium rounded-lg transition-colors border outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 whitespace-nowrap";
+                    
+                    // Default select the LAST button instead of the first
+                    if (index === dates.length - 1) {
+                        btn.classList.add("bg-blue-600", "text-white", "border-blue-600", "shadow-sm");
+                        activeButton = btn;
+                    } else {
+                        btn.classList.add("bg-white", "text-slate-700", "border-slate-300", "hover:bg-slate-50");
+                    }
+
+                    btn.addEventListener('click', () => {
+                        if (activeButton === btn) return; 
+                        
+                        if (activeButton) {
+                            activeButton.classList.remove("bg-blue-600", "text-white", "border-blue-600", "shadow-sm");
+                            activeButton.classList.add("bg-white", "text-slate-700", "border-slate-300", "hover:bg-slate-50");
+                        }
+                        
+                        btn.classList.remove("bg-white", "text-slate-700", "border-slate-300", "hover:bg-slate-50");
+                        btn.classList.add("bg-blue-600", "text-white", "border-blue-600", "shadow-sm");
+                        
+                        activeButton = btn;
+                        fetchCsvData(btn.value);
+                    });
+
+                    container.appendChild(btn);
+                });
+
+                // Load initial newest data
+                if (dates.length > 0) {
+                    fetchCsvData(fileMap[dates[dates.length - 1]]);
+
+                    // Scroll wrapper to right so default newest button is visible without swiping
+                    setTimeout(() => {
+                        const scrollContainer = document.getElementById('date-scroll-container');
+                        if (scrollContainer) {
+                            scrollContainer.scrollLeft = scrollContainer.scrollWidth;
+                        }
+                    }, 50);
+                }
+
+            } catch (error) {
+                console.warn("Could not load index.json. Using fallback mock data for demonstration.", error);
+                setupMockUI();
+            }
+        }
+
+        // --- FALLBACK LOGIC --- (For previewers lacking external files)
+        function setupMockUI() {
+            const container = document.getElementById('date-buttons-container');
+            container.innerHTML = '<button class="px-4 py-2 text-sm font-medium rounded-lg transition-colors border bg-blue-600 text-white border-blue-600 shadow-sm whitespace-nowrap cursor-default outline-none">Latest Built Data (Mock fallback)</button>';
+            
+            const mockCsvData = `Member Type,Production raw_ptr<T>,Production T*,Production Total,Test raw_ptr<T>,Test T*,Test Total,Grand Total\nAnyInvocable,0,3,3,0,0,0,3\nArenaSpsc,0,1,1,0,0,0,1\nAssociatedReceiverSet,0,1,1,0,0,0,1\nAutoReset,0,22,22,0,12,12,34\nBrowserInterfaceBrokerImpl,0,1,1,0,0,0,1\nCSimpleArray,0,2,2,0,0,0,2\nCSimpleMap,0,1,1,0,0,0,1\nChunkedVector,0,1,1,0,0,0,1\nComPtr,0,0,0,0,2,2,2\nCrossThreadFunction,0,2,2,0,0,0,2\nDenseMap,0,1,1,0,0,0,1\nHashMap,0,6,6,0,1,1,7\nHashSet,0,4,4,0,0,0,4\nHashingLRUCache,0,1,1,0,0,0,1\nHeapArray,0,1,1,0,0,0,1\nHeapVector,0,2,2,0,0,0,2\nIDMap,0,3,3,0,0,0,3\nInlinedVector,0,3,3,0,0,0,3\nLRUCache,1,0,1,0,0,0,1\nLinkedHashSet,0,2,2,0,0,0,2\nMatcher,0,0,0,0,1,1,1\nMember,0,28,28,0,0,0,28\nMockCallback,0,0,0,0,2,2,2\nMockFunction,0,0,0,0,6,6,6\nMockRepeatingCallback,0,0,0,0,2,2,2\nNSArray,0,24,24,0,1,1,25\nNSCache,0,4,4,0,0,0,4\nNSDictionary,0,8,8,0,0,0,8\nNSMutableArray,0,4,4,0,0,0,4\nNSMutableDictionary,0,4,4,0,0,0,4\nNSMutableSet,0,1,1,0,0,0,1\nNoCfiIcall,0,10,10,0,0,0,10\nNodeSetView,0,42,42,0,0,0,42\nOnceCallback,0,38,38,0,18,18,56\nOnceCallbackList,0,4,4,0,0,0,4\nOptional,0,1,1,0,0,0,1\nOwnedObjects,0,1,1,0,0,0,1\nRepeatingCallback,0,54,54,0,26,26,80\nRepeatingCallbackList,0,41,41,0,4,4,45\nSafeOptional,49,0,49,0,0,0,49\nScopedArCoreObject,0,7,7,0,0,0,7\nScopedCardboardObject,0,1,1,0,0,0,1\nSettingsTable,0,0,0,0,1,1,1\nSmallVector,0,1,1,0,0,0,1\nSpan,0,2,2,0,1,1,3\nStatusOr,0,18,18,0,0,0,18\nStrictMock,0,0,0,0,1,1,1\nStringMap,0,1,1,0,0,0,1\nTypeIfNeeded,0,1,1,0,0,0,1\nUniqueReceiverSet,0,2,2,0,0,0,2\nUntracedMember,0,1,1,0,0,0,1\nVec,0,3,3,0,0,0,3\nVector,0,17,17,0,2,2,19\nWeakPtr,0,0,0,1,0,1,1\nWeakPtrFactory,0,0,0,1,0,1,1\narray,0,9,9,2,10,12,21\natomic,0,66,66,0,1,1,67\nbtree_map,0,7,7,0,0,0,7\nbtree_set,0,3,3,0,0,0,3\ncircular_deque,1,4,5,0,2,2,7\nconditional_t,1,1,2,0,0,0,2\ndeque,1,2,3,0,0,0,3\nexpected,0,14,14,0,0,0,14\nflat_hash_map,6,41,47,1,6,7,54\nflat_hash_set,2,20,22,0,1,1,23\nflat_map,55,117,172,13,13,26,198\nflat_set,67,18,85,5,2,7,92\nfunction,0,20,20,0,7,7,27\ninitializer_list,0,0,0,0,2,2,2\nlist,17,7,24,27,32,59,83\nmap,99,276,375,45,91,136,511\nmultimap,1,1,2,0,0,0,2\nmultiset,1,1,2,0,0,0,2\noptional,6,30,36,1,21,22,58\npair,0,20,20,0,3,3,23\nqueue,6,1,7,4,3,7,14\nraw_ptr,4,14,18,6,6,12,30\nraw_ref,0,0,0,2,3,5,5\nraw_span,0,7,7,0,6,6,13\nset,88,57,145,26,6,32,177\nspan,0,71,71,0,1,1,72\nstack,0,0,0,3,2,5,5\ntuple,0,8,8,0,0,0,8\nunique_ptr,0,7,7,0,5,5,12\nunordered_map,16,39,55,4,5,9,64\nunordered_set,12,5,17,1,1,2,19\nvariant,7,17,24,0,3,3,27\nvector,233,617,850,175,174,349,1199`;
+
+            renderDashboard(mockCsvData);
+        }
+
+        // Execute init safely, regardless of whether DOMContentLoaded has already passed
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
