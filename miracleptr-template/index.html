@@ -223,14 +223,29 @@
 
         // Derived Supported Containers based on Clang Rewriter Rules
         const clangSupported = new Set([
-            "vector", "set", "unordered_set", "flat_set", "flat_hash_set", 
-            "deque", "circular_deque", "queue", "stack", "list",
-            "map", "flat_map", "unordered_map",
+            "std::circular_deque",
+            "std::deque",
+            "std::flat_hash_set",
+            "std::flat_map",
+            "std::flat_set",
+            "std::list",
+            "std::map",
+            "std::queue",
+            "std::set",
+            "std::stack",
+            "std::unordered_map",
+            "std::unordered_set",
+            "std::vector",
+            "base::flat_map",
+            "base::flat_set",
         ]);
         
         // Define which containers have partial support
         const clangPartialSupported = new Set([
-            "map", "flat_map", "unordered_map"
+            "base::flat_map",
+            "std::flat_map",
+            "std::map",
+            "std::unordered_map",
         ]);
 
         // Variable to hold our frozen sort order so items don't shift when dates change
