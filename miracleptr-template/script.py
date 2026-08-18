@@ -13,13 +13,25 @@ from tree_sitter import Language, Parser, Query, QueryCursor
 CPP_LANGUAGE = Language(tree_sitter_cpp.language())
 parser = Parser(CPP_LANGUAGE)
 
+# We must query BOTH field_declaration and standard declaration.
+# Chromium macros (like FRIEND_TEST_ALL_PREFIXES) frequently break the 
+# Tree-sitter parser, causing it to parse class fields as standard declarations.
 QUERY_STRING = """
-(field_declaration
-  type: [
-    (template_type) @tmpl
-    (qualified_identifier (template_type) @tmpl)
-  ]
-) @field
+[
+  (field_declaration
+    type: [
+      (template_type) @tmpl
+      (qualified_identifier (template_type) @tmpl)
+    ]
+  ) @field
+
+  (declaration
+    type: [
+      (template_type) @tmpl
+      (qualified_identifier (template_type) @tmpl)
+    ]
+  ) @field
+]
 """
 query = Query(CPP_LANGUAGE, QUERY_STRING)
 
@@ -57,21 +69,45 @@ def get_git_files():
         print(f"Error running git ls-files: {e}")
         return []
 
-def get_container_name(tmpl_node):
-    name_node = tmpl_node.child_by_field_name('name')
-    if not name_node:
+def get_container_name(node):
+    """
+    Extracts the container name from a field_declaration, declaration, or template_type node.
+    Handles std:: prefixes, and filters out iterators/nested types.
+    """
+    if node.type in ('field_declaration', 'declaration'):
+        type_node = node.child_by_field_name('type')
+        if not type_node:
+            return None
+        node = type_node
+        
+    text = node.text.decode('utf8').replace(' ', '').replace('\n', '')
+    
+    # Prevent False Positives on iterators (e.g. std::vector<T*>::iterator)
+    if '>::' in text:
         return None
         
-    if name_node.type == 'scoped_type_identifier':
-        final_name_node = name_node.child_by_field_name('name')
-        if final_name_node:
-            text = final_name_node.text.decode('utf8')
-        else:
-            text = name_node.text.decode('utf8').split('::')[-1]
-    else:
-        text = name_node.text.decode('utf8')
-    
-    return text.split('<')[0].strip()
+    return text.split('<')[0]
+
+def is_local_variable(node):
+    """Checks if a declaration is inside a method/function body."""
+    parent = node.parent
+    while parent:
+        # If we hit a block scope before a class scope, it's a local variable.
+        if parent.type == 'compound_statement':
+            # Check if this compound statement belongs to a function that's actually a class
+            # because of misparsing (e.g. class CONTENT_EXPORT MyClass { ... })
+            grandparent = parent.parent
+            if grandparent and grandparent.type == 'function_definition':
+                # Check for 'class' or 'struct' in the text of the grandparent's type
+                ret_type = grandparent.child_by_field_name('type')
+                if ret_type and (b'class' in ret_type.text or b'struct' in ret_type.text):
+                    return False
+            return True
+        # If we hit a class/struct first, it's a member field (even if parsed poorly).
+        if parent.type in ('class_specifier', 'struct_specifier', 'union_specifier'):
+            return False
+        parent = parent.parent
+    return False
 
 def is_raw_ptr_or_ref(node):
     text = node.text.decode('utf8').replace(' ', '').replace('\n', '')
@@ -150,29 +186,6 @@ def is_ignored_ptr_type(node):
         'charconst*const'
     )
 
-def get_access_level(field_node):
-    """Walks tree siblings backward to determine if field is public/private/protected."""
-    parent = field_node.parent
-    if not parent or parent.type != 'field_declaration_list':
-        return 'unknown'
-    
-    grandparent = parent.parent
-    current_access = 'private'
-    if grandparent:
-        if grandparent.type in ('struct_specifier', 'union_specifier'):
-            current_access = 'public'
-        elif grandparent.type == 'class_specifier':
-            current_access = 'private'
-    
-    for child in parent.children:
-        if child == field_node:
-            break
-        if child.type == 'access_specifier':
-            text = child.text.decode('utf8').replace(':', '').strip()
-            if text in ('public', 'private', 'protected'):
-                current_access = text
-                
-    return current_access
 
 def get_default_counts():
     return {'raw_ptr_or_ref': 0, 'raw_pointer': 0}
@@ -213,6 +226,10 @@ def process_file(file_path):
             field_node = field_nodes[0] if isinstance(field_nodes, list) else field_nodes
             tmpl_node = tmpl_nodes[0] if isinstance(tmpl_nodes, list) else tmpl_nodes
             
+            # Filter out variables declared inside function bodies
+            if field_node.type == 'declaration' and is_local_variable(field_node):
+                continue
+            
             if is_method_declaration(field_node):
                 continue
             
@@ -220,7 +237,8 @@ def process_file(file_path):
             if not args_node or args_node.type != 'template_argument_list':
                 continue
                 
-            container_name = get_container_name(tmpl_node)
+            # Use the robust extraction (handles scoped namespaces, blocks iterators)
+            container_name = get_container_name(field_node)
             if not container_name:
                 continue
                 
@@ -240,27 +258,29 @@ def process_file(file_path):
                     found_raw_pointer = True
             
             if found_raw_ptr_or_ref or found_raw_pointer:
+                # Count how many variables are declared on this line (e.g. std::vector<T*> a, b;)
+                comma_count = sum(1 for child in field_node.children if child.type == ',')
+                multiplier = comma_count + 1
+
                 # 1. Update aggregates
                 if found_raw_ptr_or_ref:
-                    target_counts[container_name]['raw_ptr_or_ref'] += 1
+                    target_counts[container_name]['raw_ptr_or_ref'] += multiplier
                 if found_raw_pointer:
-                    target_counts[container_name]['raw_pointer'] += 1
+                    target_counts[container_name]['raw_pointer'] += multiplier
                 
                 # 2. Record this specific instance
-                access_level = get_access_level(field_node)
                 type_node = field_node.child_by_field_name('type')
                 full_type = ' '.join(type_node.text.decode('utf8').split()) if type_node else ''
                 
-                local_instances.append({
-                    'file_path': file_path,
-                    'is_test': 'TRUE' if is_test_file else 'FALSE',
-                    'container_type': container_name,
-                    'protected_by_raw_ptr': 1 if found_raw_ptr_or_ref else 0,
-                    'protected_modifier': 1 if access_level == 'protected' else 0,
-                    'access_level': access_level,
-                    'line_number': field_node.start_point[0] + 1,
-                    'full_type': full_type
-                })
+                for _ in range(multiplier):
+                    local_instances.append({
+                        'file_path': file_path,
+                        'is_test': 'TRUE' if is_test_file else 'FALSE',
+                        'container_type': container_name,
+                        'protected_by_raw_ptr': 1 if found_raw_ptr_or_ref else 0,
+                        'line_number': field_node.start_point[0] + 1,
+                        'full_type': full_type
+                    })
 
     except Exception:
         pass
@@ -315,8 +335,7 @@ def main():
     instances_writer = csv.writer(instances_file)
     instances_writer.writerow([
         'File Path', 'Is Test File', 'Container Type', 
-        'Protected by raw_ptr (0/1)', 'Protected Modifier (0/1)', 
-        'C++ Access Level', 'Line Number', 'Full Type'
+        'Protected by raw_ptr (0/1)', 'Line Number', 'Full Type'
     ])
 
     # Use a ProcessPoolExecutor to max out CPU cores
@@ -341,8 +360,7 @@ def main():
             for inst in local_instances:
                 instances_writer.writerow([
                     inst['file_path'], inst['is_test'], inst['container_type'],
-                    inst['protected_by_raw_ptr'], inst['protected_modifier'],
-                    inst['access_level'], inst['line_number'], inst['full_type']
+                    inst['protected_by_raw_ptr'], inst['line_number'], inst['full_type']
                 ])
 
     instances_file.close()
@@ -351,3 +369,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
