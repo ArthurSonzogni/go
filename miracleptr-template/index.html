@@ -156,16 +156,20 @@
         <!-- Split Chart Section wrapper -->
         <div class="pb-12">
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-6 py-5 border-b border-slate-200 bg-slate-50 flex flex-col xl:flex-row justify-between items-start xl:items-center">
-                    <div class="max-w-3xl">
+                <div class="px-6 py-5 border-b border-slate-200 bg-slate-50 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
+                    <div class="max-w-2xl">
                         <h2 class="text-lg font-semibold text-slate-800">Protected Member Coverage by Type</h2>
                         <p class="text-sm text-slate-500 mt-1 leading-relaxed">Each small block represents <strong>one single instance</strong> of the container type. Dark segments represent protected <code class="bg-gray-200 px-1 rounded text-xs">raw_ptr</code> elements, while light segments are unprotected.</p>
                     </div>
-                    <div class="flex flex-wrap items-center gap-3 mt-4 xl:mt-0 text-xs font-medium text-slate-600 flex-shrink-0">
+                    <div class="flex flex-wrap items-center gap-3 text-xs font-medium text-slate-600 flex-shrink-0">
                         <div class="flex items-center"><span class="w-3 h-3 rounded bg-blue-500 mr-1.5"></span>Production (Protected)</div>
                         <div class="flex items-center"><span class="w-3 h-3 rounded bg-blue-200 mr-1.5"></span>Production (Unprotected)</div>
                         <div class="flex items-center"><span class="w-3 h-3 rounded bg-orange-500 mr-1.5"></span>Test (Protected)</div>
                         <div class="flex items-center"><span class="w-3 h-3 rounded bg-orange-200 mr-1.5"></span>Test (Unprotected)</div>
+                        <button id="open-explorer-btn" class="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-sm transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            Explore Instances
+                        </button>
                     </div>
                 </div>
                 
@@ -182,6 +186,93 @@
                             <!-- Populated by JS -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Instance Explorer Modal -->
+    <div id="instance-modal" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 sm:p-6 lg:p-8">
+        <div id="instance-modal-card" class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-5xl max-h-[85vh] flex flex-col overflow-hidden">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Chromium Instance Explorer</h3>
+                        <p id="instance-stats-text" class="text-xs text-slate-500">Loading instances...</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="reset-filters-btn" class="text-xs font-medium text-slate-500 hover:text-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors">
+                        Reset Filters
+                    </button>
+                    <button id="close-modal-btn" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-200 transition-colors" title="Close (Esc)">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters Bar -->
+            <div class="px-6 py-3 border-b border-slate-200 bg-white grid grid-cols-1 sm:grid-cols-12 gap-3 flex-shrink-0">
+                <!-- Search input -->
+                <div class="sm:col-span-5 relative">
+                    <input type="text" id="instance-search-input" placeholder="Search file, type or symbol..." class="w-full pl-9 pr-8 py-2 text-xs rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-slate-50 focus:bg-white transition-colors">
+                    <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <button id="clear-search-btn" class="hidden absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+
+                <!-- Container Type select -->
+                <div class="sm:col-span-3">
+                    <select id="instance-container-select" class="w-full py-2 px-3 text-xs rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-slate-50 focus:bg-white transition-colors">
+                        <option value="ALL">All Containers</option>
+                    </select>
+                </div>
+
+                <!-- Scope Filter (Prod/Test) -->
+                <div class="sm:col-span-2 flex rounded-lg border border-slate-200 p-0.5 bg-slate-50 text-xs">
+                    <button data-scope="ALL" class="scope-btn flex-1 py-1 text-center font-medium rounded-md bg-white text-slate-800 shadow-sm">All</button>
+                    <button data-scope="PROD" class="scope-btn flex-1 py-1 text-center font-medium rounded-md text-slate-500 hover:text-slate-800">Prod</button>
+                    <button data-scope="TEST" class="scope-btn flex-1 py-1 text-center font-medium rounded-md text-slate-500 hover:text-slate-800">Test</button>
+                </div>
+
+                <!-- Protection Filter (All / Protected / Unprotected) -->
+                <div class="sm:col-span-2 flex rounded-lg border border-slate-200 p-0.5 bg-slate-50 text-xs">
+                    <button data-prot="ALL" class="prot-btn flex-1 py-1 text-center font-medium rounded-md bg-white text-slate-800 shadow-sm">All</button>
+                    <button data-prot="UNPROTECTED" class="prot-btn flex-1 py-1 text-center font-medium rounded-md text-slate-500 hover:text-slate-800" title="Unprotected T*">T*</button>
+                    <button data-prot="PROTECTED" class="prot-btn flex-1 py-1 text-center font-medium rounded-md text-slate-500 hover:text-slate-800" title="Protected raw_ptr<T>">raw_ptr</button>
+                </div>
+            </div>
+
+            <!-- Table list -->
+            <div class="overflow-y-auto flex-grow custom-scroll p-6">
+                <div id="instance-table-container">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-50 text-slate-500 border-b border-slate-200 sticky top-0">
+                            <tr>
+                                <th class="px-4 py-2.5 font-semibold">Location</th>
+                                <th class="px-4 py-2.5 font-semibold">Container</th>
+                                <th class="px-4 py-2.5 font-semibold">Scope</th>
+                                <th class="px-4 py-2.5 font-semibold">Status</th>
+                                <th class="px-4 py-2.5 font-semibold">Full Declaration</th>
+                            </tr>
+                        </thead>
+                        <tbody id="instance-table-body" class="divide-y divide-slate-100">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="instance-empty-state" class="hidden py-12 text-center text-slate-500">
+                    <svg class="w-10 h-10 mx-auto text-slate-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <p class="font-medium text-sm">No instances match the current filters</p>
+                    <p class="text-xs text-slate-400 mt-1">Try clearing search or relaxing filters</p>
+                </div>
+                <div id="instance-load-more" class="hidden mt-4 text-center">
+                    <button id="load-more-btn" class="px-4 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer">Load more instances...</button>
                 </div>
             </div>
         </div>
@@ -533,16 +624,19 @@
                 const testLight = 'bg-orange-200';
                 
                 chartRowsHtml += `
-                    <tr class="hover:bg-slate-50 transition-colors group ${rowBgClass}">
+                    <tr class="hover:bg-slate-50/80 transition-colors group ${rowBgClass} cursor-pointer" onclick="openInstanceExplorer('${d.rawMemberType}')" title="Click to explore ${d.rawMemberType} instances">
                         <td class="px-6 py-4 border-r border-slate-100/50 align-top">
-                            <div class="font-medium text-slate-800 ${isSupportedClass} flex flex-wrap items-center gap-1.5">
-                                ${d.memberType} ${badge}
+                            <div class="font-medium text-slate-800 ${isSupportedClass} flex items-center justify-between gap-1.5">
+                                <div class="flex items-center flex-wrap gap-1.5">
+                                    <span class="group-hover:text-indigo-600 transition-colors">${d.memberType}</span> ${badge}
+                                </div>
+                                <svg class="w-3.5 h-3.5 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                             </div>
                         </td>
-                        <td class="px-6 py-4 border-r border-slate-100/50 align-top">
+                        <td class="px-6 py-4 border-r border-slate-100/50 align-top" onclick="event.stopPropagation(); openInstanceExplorer('${d.rawMemberType}', 'PROD')" title="Explore Production ${d.rawMemberType} instances">
                             ${generateUnitBlocks(d.prodRaw, d.prodTotal, prodDark, prodLight)}
                         </td>
-                        <td class="px-6 py-4 align-top">
+                        <td class="px-6 py-4 align-top" onclick="event.stopPropagation(); openInstanceExplorer('${d.rawMemberType}', 'TEST')" title="Explore Test ${d.rawMemberType} instances">
                             ${generateUnitBlocks(d.testRaw, d.testTotal, testDark, testLight)}
                         </td>
                     </tr>
@@ -690,9 +784,313 @@
                     }, 50);
                 }
 
+                // Initialize instance explorer events
+                setupExplorerEvents();
+
             } catch (error) {
                 console.warn("Could not load index.json. Using fallback mock data for demonstration.", error);
                 setupMockUI();
+            }
+        }
+
+        // ==========================================
+        // INSTANCE EXPLORER LOGIC
+        // ==========================================
+        let allInstances = null;
+        let filteredInstances = [];
+        let displayedCount = 50;
+        const PAGE_SIZE = 50;
+
+        let explorerState = {
+            search: '',
+            container: 'ALL',
+            scope: 'ALL',       // 'ALL', 'PROD', 'TEST'
+            protection: 'ALL',  // 'ALL', 'PROTECTED', 'UNPROTECTED'
+        };
+
+        async function loadInstancesData() {
+            if (allInstances !== null) return allInstances;
+            try {
+                const res = await fetch('./instances.csv');
+                if (!res.ok) throw new Error("instances.csv not found");
+                const text = await res.text();
+                allInstances = d3.csvParse(text, d => ({
+                    filePath: d["File Path"],
+                    isTest: d["Is Test File"] === "TRUE",
+                    containerType: d["Container Type"],
+                    isProtected: d["Protected by raw_ptr (0/1)"] === "1",
+                    lineNumber: d["Line Number"],
+                    fullType: d["Full Type"]
+                }));
+                populateContainerSelect();
+                return allInstances;
+            } catch (err) {
+                console.warn("Could not load instances.csv:", err);
+                allInstances = [];
+                return allInstances;
+            }
+        }
+
+        function populateContainerSelect() {
+            const select = document.getElementById('instance-container-select');
+            if (!select || !allInstances) return;
+
+            const counts = {};
+            allInstances.forEach(i => {
+                counts[i.containerType] = (counts[i.containerType] || 0) + 1;
+            });
+
+            const sortedTypes = Object.keys(counts).sort((a, b) => a.localeCompare(b));
+            let optionsHtml = `<option value="ALL">All Containers (${allInstances.length.toLocaleString()})</option>`;
+            sortedTypes.forEach(t => {
+                optionsHtml += `<option value="${t}">${t} (${counts[t]})</option>`;
+            });
+            select.innerHTML = optionsHtml;
+        }
+
+        function applyInstanceFilters() {
+            if (!allInstances) return;
+
+            const q = explorerState.search.trim().toLowerCase();
+            const container = explorerState.container;
+            const scope = explorerState.scope;
+            const prot = explorerState.protection;
+
+            filteredInstances = allInstances.filter(inst => {
+                if (container !== 'ALL' && inst.containerType !== container) {
+                    return false;
+                }
+                if (scope === 'PROD' && inst.isTest) return false;
+                if (scope === 'TEST' && !inst.isTest) return false;
+
+                if (prot === 'PROTECTED' && !inst.isProtected) return false;
+                if (prot === 'UNPROTECTED' && inst.isProtected) return false;
+
+                if (q) {
+                    const matchPath = inst.filePath.toLowerCase().includes(q);
+                    const matchType = inst.fullType.toLowerCase().includes(q);
+                    const matchContainer = inst.containerType.toLowerCase().includes(q);
+                    if (!matchPath && !matchType && !matchContainer) return false;
+                }
+
+                return true;
+            });
+
+            displayedCount = PAGE_SIZE;
+            renderInstanceTable();
+        }
+
+        function renderInstanceTable() {
+            const tbody = document.getElementById('instance-table-body');
+            const statsText = document.getElementById('instance-stats-text');
+            const emptyState = document.getElementById('instance-empty-state');
+            const tableContainer = document.getElementById('instance-table-container');
+            const loadMoreContainer = document.getElementById('instance-load-more');
+
+            if (!tbody) return;
+
+            const total = filteredInstances.length;
+            statsText.textContent = `Showing ${Math.min(displayedCount, total)} of ${total.toLocaleString()} instances (out of ${allInstances.length.toLocaleString()} total)`;
+
+            if (total === 0) {
+                tableContainer.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                loadMoreContainer.classList.add('hidden');
+                return;
+            }
+
+            tableContainer.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            const pageItems = filteredInstances.slice(0, displayedCount);
+            let rowsHtml = '';
+
+            pageItems.forEach(inst => {
+                const codeSearchUrl = `https://source.chromium.org/chromium/chromium/src/+/main:${inst.filePath};l=${inst.lineNumber}`;
+                
+                const scopeBadge = inst.isTest
+                    ? `<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-orange-50 text-orange-700 border border-orange-200">Test</span>`
+                    : `<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">Production</span>`;
+
+                const protBadge = inst.isProtected
+                    ? `<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">raw_ptr</span>`
+                    : `<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">Unprotected T*</span>`;
+
+                rowsHtml += `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-4 py-3 font-mono text-[11px] max-w-[280px] truncate" title="${inst.filePath}:${inst.lineNumber}">
+                            <a href="${codeSearchUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1">
+                                <span class="truncate">${inst.filePath}</span>:<span class="text-slate-400">${inst.lineNumber}</span>
+                                <svg class="w-3 h-3 flex-shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            </a>
+                        </td>
+                        <td class="px-4 py-3 font-medium text-slate-700 whitespace-nowrap">${inst.containerType}</td>
+                        <td class="px-4 py-3 whitespace-nowrap">${scopeBadge}</td>
+                        <td class="px-4 py-3 whitespace-nowrap">${protBadge}</td>
+                        <td class="px-4 py-3 font-mono text-[11px] text-slate-700 break-all max-w-[320px]">
+                            <code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-800">${escapeHtml(inst.fullType)}</code>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = rowsHtml;
+
+            if (displayedCount < total) {
+                loadMoreContainer.classList.remove('hidden');
+            } else {
+                loadMoreContainer.classList.add('hidden');
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        window.openInstanceExplorer = async function(container = 'ALL', scope = 'ALL', prot = 'ALL') {
+            await loadInstancesData();
+
+            explorerState.container = container;
+            explorerState.scope = scope;
+            explorerState.protection = prot;
+            explorerState.search = '';
+
+            const searchInput = document.getElementById('instance-search-input');
+            const clearBtn = document.getElementById('clear-search-btn');
+            const containerSelect = document.getElementById('instance-container-select');
+            
+            if (searchInput) searchInput.value = '';
+            if (clearBtn) clearBtn.classList.add('hidden');
+            if (containerSelect) containerSelect.value = container;
+
+            // Sync Scope Buttons
+            document.querySelectorAll('.scope-btn').forEach(btn => {
+                if (btn.dataset.scope === scope) {
+                    btn.classList.add('bg-white', 'text-slate-800', 'shadow-sm');
+                    btn.classList.remove('text-slate-500');
+                } else {
+                    btn.classList.remove('bg-white', 'text-slate-800', 'shadow-sm');
+                    btn.classList.add('text-slate-500');
+                }
+            });
+
+            // Sync Protection Buttons
+            document.querySelectorAll('.prot-btn').forEach(btn => {
+                if (btn.dataset.prot === prot) {
+                    btn.classList.add('bg-white', 'text-slate-800', 'shadow-sm');
+                    btn.classList.remove('text-slate-500');
+                } else {
+                    btn.classList.remove('bg-white', 'text-slate-800', 'shadow-sm');
+                    btn.classList.add('text-slate-500');
+                }
+            });
+
+            applyInstanceFilters();
+
+            const modal = document.getElementById('instance-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            }
+        };
+
+        function closeInstanceExplorer() {
+            const modal = document.getElementById('instance-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        }
+
+        function setupExplorerEvents() {
+            const modal = document.getElementById('instance-modal');
+            const closeBtn = document.getElementById('close-modal-btn');
+            const openBtn = document.getElementById('open-explorer-btn');
+            const resetBtn = document.getElementById('reset-filters-btn');
+            const searchInput = document.getElementById('instance-search-input');
+            const clearSearchBtn = document.getElementById('clear-search-btn');
+            const containerSelect = document.getElementById('instance-container-select');
+            const loadMoreBtn = document.getElementById('load-more-btn');
+
+            if (openBtn) openBtn.addEventListener('click', () => openInstanceExplorer());
+            if (closeBtn) closeBtn.addEventListener('click', closeInstanceExplorer);
+
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) closeInstanceExplorer();
+                });
+            }
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+                    closeInstanceExplorer();
+                }
+            });
+
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    explorerState.search = e.target.value;
+                    if (clearSearchBtn) {
+                        clearSearchBtn.classList.toggle('hidden', !e.target.value);
+                    }
+                    applyInstanceFilters();
+                });
+            }
+
+            if (clearSearchBtn) {
+                clearSearchBtn.addEventListener('click', () => {
+                    searchInput.value = '';
+                    explorerState.search = '';
+                    clearSearchBtn.classList.add('hidden');
+                    applyInstanceFilters();
+                });
+            }
+
+            if (containerSelect) {
+                containerSelect.addEventListener('change', (e) => {
+                    explorerState.container = e.target.value;
+                    applyInstanceFilters();
+                });
+            }
+
+            document.querySelectorAll('.scope-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    explorerState.scope = btn.dataset.scope;
+                    document.querySelectorAll('.scope-btn').forEach(b => {
+                        b.classList.toggle('bg-white', b === btn);
+                        b.classList.toggle('text-slate-800', b === btn);
+                        b.classList.toggle('shadow-sm', b === btn);
+                        b.classList.toggle('text-slate-500', b !== btn);
+                    });
+                    applyInstanceFilters();
+                });
+            });
+
+            document.querySelectorAll('.prot-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    explorerState.protection = btn.dataset.prot;
+                    document.querySelectorAll('.prot-btn').forEach(b => {
+                        b.classList.toggle('bg-white', b === btn);
+                        b.classList.toggle('text-slate-800', b === btn);
+                        b.classList.toggle('shadow-sm', b === btn);
+                        b.classList.toggle('text-slate-500', b !== btn);
+                    });
+                    applyInstanceFilters();
+                });
+            });
+
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    openInstanceExplorer('ALL', 'ALL', 'ALL');
+                });
+            }
+
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', () => {
+                    displayedCount += PAGE_SIZE;
+                    renderInstanceTable();
+                });
             }
         }
 
