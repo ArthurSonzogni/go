@@ -1,5 +1,10 @@
 [
     {
+        "date": "Today",
+        "full_date": "2026-08-25",
+        "file": "data_today.csv"
+    },
+    {
         "date": "2026-03",
         "file": "data_2026_03.csv"
     },

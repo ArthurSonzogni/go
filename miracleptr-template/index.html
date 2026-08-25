@@ -60,8 +60,13 @@
         
         <!-- Header & Script Section -->
         <div>
-            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">MiraclePtr Container Enforcement</h1>
-            <p class="text-slate-500 mt-2">Analysis of <code class="bg-gray-200 px-1 rounded text-sm text-pink-600">raw_ptr&lt;T&gt;</code> protection across standard and not-supported container members.</p>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-slate-900 tracking-tight">MiraclePtr Container Enforcement</h1>
+                    <p class="text-slate-500 mt-2">Analysis of <code class="bg-gray-200 px-1 rounded text-sm text-pink-600">raw_ptr&lt;T&gt;</code> protection across standard and not-supported container members.</p>
+                </div>
+                <div id="current-snapshot-badge" class="flex-shrink-0"></div>
+            </div>
             
             <!-- Script Collapsible Section -->
             <details class="mt-6 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden group">
@@ -565,48 +570,88 @@
             }
         }
 
+        function updateSnapshotBadge(entry) {
+            const badge = document.getElementById('current-snapshot-badge');
+            if (!badge) return;
+            if (entry.is_today) {
+                const dateStr = entry.full_date || '2026-08-25';
+                badge.innerHTML = `
+                    <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-sm" title="Live snapshot from ${dateStr}">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        Today (${dateStr})
+                    </span>
+                `;
+            } else {
+                badge.innerHTML = `
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200 shadow-sm">
+                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Snapshot: ${entry.date}
+                    </span>
+                `;
+            }
+        }
+
         async function init() {
             try {
                 const response = await fetch('./index.json');
                 if (!response.ok) throw new Error("index.json not found");
                 
-                const dateMapping = await response.json();
+                const rawMapping = await response.json();
+                let entries = [];
                 
-                let dates = [];
-                let fileMap = {};
-                
-                if (Array.isArray(dateMapping)) {
-                    dates = dateMapping.map(d => d.date);
-                    dateMapping.forEach(d => { fileMap[d.date] = d.file; });
+                if (Array.isArray(rawMapping)) {
+                    entries = rawMapping.map(d => ({
+                        date: d.date,
+                        file: d.file,
+                        full_date: d.full_date || d.fullDate || null,
+                        is_today: d.date === 'Today' || d.is_today || d.isToday || false
+                    }));
                 } else {
-                    dates = Object.keys(dateMapping);
-                    fileMap = dateMapping;
+                    entries = Object.keys(rawMapping).map(key => ({
+                        date: key,
+                        file: rawMapping[key],
+                        full_date: null,
+                        is_today: key === 'Today'
+                    }));
                 }
 
-                // SORT DATES ASCENDING (oldest left, newest right)
-                dates.sort((a, b) => new Date(a) - new Date(b));
+                // SORT ENTRIES ASCENDING: chronological order with Today as the last item
+                entries.sort((a, b) => {
+                    if (a.is_today) return 1;
+                    if (b.is_today) return -1;
+                    return new Date(a.date) - new Date(b.date);
+                });
                 
                 const container = document.getElementById('date-buttons-container');
                 container.innerHTML = '';
                 
-                if (dates.length === 0) {
+                if (entries.length === 0) {
                     container.innerHTML = '<span class="text-sm text-slate-500">No data available</span>';
                     return;
                 }
 
                 let activeButton = null;
 
-                dates.forEach((date, index) => {
+                entries.forEach((entry, index) => {
                     const btn = document.createElement('button');
-                    btn.textContent = date;
-                    btn.value = fileMap[date];
+                    if (entry.is_today) {
+                        btn.innerHTML = `<span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>Today</span>`;
+                        btn.title = `Today (${entry.full_date || '2026-08-25'})`;
+                    } else {
+                        btn.textContent = entry.date;
+                    }
+                    btn.value = entry.file;
                     
                     btn.className = "px-4 py-2 text-sm font-medium rounded-lg transition-colors border outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 whitespace-nowrap";
                     
-                    // Default select the LAST button instead of the first
-                    if (index === dates.length - 1) {
+                    // Default select the LAST button (Today)
+                    if (index === entries.length - 1) {
                         btn.classList.add("bg-blue-600", "text-white", "border-blue-600", "shadow-sm");
                         activeButton = btn;
+                        updateSnapshotBadge(entry);
                     } else {
                         btn.classList.add("bg-white", "text-slate-700", "border-slate-300", "hover:bg-slate-50");
                     }
@@ -623,15 +668,18 @@
                         btn.classList.add("bg-blue-600", "text-white", "border-blue-600", "shadow-sm");
                         
                         activeButton = btn;
+                        updateSnapshotBadge(entry);
                         fetchCsvData(btn.value);
                     });
 
                     container.appendChild(btn);
                 });
 
-                // Load initial newest data
-                if (dates.length > 0) {
-                    fetchCsvData(fileMap[dates[dates.length - 1]]);
+                // Load initial newest data (Today)
+                if (entries.length > 0) {
+                    const latestEntry = entries[entries.length - 1];
+                    updateSnapshotBadge(latestEntry);
+                    fetchCsvData(latestEntry.file);
 
                     // Scroll wrapper to right so default newest button is visible without swiping
                     setTimeout(() => {

@@ -53,7 +53,19 @@ def main():
                 print(f"[{date_label}] Reached end of history before {git_date_str}. Stopping.")
                 break
 
-            csv_filename = f"data_{date_label.replace('-', '_')}.csv"
+            if step == 0:
+                csv_filename = "data_today.csv"
+                entry = {
+                    "date": "Today",
+                    "full_date": target_date.strftime('%Y-%m-%d'),
+                    "file": csv_filename
+                }
+            else:
+                csv_filename = f"data_{date_label.replace('-', '_')}.csv"
+                entry = {
+                    "date": date_label,
+                    "file": csv_filename
+                }
             
             print(f"[{date_label}] Checking out commit {commit_hash[:8]}...")
             subprocess.run(['git', 'checkout', '-q', commit_hash], check=True)
@@ -68,10 +80,7 @@ def main():
                     shutil.move('template_member_counts.csv', csv_filename)
                     
                     # Append to our tracking array for the JSON output
-                    index_entries.append({
-                        "date": date_label,
-                        "file": csv_filename
-                    })
+                    index_entries.append(entry)
                 else:
                     print(f"[{date_label}] Warning: script.py did not produce 'template_member_counts.csv'")
             except subprocess.CalledProcessError as e:
