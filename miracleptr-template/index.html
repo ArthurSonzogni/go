@@ -6,210 +6,269 @@
     <title>MiraclePtr Container Enforcement Dashboard</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Highlight.js for Python syntax highlighting -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    
+
     <style>
-        /* Custom scrollbar for containers */
         .custom-scroll::-webkit-scrollbar {
             height: 8px;
             width: 8px;
         }
         .custom-scroll::-webkit-scrollbar-track {
-            background: #f1f1f1; 
+            background: #f1f5f9;
             border-radius: 4px;
         }
         .custom-scroll::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
+            background: #cbd5e1;
             border-radius: 4px;
         }
         .custom-scroll::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8; 
+            background: #94a3b8;
         }
-        /* Details summary arrow animation */
         details > summary {
             list-style: none;
         }
         details > summary::-webkit-details-marker {
             display: none;
         }
-        details[open] summary svg {
+        details[open] summary svg.chevron {
             transform: rotate(180deg);
         }
-        .pie-tooltip {
+        .chart-tooltip {
             position: absolute;
-            background: rgba(255, 255, 255, 0.95);
-            border: 1px solid #e2e8f0;
+            background: rgba(15, 23, 42, 0.94);
+            color: #f8fafc;
             padding: 8px 12px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 12px;
             pointer-events: none;
             opacity: 0;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            transition: opacity 0.2s;
-            z-index: 50;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+            transition: opacity 0.15s;
+            z-index: 60;
         }
     </style>
 </head>
-<body class="bg-gray-50 text-slate-800 p-6 md:p-10 font-sans pb-24">
+<body class="bg-slate-50 text-slate-800 p-5 md:p-10 font-sans pb-28">
 
-    <!-- Swapped max-w-7xl for max-w-6xl to enforce a slightly tighter max-width on large screens -->
-    <div class="max-w-6xl mx-auto space-y-8">
-        
-        <!-- Header & Script Section -->
-        <div>
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                    <h1 class="text-3xl font-bold text-slate-900 tracking-tight">MiraclePtr Container Enforcement</h1>
-                    <p class="text-slate-500 mt-2">Analysis of <code class="bg-gray-200 px-1 rounded text-sm text-pink-600">raw_ptr&lt;T&gt;</code> protection across standard and not-supported container members.</p>
-                </div>
-                <div id="current-snapshot-badge" class="flex-shrink-0"></div>
+    <div class="max-w-6xl mx-auto space-y-6">
+
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-900 tracking-tight">MiraclePtr Container Enforcement</h1>
+                <p class="text-slate-500 mt-1.5 text-sm">
+                    Tracking <code class="bg-slate-200/80 px-1.5 py-0.5 rounded text-xs font-mono text-pink-700">raw_ptr&lt;T&gt;</code>
+                    adoption in Chromium C++ container members against <code class="bg-slate-200/80 px-1.5 py-0.5 rounded text-xs font-mono text-indigo-700">check_raw_ptr_in_container</code>.
+                </p>
             </div>
-            
-            <!-- Script Collapsible Section -->
-            <details class="mt-6 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden group">
-                <summary class="px-6 py-4 font-semibold text-slate-800 cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors flex justify-between items-center select-none">
+            <div id="current-snapshot-badge" class="flex-shrink-0"></div>
+        </div>
+
+        <!-- Collapsible Panels: Plugin Config & Data Collection Script -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <summary class="px-5 py-3.5 text-sm font-semibold text-slate-800 cursor-pointer bg-slate-50/70 hover:bg-slate-100/80 transition-colors flex justify-between items-center select-none">
                     <span class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                        View Data Collection Script (Python / Tree-sitter)
+                        <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        Active Clang Plugin Policy
                     </span>
-                    <svg class="w-5 h-5 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <svg class="chevron w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </summary>
-                <div class="overflow-x-auto text-sm bg-[#0d1117] custom-scroll border-t border-slate-200">
-<pre class="!m-0 !p-6"><code class="language-python !bg-transparent"></code></pre>
+                <div class="p-5 border-t border-slate-200 text-xs space-y-4">
+                    <div>
+                        <div class="font-semibold text-slate-700 mb-1.5">Included Container Types</div>
+                        <div id="policy-included-list" class="flex flex-wrap gap-1.5"></div>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-slate-700 mb-1">Excluded Pointer Types <span class="font-normal text-slate-400">(non-PartitionAlloc handles)</span></div>
+                        <div id="policy-excluded-list" class="flex flex-wrap gap-1 mt-1.5"></div>
+                    </div>
+                </div>
+            </details>
+
+            <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <summary class="px-5 py-3.5 text-sm font-semibold text-slate-800 cursor-pointer bg-slate-50/70 hover:bg-slate-100/80 transition-colors flex justify-between items-center select-none">
+                    <span class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                        Data Collection Script (Python / Tree-sitter)
+                    </span>
+                    <svg class="chevron w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <div class="overflow-x-auto max-h-96 text-xs bg-[#0d1117] custom-scroll border-t border-slate-200">
+<pre class="!m-0 !p-4"><code class="language-python !bg-transparent"></code></pre>
                 </div>
             </details>
         </div>
 
-        <!-- Row 2: Readme & Volume Proportion -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            <!-- About this Dashboard (Readme) -->
-            <div class="lg:col-span-2 flex flex-col h-full">
-                <div class="p-6 bg-blue-50 text-blue-900 rounded-xl text-sm border border-blue-100 shadow-sm h-full flex flex-col justify-center">
-                    <h2 class="text-lg font-semibold text-blue-900 mb-4">About this Dashboard</h2>
-                    <div class="flex items-start mb-4">
-                        <svg class="w-5 h-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <p class="leading-relaxed"><strong>Context & Documentation:</strong> This dashboard tracks the effort to enforce <code class="bg-blue-100/50 px-1 rounded">raw_ptr&lt;T&gt;</code> usage in templated containers to mitigate Use-After-Free (UAF) vulnerabilities. Read the full <a href="https://docs.google.com/document/d/1JDMdJ9tOs5-AG4WtYHPqfKeBuSmWfFYiRHzSa-iikTI/edit?tab=t.0" target="_blank" class="text-blue-600 font-semibold hover:underline">MiraclePtr Container Enforcement Design Doc</a> for more details.</p>
-                    </div>
-                    <div class="flex items-start">
-                        <svg class="w-5 h-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        <p class="leading-relaxed"><strong>Raw Data:</strong> The data behind these visualizations is available in this <a href="https://docs.google.com/spreadsheets/d/1AxizPP7FbWs-Ec7YtzNT2wIrINF8igk-YOpF6dUoaY4/edit?usp=sharing" target="_blank" class="text-blue-600 font-semibold hover:underline">Google Sheet</a>. Feel free to leave comments there.</p>
-                    </div>
+        <!-- KPI Row (3 Cards) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <!-- Enforced Containers KPI -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Enforced Containers</h3>
+                    <span class="p-1.5 rounded-md bg-indigo-50 text-indigo-600">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </span>
+                </div>
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span id="kpi-enforced-pct" class="text-3xl font-extrabold text-indigo-600">0%</span>
+                    <span id="kpi-enforced-text" class="text-xs font-medium text-slate-500">0 / 0 protected</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2 mt-4">
+                    <div id="kpi-enforced-bar" class="bg-indigo-500 h-2 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
                 </div>
             </div>
 
-            <!-- Proportion Donut Chart -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col relative lg:col-span-1">
-                <div class="px-6 py-4 border-b border-slate-200 bg-slate-50">
-                    <h2 class="text-lg font-semibold text-slate-800">Volume Proportion</h2>
+            <!-- Remaining Unprotected in Enforced KPI (Clickable) -->
+            <button id="kpi-remaining-card" type="button" class="text-left bg-white rounded-xl shadow-sm border border-slate-200 hover:border-rose-300 hover:shadow-md transition-all p-5 flex flex-col justify-between cursor-pointer group">
+                <div class="flex justify-between items-center w-full">
+                    <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-rose-600 transition-colors">Unprotected in Enforced</h3>
+                    <span class="p-1.5 rounded-md bg-rose-50 text-rose-600">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    </span>
                 </div>
-                <div class="p-6 flex-grow flex flex-col items-center justify-center relative">
-                    <div id="proportion-chart" class="relative flex justify-center w-full"></div>
-                    <div id="proportion-legend" class="mt-6 w-full flex flex-col justify-center items-center gap-2 text-sm">
-                        <!-- Legend Populated by JS -->
-                    </div>
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span id="kpi-remaining-count" class="text-3xl font-extrabold text-rose-600">0</span>
+                    <span id="kpi-remaining-sub" class="text-xs font-medium text-slate-500">0 prod · 0 test</span>
+                </div>
+                <div class="mt-4 text-xs font-medium text-rose-600/90 flex items-center gap-1">
+                    Inspect remaining T* instances
+                    <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+            </button>
+
+            <!-- Not Enforced Containers KPI -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Not Enforced / Partial</h3>
+                    <span class="p-1.5 rounded-md bg-slate-100 text-slate-600">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </span>
+                </div>
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span id="kpi-unenforced-pct" class="text-3xl font-extrabold text-slate-700">0%</span>
+                    <span id="kpi-unenforced-text" class="text-xs font-medium text-slate-500">0 / 0 protected</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2 mt-4">
+                    <div id="kpi-unenforced-bar" class="bg-slate-400 h-2 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Row 3: KPI Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            
-            <!-- Supported Elements KPI -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col justify-center">
-                    <div class="flex justify-between items-center mb-1">
-                        <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Protected (Supported Elements)</h3>
-                        <span class="p-1.5 rounded-md bg-indigo-50 text-indigo-600">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </span>
+        <!-- Trend Chart + Volume Proportion Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Historical Trend Chart -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col lg:col-span-2">
+                <div class="px-5 py-3.5 border-b border-slate-200 bg-slate-50/70 flex flex-wrap justify-between items-center gap-2">
+                    <div>
+                        <h2 class="text-sm font-semibold text-slate-800">Protection Coverage Over Time</h2>
+                        <p class="text-xs text-slate-500">Click any point to jump to that snapshot (or use ← / → keys).</p>
                     </div>
-                    <div class="mt-2 flex items-baseline gap-2">
-                        <span id="kpi-supported-pct" class="text-4xl font-extrabold text-indigo-600">0%</span>
-                        <span id="kpi-supported-text" class="text-sm font-medium text-slate-500">0 / 0 protected</span>
-                    </div>
-                    <div class="w-full bg-slate-100 rounded-full h-2.5 mt-5">
-                        <div id="kpi-supported-bar" class="bg-indigo-500 h-2.5 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                    <div class="flex items-center gap-4 text-xs font-medium text-slate-600">
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-indigo-600 inline-block rounded"></span>Enforced</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-slate-400 inline-block rounded border-b border-dashed border-slate-500"></span>All Containers</span>
                     </div>
                 </div>
-
-                <!-- Unsupported Elements KPI -->
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col justify-center">
-                    <div class="flex justify-between items-center mb-1">
-                        <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Protected (Unsupported Elements)</h3>
-                        <span class="p-1.5 rounded-md bg-slate-100 text-slate-600">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                        </span>
-                    </div>
-                    <div class="mt-2 flex items-baseline gap-2">
-                        <span id="kpi-unsupported-pct" class="text-4xl font-extrabold text-slate-700">0%</span>
-                        <span id="kpi-unsupported-text" class="text-sm font-medium text-slate-500">0 / 0 protected</span>
-                    </div>
-                    <div class="w-full bg-slate-100 rounded-full h-2.5 mt-5">
-                        <div id="kpi-unsupported-bar" class="bg-slate-400 h-2.5 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
-                    </div>
+                <div class="p-4 flex-grow flex items-center justify-center min-h-[240px]">
+                    <div id="trend-chart" class="w-full"></div>
                 </div>
             </div>
 
-        <!-- Split Chart Section wrapper -->
-        <div class="pb-12">
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-6 py-5 border-b border-slate-200 bg-slate-50 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
-                    <div class="max-w-2xl">
-                        <h2 class="text-lg font-semibold text-slate-800">Protected Member Coverage by Type</h2>
-                        <p class="text-sm text-slate-500 mt-1 leading-relaxed">Each small block represents <strong>one single instance</strong> of the container type. Dark segments represent protected <code class="bg-gray-200 px-1 rounded text-xs">raw_ptr</code> elements, while light segments are unprotected.</p>
+            <!-- Volume Proportion Donut + Context Links -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col lg:col-span-1">
+                <div class="px-5 py-3.5 border-b border-slate-200 bg-slate-50/70 flex items-center justify-between">
+                    <h2 class="text-sm font-semibold text-slate-800">Volume Breakdown</h2>
+                    <div class="flex items-center gap-2 text-xs">
+                        <a href="https://docs.google.com/document/d/1JDMdJ9tOs5-AG4WtYHPqfKeBuSmWfFYiRHzSa-iikTI/edit?tab=t.0" target="_blank" class="text-indigo-600 hover:underline font-medium">Design Doc</a>
+                        <span class="text-slate-300">·</span>
+                        <a href="https://docs.google.com/spreadsheets/d/1AxizPP7FbWs-Ec7YtzNT2wIrINF8igk-YOpF6dUoaY4/edit?usp=sharing" target="_blank" class="text-indigo-600 hover:underline font-medium">Sheet</a>
+                    </div>
+                </div>
+                <div class="p-5 flex-grow flex flex-col items-center justify-center">
+                    <div id="proportion-chart" class="relative flex justify-center w-full"></div>
+                    <div id="proportion-legend" class="mt-3 w-full flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-xs"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Split Chart Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/70 space-y-3">
+                <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-3">
+                    <div>
+                        <h2 class="text-base font-semibold text-slate-800">Protected Member Coverage by Type</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Each block represents <strong>1 instance</strong>. Dark = <code class="bg-slate-200/80 px-1 rounded">raw_ptr</code>, light = unprotected <code class="bg-slate-200/80 px-1 rounded">T*</code>. Click a row or unprotected count to inspect in Chromium Code Search.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3 text-xs font-medium text-slate-600 flex-shrink-0">
-                        <div class="flex items-center"><span class="w-3 h-3 rounded bg-blue-500 mr-1.5"></span>Production (Protected)</div>
-                        <div class="flex items-center"><span class="w-3 h-3 rounded bg-blue-200 mr-1.5"></span>Production (Unprotected)</div>
-                        <div class="flex items-center"><span class="w-3 h-3 rounded bg-orange-500 mr-1.5"></span>Test (Protected)</div>
-                        <div class="flex items-center"><span class="w-3 h-3 rounded bg-orange-200 mr-1.5"></span>Test (Unprotected)</div>
-                        <button id="open-explorer-btn" class="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-sm transition-colors cursor-pointer">
+                        <div class="flex items-center"><span class="w-2.5 h-2.5 rounded-sm bg-blue-500 mr-1.5"></span>Prod Protected</div>
+                        <div class="flex items-center"><span class="w-2.5 h-2.5 rounded-sm bg-blue-200 mr-1.5"></span>Prod T*</div>
+                        <div class="flex items-center"><span class="w-2.5 h-2.5 rounded-sm bg-orange-500 mr-1.5"></span>Test Protected</div>
+                        <div class="flex items-center"><span class="w-2.5 h-2.5 rounded-sm bg-orange-200 mr-1.5"></span>Test T*</div>
+                        <button id="open-explorer-btn" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-sm transition-colors cursor-pointer">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                             Explore Instances
                         </button>
                     </div>
                 </div>
-                
-                <div class="overflow-x-auto custom-scroll max-h-[800px]">
-                    <table class="w-full text-left text-sm whitespace-nowrap">
-                        <thead class="bg-white sticky top-0 z-10 shadow-sm border-b border-slate-200">
-                            <tr class="text-slate-500">
-                                <th scope="col" class="px-6 py-4 font-medium w-px whitespace-nowrap">Member Type</th>
-                                <th scope="col" class="px-6 py-4 font-medium w-1/2 min-w-[200px]">Production</th>
-                                <th scope="col" class="px-6 py-4 font-medium w-1/2 min-w-[200px]">Test</th>
-                            </tr>
-                        </thead>
-                        <tbody id="chart-body" class="divide-y divide-slate-100 bg-white">
-                            <!-- Populated by JS -->
-                        </tbody>
-                    </table>
+
+                <!-- Table Filters -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-1">
+                    <div class="flex flex-wrap items-center gap-1.5 text-xs">
+                        <button data-filter="ALL" class="table-filter-btn px-3 py-1.5 rounded-lg font-medium bg-indigo-600 text-white shadow-sm cursor-pointer">All</button>
+                        <button data-filter="ENFORCED" class="table-filter-btn px-3 py-1.5 rounded-lg font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 cursor-pointer">Enforced</button>
+                        <button data-filter="PARTIAL" class="table-filter-btn px-3 py-1.5 rounded-lg font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 cursor-pointer">Partial</button>
+                        <button data-filter="UNENFORCED" class="table-filter-btn px-3 py-1.5 rounded-lg font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 cursor-pointer">Not Enforced</button>
+                        <button data-filter="HAS_UNPROTECTED" class="table-filter-btn px-3 py-1.5 rounded-lg font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 cursor-pointer">Has Unprotected T*</button>
+                    </div>
+                    <div class="relative w-full sm:w-56">
+                        <input id="table-search-input" type="text" placeholder="Filter container type..." class="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-200 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
                 </div>
+            </div>
+
+            <div class="overflow-x-auto custom-scroll max-h-[800px]">
+                <table class="w-full text-left text-sm whitespace-nowrap">
+                    <thead class="bg-white sticky top-0 z-10 shadow-sm border-b border-slate-200">
+                        <tr class="text-slate-500 text-xs uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-3.5 font-semibold w-px whitespace-nowrap">Member Type</th>
+                            <th scope="col" class="px-6 py-3.5 font-semibold w-1/2 min-w-[200px]">Production</th>
+                            <th scope="col" class="px-6 py-3.5 font-semibold w-1/2 min-w-[200px]">Test</th>
+                        </tr>
+                    </thead>
+                    <tbody id="chart-body" class="divide-y divide-slate-100 bg-white">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-    
+
     <!-- Instance Explorer Modal -->
     <div id="instance-modal" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 sm:p-6 lg:p-8">
         <div id="instance-modal-card" class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-5xl max-h-[85vh] flex flex-col overflow-hidden">
-            <!-- Modal Header -->
             <div class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between flex-shrink-0">
                 <div class="flex items-center gap-3">
                     <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                     </div>
                     <div>
-                        <h3 class="text-lg font-bold text-slate-900">Chromium Instance Explorer</h3>
+                        <h3 class="text-base font-bold text-slate-900">Chromium Instance Explorer <span class="text-xs font-normal text-slate-400">(Today snapshot)</span></h3>
                         <p id="instance-stats-text" class="text-xs text-slate-500">Loading instances...</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button id="reset-filters-btn" class="text-xs font-medium text-slate-500 hover:text-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors">
-                        Reset Filters
+                    <label class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white cursor-pointer select-none">
+                        <input id="instance-enforced-only" type="checkbox" class="rounded text-indigo-600 focus:ring-indigo-500">
+                        Enforced only
+                    </label>
+                    <button id="reset-filters-btn" class="text-xs font-medium text-slate-500 hover:text-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors cursor-pointer">
+                        Reset
                     </button>
-                    <button id="close-modal-btn" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-200 transition-colors" title="Close (Esc)">
+                    <button id="close-modal-btn" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-200 transition-colors cursor-pointer" title="Close (Esc)">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
@@ -217,34 +276,30 @@
 
             <!-- Filters Bar -->
             <div class="px-6 py-3 border-b border-slate-200 bg-white grid grid-cols-1 sm:grid-cols-12 gap-3 flex-shrink-0">
-                <!-- Search input -->
                 <div class="sm:col-span-5 relative">
                     <input type="text" id="instance-search-input" placeholder="Search file, type or symbol..." class="w-full pl-9 pr-8 py-2 text-xs rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-slate-50 focus:bg-white transition-colors">
                     <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    <button id="clear-search-btn" class="hidden absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600">
+                    <button id="clear-search-btn" class="hidden absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600 cursor-pointer">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
 
-                <!-- Container Type select -->
                 <div class="sm:col-span-3">
                     <select id="instance-container-select" class="w-full py-2 px-3 text-xs rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-slate-50 focus:bg-white transition-colors">
                         <option value="ALL">All Containers</option>
                     </select>
                 </div>
 
-                <!-- Scope Filter (Prod/Test) -->
                 <div class="sm:col-span-2 flex rounded-lg border border-slate-200 p-0.5 bg-slate-50 text-xs">
-                    <button data-scope="ALL" class="scope-btn flex-1 py-1 text-center font-medium rounded-md bg-white text-slate-800 shadow-sm">All</button>
-                    <button data-scope="PROD" class="scope-btn flex-1 py-1 text-center font-medium rounded-md text-slate-500 hover:text-slate-800">Prod</button>
-                    <button data-scope="TEST" class="scope-btn flex-1 py-1 text-center font-medium rounded-md text-slate-500 hover:text-slate-800">Test</button>
+                    <button data-scope="ALL" class="scope-btn flex-1 py-1 text-center font-medium rounded-md bg-white text-slate-800 shadow-sm cursor-pointer">All</button>
+                    <button data-scope="PROD" class="scope-btn flex-1 py-1 text-center font-medium rounded-md text-slate-500 hover:text-slate-800 cursor-pointer">Prod</button>
+                    <button data-scope="TEST" class="scope-btn flex-1 py-1 text-center font-medium rounded-md text-slate-500 hover:text-slate-800 cursor-pointer">Test</button>
                 </div>
 
-                <!-- Protection Filter (All / Protected / Unprotected) -->
                 <div class="sm:col-span-2 flex rounded-lg border border-slate-200 p-0.5 bg-slate-50 text-xs">
-                    <button data-prot="ALL" class="prot-btn flex-1 py-1 text-center font-medium rounded-md bg-white text-slate-800 shadow-sm">All</button>
-                    <button data-prot="UNPROTECTED" class="prot-btn flex-1 py-1 text-center font-medium rounded-md text-slate-500 hover:text-slate-800" title="Unprotected T*">T*</button>
-                    <button data-prot="PROTECTED" class="prot-btn flex-1 py-1 text-center font-medium rounded-md text-slate-500 hover:text-slate-800" title="Protected raw_ptr<T>">raw_ptr</button>
+                    <button data-prot="ALL" class="prot-btn flex-1 py-1 text-center font-medium rounded-md bg-white text-slate-800 shadow-sm cursor-pointer">All</button>
+                    <button data-prot="UNPROTECTED" class="prot-btn flex-1 py-1 text-center font-medium rounded-md text-slate-500 hover:text-slate-800 cursor-pointer" title="Unprotected T*">T*</button>
+                    <button data-prot="PROTECTED" class="prot-btn flex-1 py-1 text-center font-medium rounded-md text-slate-500 hover:text-slate-800 cursor-pointer" title="Protected raw_ptr<T>">raw_ptr</button>
                 </div>
             </div>
 
@@ -261,13 +316,10 @@
                                 <th class="px-4 py-2.5 font-semibold">Full Declaration</th>
                             </tr>
                         </thead>
-                        <tbody id="instance-table-body" class="divide-y divide-slate-100">
-                            <!-- Populated by JS -->
-                        </tbody>
+                        <tbody id="instance-table-body" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
                 <div id="instance-empty-state" class="hidden py-12 text-center text-slate-500">
-                    <svg class="w-10 h-10 mx-auto text-slate-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <p class="font-medium text-sm">No instances match the current filters</p>
                     <p class="text-xs text-slate-400 mt-1">Try clearing search or relaxing filters</p>
                 </div>
@@ -277,24 +329,23 @@
             </div>
         </div>
     </div>
-    
-    <!-- Tooltip for Pie Chart -->
-    <div id="pie-tooltip" class="pie-tooltip text-slate-700"></div>
+
+    <!-- Shared Floating Tooltip -->
+    <div id="chart-tooltip" class="chart-tooltip"></div>
 
     <!-- Sticky Bottom Bar for Date Selection -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] z-50">
+    <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur border-t border-slate-200 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] z-40">
         <div class="w-full max-w-6xl mx-auto">
-            <div id="date-scroll-container" class="p-4 flex justify-start items-center gap-4 transition-transform duration-300 overflow-x-auto custom-scroll">
+            <div id="date-scroll-container" class="px-4 py-3 flex justify-start items-center gap-3 overflow-x-auto custom-scroll">
                 <div class="flex-grow flex justify-center w-full min-w-max">
                     <div id="date-buttons-container" class="flex items-center gap-2">
                         <span class="text-sm text-slate-500">Loading dates...</span>
                     </div>
-                    <div id="loading-indicator" class="hidden text-sm text-blue-600 flex items-center gap-2 font-medium ml-2">
-                        <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <div id="loading-indicator" class="hidden text-sm text-indigo-600 flex items-center gap-2 font-medium ml-3">
+                        <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        <span class="hidden sm:inline">Loading data...</span>
                     </div>
                 </div>
             </div>
@@ -302,366 +353,523 @@
     </div>
 
     <script>
-        // Fetch the script content from "./script.py" and insert it into the
-        // code block in the collapsible section
+        // ==========================================
+        // CHROMIUM PLUGIN POLICY (check_raw_ptr_in_container)
+        // ==========================================
+        const POLICY_INCLUDED_TYPES = [
+            "std::vector",
+            "std::set",
+            "std::unordered_set",
+            "std::list",
+            "std::deque",
+            "std::queue",
+            "std::stack",
+            "std::tuple",
+            "std::variant",
+            "base::internal::flat_tree",
+        ];
+
+        const POLICY_EXCLUDED_POINTER_TYPES = [
+            "EVT_HANDLE", "HANDLE", "HBITMAP", "HBRUSH", "HDC", "HDESK",
+            "HDEVINFO", "HDEVNOTIFY", "HFONT", "HGLRC", "HICON", "HINSTANCE",
+            "HINTERNET", "HKEY", "HKL", "HMENU", "HMODULE", "HMONITOR",
+            "HPEN", "HPOWERNOTIFY", "HRGN", "HWINEVENTHOOK", "HWINSTA",
+            "HWND", "LSA_HANDLE",
+            "VkDescriptorSet", "VkDeviceMemory", "VkFramebuffer",
+            "VkImage", "VkImageView", "VkSemaphore",
+            "FPDF_PAGEOBJECT", "id",
+        ];
+
+        // Containers directly enforced by check_raw_ptr_in_container
+        // (base::flat_set inherits base::internal::flat_tree; base::queue/stack alias std::queue/stack)
+        const clangEnforced = new Set([
+            "std::vector",
+            "std::set",
+            "std::unordered_set",
+            "std::list",
+            "std::deque",
+            "std::queue",
+            "std::stack",
+            "std::tuple",
+            "std::variant",
+            "base::flat_set",
+            "base::queue",
+            "base::stack",
+            "base::internal::flat_tree",
+        ]);
+
+        // Partially enforced: inherits base::internal::flat_tree, but stores std::pair<K, V>
+        const clangPartial = new Set([
+            "base::flat_map",
+            "flat_map",
+        ]);
+
+        function getSupportStatus(memberType) {
+            if (clangEnforced.has(memberType)) return 'ENFORCED';
+            if (clangPartial.has(memberType)) return 'PARTIAL';
+            return 'UNENFORCED';
+        }
+
+        // Populate Policy Disclosure Panel
+        (function renderPolicyBadges() {
+            const incEl = document.getElementById('policy-included-list');
+            const excEl = document.getElementById('policy-excluded-list');
+            if (incEl) {
+                incEl.innerHTML = POLICY_INCLUDED_TYPES.map(t =>
+                    `<code class="px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200 font-mono text-[11px]">${t}</code>`
+                ).join('');
+            }
+            if (excEl) {
+                excEl.innerHTML = POLICY_EXCLUDED_POINTER_TYPES.map(t =>
+                    `<code class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 font-mono text-[10px]">${t}</code>`
+                ).join('');
+            }
+        })();
+
+        // Load script.py into code viewer
         fetch('./script.py').then(async response => {
-            if(response.ok) {
+            if (response.ok) {
                 const scriptText = await response.text();
                 const codeBlock = document.querySelector('.language-python');
                 codeBlock.textContent = scriptText;
-                
-                // Trigger syntax highlighting
-                if (typeof hljs !== 'undefined') {
-                    hljs.highlightElement(codeBlock);
-                }
+                if (typeof hljs !== 'undefined') hljs.highlightElement(codeBlock);
             }
-        }).catch(err => console.warn("Failed to load script.py"));
+        }).catch(() => {});
 
-        // Derived Supported Containers based on Clang Rewriter Rules
-        const clangSupported = new Set([
-            "std::circular_deque",
-            "std::deque",
-            "std::flat_hash_set",
-            "std::flat_map",
-            "std::flat_set",
-            "std::list",
-            "std::map",
-            "std::queue",
-            "std::set",
-            "std::stack",
-            "std::unordered_map",
-            "std::unordered_set",
-            "std::vector",
-            "base::flat_map",
-            "base::flat_set",
-        ]);
-        
-        // Define which containers have partial support
-        const clangPartialSupported = new Set([
-            "base::flat_map",
-            "std::flat_map",
-            "std::map",
-            "std::unordered_map",
-        ]);
-
-        // Variable to hold our frozen sort order so items don't shift when dates change
+        // ==========================================
+        // DASHBOARD STATE
+        // ==========================================
+        let snapshotEntries = [];
+        let activeSnapshotIndex = -1;
+        let csvCache = new Map();
+        let currentParsedData = [];
         let frozenSortOrder = null;
+        let tableFilter = 'ALL';
+        let tableSearch = '';
+        let trendPoints = [];
 
-        // Main rendering function that processes CSV and updates the UI
-        function renderDashboard(csvString) {
-            // Parse Data
-            const data = d3.csvParse(csvString, d => {
+        function parseCsv(csvString) {
+            return d3.csvParse(csvString, d => {
+                const rawName = d["Member Type"];
+                const prodRaw = +d["Production raw_ptr<T>"] || 0;
+                const prodTotal = +d["Production Total"] || 0;
+                const testRaw = +d["Test raw_ptr<T>"] || 0;
+                const testTotal = +d["Test Total"] || 0;
+                const grandTotal = +d["Grand Total"] || 0;
+                const grandRaw = prodRaw + testRaw;
                 return {
-                    rawMemberType: d["Member Type"],
-                    memberType: d["Member Type"] + "<T*>",
-                    prodRaw: +d["Production raw_ptr<T>"] || 0,
-                    prodTotal: +d["Production Total"] || 0,
-                    testRaw: +d["Test raw_ptr<T>"] || 0,
-                    testTotal: +d["Test Total"] || 0,
-                    grandTotal: +d["Grand Total"] || 0,
-                    grandRaw: (+d["Production raw_ptr<T>"] || 0) + (+d["Test raw_ptr<T>"] || 0),
-                    isSupported: clangSupported.has(d["Member Type"])
+                    rawMemberType: rawName,
+                    memberType: rawName + "<T*>",
+                    prodRaw,
+                    prodUnprotected: prodTotal - prodRaw,
+                    prodTotal,
+                    testRaw,
+                    testUnprotected: testTotal - testRaw,
+                    testTotal,
+                    grandTotal,
+                    grandRaw,
+                    grandUnprotected: grandTotal - grandRaw,
+                    status: getSupportStatus(rawName),
                 };
             });
+        }
 
-            // 1. POPULATE THE GRID (Summary Matrix)
-            let gridStats = {
-                supported: { prodRaw: 0, prodTotal: 0, testRaw: 0, testTotal: 0, grandRaw: 0, grandTotal: 0 },
-                notSupported: { prodRaw: 0, prodTotal: 0, testRaw: 0, testTotal: 0, grandRaw: 0, grandTotal: 0 },
-                overall: { prodRaw: 0, prodTotal: 0, testRaw: 0, testTotal: 0, grandRaw: 0, grandTotal: 0 }
-            };
-
+        function computeStats(data) {
+            const empty = () => ({ prodRaw: 0, prodTotal: 0, testRaw: 0, testTotal: 0, grandRaw: 0, grandTotal: 0 });
+            const stats = { enforced: empty(), partial: empty(), unenforced: empty(), overall: empty() };
             data.forEach(d => {
-                const cat = d.isSupported ? 'supported' : 'notSupported';
-                
-                gridStats[cat].prodRaw += d.prodRaw;
-                gridStats[cat].prodTotal += d.prodTotal;
-                gridStats[cat].testRaw += d.testRaw;
-                gridStats[cat].testTotal += d.testTotal;
-                gridStats[cat].grandRaw += d.grandRaw;
-                gridStats[cat].grandTotal += d.grandTotal;
-                
-                gridStats.overall.prodRaw += d.prodRaw;
-                gridStats.overall.prodTotal += d.prodTotal;
-                gridStats.overall.testRaw += d.testRaw;
-                gridStats.overall.testTotal += d.testTotal;
-                gridStats.overall.grandRaw += d.grandRaw;
-                gridStats.overall.grandTotal += d.grandTotal;
+                const bucket = d.status === 'ENFORCED' ? stats.enforced : (d.status === 'PARTIAL' ? stats.partial : stats.unenforced);
+                [bucket, stats.overall].forEach(b => {
+                    b.prodRaw += d.prodRaw;
+                    b.prodTotal += d.prodTotal;
+                    b.testRaw += d.testRaw;
+                    b.testTotal += d.testTotal;
+                    b.grandRaw += d.grandRaw;
+                    b.grandTotal += d.grandTotal;
+                });
             });
+            return stats;
+        }
 
-            // 2. DRAW THE DONUT CHART PROPORTION (using D3 update pattern)
-            const width = 320, height = 320, margin = 10;
+        function renderDashboard(csvString) {
+            const data = parseCsv(csvString);
+            currentParsedData = data;
+            const stats = computeStats(data);
+
+            // 1. Update KPI Cards
+            const enfPct = stats.enforced.grandTotal > 0
+                ? ((stats.enforced.grandRaw / stats.enforced.grandTotal) * 100).toFixed(1) : "0.0";
+            document.getElementById("kpi-enforced-pct").textContent = `${enfPct}%`;
+            document.getElementById("kpi-enforced-text").textContent =
+                `${stats.enforced.grandRaw.toLocaleString()} / ${stats.enforced.grandTotal.toLocaleString()} protected`;
+            document.getElementById("kpi-enforced-bar").style.width = `${enfPct}%`;
+
+            const remProd = stats.enforced.prodTotal - stats.enforced.prodRaw;
+            const remTest = stats.enforced.testTotal - stats.enforced.testRaw;
+            document.getElementById("kpi-remaining-count").textContent = (remProd + remTest).toLocaleString();
+            document.getElementById("kpi-remaining-sub").textContent = `${remProd} prod · ${remTest} test`;
+
+            const nonEnfRaw = stats.partial.grandRaw + stats.unenforced.grandRaw;
+            const nonEnfTotal = stats.partial.grandTotal + stats.unenforced.grandTotal;
+            const nonEnfPct = nonEnfTotal > 0 ? ((nonEnfRaw / nonEnfTotal) * 100).toFixed(1) : "0.0";
+            document.getElementById("kpi-unenforced-pct").textContent = `${nonEnfPct}%`;
+            document.getElementById("kpi-unenforced-text").textContent =
+                `${nonEnfRaw.toLocaleString()} / ${nonEnfTotal.toLocaleString()} protected`;
+            document.getElementById("kpi-unenforced-bar").style.width = `${nonEnfPct}%`;
+
+            // 2. Render Donut Chart
+            renderDonutChart(stats);
+
+            // 3. Freeze sort order on first load & render table
+            if (!frozenSortOrder) {
+                const sorted = data.filter(d => d.grandTotal > 0).sort((a, b) => b.grandTotal - a.grandTotal);
+                frozenSortOrder = sorted.map(d => d.memberType);
+            }
+            renderCoverageTable();
+        }
+
+        function renderDonutChart(stats) {
+            const width = 230, height = 230, margin = 8;
             const radius = Math.min(width, height) / 2 - margin;
-            
+
             const chartContainer = d3.select("#proportion-chart");
             let svg = chartContainer.select("svg");
 
-            // Initialize SVG elements only if they don't exist
             if (svg.empty()) {
                 svg = chartContainer
                     .append("svg")
                     .attr("viewBox", `0 0 ${width} ${height}`)
                     .style("width", "100%")
-                    .style("max-width", "320px")
+                    .style("max-width", "210px")
                     .style("height", "auto")
                     .append("g")
-                    .attr("transform", `translate(${width/2},${height/2})`);
+                    .attr("transform", `translate(${width / 2},${height / 2})`);
 
                 svg.append("g").attr("class", "slices");
                 svg.append("g").attr("class", "labels");
-                
                 svg.append("text")
-                    .attr("class", "title-text")
                     .attr("text-anchor", "middle")
-                    .attr("dy", "-0.3em")
-                    .style("font-size", "14px")
+                    .attr("dy", "-0.4em")
+                    .style("font-size", "11px")
                     .style("fill", "#64748b")
-                    .text("Total Volume");
-                
+                    .text("Total Members");
                 svg.append("text")
                     .attr("class", "total-text")
                     .attr("text-anchor", "middle")
-                    .attr("dy", "1.1em")
-                    .style("font-size", "28px")
-                    .style("font-weight", "bold")
+                    .attr("dy", "0.95em")
+                    .style("font-size", "22px")
+                    .style("font-weight", "700")
                     .style("fill", "#0f172a")
                     .text("0");
             } else {
-                svg = chartContainer.select("svg > g"); // Re-select the transformed inner group
+                svg = chartContainer.select("svg > g");
             }
 
             const pieData = [
-                { name: "Supported by Clang Rewriter", value: gridStats.supported.grandTotal, color: "#6366f1" }, 
-                { name: "Not Supported", value: gridStats.notSupported.grandTotal, color: "#cbd5e1" } 
+                { name: "Enforced", value: stats.enforced.grandTotal, color: "#6366f1" },
+                { name: "Partial (flat_map)", value: stats.partial.grandTotal, color: "#f59e0b" },
+                { name: "Not Enforced", value: stats.unenforced.grandTotal, color: "#cbd5e1" },
             ];
 
-            const pie = d3.pie()
-                .value(d => d.value)
-                .sort(null);
+            const pie = d3.pie().value(d => d.value).sort(null);
+            const arc = d3.arc().innerRadius(radius * 0.58).outerRadius(radius);
+            const tooltip = d3.select("#chart-tooltip");
+            const total = stats.overall.grandTotal || 1;
 
-            const arc = d3.arc()
-                .innerRadius(radius * 0.55)
-                .outerRadius(radius);
+            const slices = svg.select(".slices").selectAll("path").data(pie(pieData), d => d.data.name);
+            const slicesEnter = slices.enter()
+                .append("path")
+                .attr("fill", d => d.data.color)
+                .attr("stroke", "white")
+                .style("stroke-width", "2px")
+                .style("cursor", "pointer")
+                .each(function(d) { this._current = d; });
 
-            if (gridStats.overall.grandTotal > 0) {
-                const tooltip = d3.select("#pie-tooltip");
-
-                // --- UPDATE ARCS ---
-                const slices = svg.select(".slices").selectAll("path")
-                    .data(pie(pieData), d => d.data.name);
-
-                const slicesEnter = slices.enter()
-                    .append("path")
-                    .attr("fill", d => d.data.color)
-                    .attr("stroke", "white")
-                    .style("stroke-width", "2px")
-                    .style("cursor", "pointer")
-                    .each(function(d) { this._current = d; }); // Store initial angles
-
-                slicesEnter.on("mouseover", function(event, d) {
-                        d3.select(this).style("opacity", 0.8);
-                        tooltip.style("opacity", 1);
-                    })
-                    .on("mousemove", function(event, d) {
-                        const percent = ((d.data.value / gridStats.overall.grandTotal) * 100).toFixed(1);
-                        tooltip.html(`
-                            <div class="font-bold text-slate-800">${d.data.name}</div>
-                            <div>Total Elements: <span class="font-semibold">${d.data.value}</span></div>
-                            <div class="text-slate-500">${percent}% of volume</div>
-                        `)
-                        .style("left", (event.pageX + 10) + "px")
+            slicesEnter
+                .on("mouseover", function() { d3.select(this).style("opacity", 0.82); tooltip.style("opacity", 1); })
+                .on("mousemove", function(event, d) {
+                    const pct = ((d.data.value / total) * 100).toFixed(1);
+                    tooltip.html(`<div class="font-semibold">${d.data.name}</div><div>${d.data.value.toLocaleString()} members (${pct}%)</div>`)
+                        .style("left", (event.pageX + 12) + "px")
                         .style("top", (event.pageY - 28) + "px");
-                    })
-                    .on("mouseout", function() {
-                        d3.select(this).style("opacity", 1);
-                        tooltip.style("opacity", 0);
-                    });
+                })
+                .on("mouseout", function() { d3.select(this).style("opacity", 1); tooltip.style("opacity", 0); });
 
-                slicesEnter.merge(slices)
-                    .transition()
-                    .duration(800)
-                    .attrTween("d", function(d) {
-                        const interpolate = d3.interpolate(this._current || d, d);
-                        this._current = interpolate(1); // update current for next iteration
-                        return function(t) { return arc(interpolate(t)); };
-                    });
-
-                slices.exit().remove();
-
-                // --- UPDATE PIE LABELS ---
-                const labels = svg.select(".labels").selectAll("text")
-                    .data(pie(pieData), d => d.data.name);
-
-                const labelsEnter = labels.enter()
-                    .append("text")
-                    .attr("dy", "0.35em")
-                    .style("text-anchor", "middle")
-                    .style("font-size", "14px")
-                    .style("font-weight", "600")
-                    .style("pointer-events", "none")
-                    .style("fill", d => d.data.name.includes("Supported by Clang Rewriter") ? "white" : "#475569");
-
-                labelsEnter.merge(labels)
-                    .transition()
-                    .duration(800)
-                    .attr("transform", d => `translate(${arc.centroid(d)})`)
-                    .style("opacity", d => ((d.data.value / gridStats.overall.grandTotal) * 100) >= 4 ? 1 : 0)
-                    .text(d => { 
-                        const percent = ((d.data.value / gridStats.overall.grandTotal) * 100).toFixed(1);
-                        return percent >= 4 ? percent + "%" : ""; 
-                    });
-
-                labels.exit().remove();
-
-                // --- UPDATE CENTER TEXT SMOOTHLY ---
-                svg.select(".total-text")
-                    .transition()
-                    .duration(800)
-                    .tween("text", function() {
-                        const oldText = this.textContent.replace(/,/g, '');
-                        const oldVal = parseInt(oldText) || 0;
-                        const newVal = gridStats.overall.grandTotal;
-                        const i = d3.interpolateRound(oldVal, newVal);
-                        return function(t) {
-                            this.textContent = d3.format(",")(i(t));
-                        };
-                    });
-            }
-
-            // Legend Updates
-            const overallTotal = gridStats.overall.grandTotal || 1; // prevent div by zero
-            const supportedPercent = ((gridStats.supported.grandTotal / overallTotal) * 100).toFixed(1);
-            const notSupportedPercent = ((gridStats.notSupported.grandTotal / overallTotal) * 100).toFixed(1);
-            
-            document.getElementById('proportion-legend').innerHTML = `
-                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-indigo-500 mr-2"></span>Supported (${supportedPercent}%)</div>
-                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-slate-300 mr-2"></span>Not Supported (${notSupportedPercent}%)</div>
-            `;
-
-            // 2b. UPDATE KPI CARDS
-            const suppPct = gridStats.supported.grandTotal > 0 
-                ? ((gridStats.supported.grandRaw / gridStats.supported.grandTotal) * 100).toFixed(1) 
-                : "0.0";
-            document.getElementById("kpi-supported-pct").textContent = `${suppPct}%`;
-            document.getElementById("kpi-supported-text").textContent = `${gridStats.supported.grandRaw.toLocaleString()} / ${gridStats.supported.grandTotal.toLocaleString()} protected`;
-            document.getElementById("kpi-supported-bar").style.width = `${suppPct}%`;
-
-            const unsuppPct = gridStats.notSupported.grandTotal > 0 
-                ? ((gridStats.notSupported.grandRaw / gridStats.notSupported.grandTotal) * 100).toFixed(1) 
-                : "0.0";
-            document.getElementById("kpi-unsupported-pct").textContent = `${unsuppPct}%`;
-            document.getElementById("kpi-unsupported-text").textContent = `${gridStats.notSupported.grandRaw.toLocaleString()} / ${gridStats.notSupported.grandTotal.toLocaleString()} protected`;
-            document.getElementById("kpi-unsupported-bar").style.width = `${unsuppPct}%`;
-
-            // 3. POPULATE THE SPLIT CHART VISUALIZATION
-            let chartData = data.filter(d => d.grandTotal > 0);
-
-            // Establish or utilize frozen sort order
-            if (!frozenSortOrder) {
-                // First load: Sort by grandTotal descending and freeze the array of memberTypes
-                chartData.sort((a, b) => b.grandTotal - a.grandTotal);
-                frozenSortOrder = chartData.map(d => d.memberType);
-            } else {
-                // Subsequent loads: Match the initial index order so elements don't jump around
-                chartData.sort((a, b) => {
-                    let indexA = frozenSortOrder.indexOf(a.memberType);
-                    let indexB = frozenSortOrder.indexOf(b.memberType);
-                    
-                    if (indexA === -1) indexA = 999999; // Unknown item fallback to bottom
-                    if (indexB === -1) indexB = 999999;
-                    
-                    if (indexA === indexB) return b.grandTotal - a.grandTotal;
-                    
-                    return indexA - indexB;
+            slicesEnter.merge(slices)
+                .transition().duration(600)
+                .attrTween("d", function(d) {
+                    const interp = d3.interpolate(this._current || d, d);
+                    this._current = interp(1);
+                    return t => arc(interp(t));
                 });
+            slices.exit().remove();
+
+            svg.select(".total-text")
+                .transition().duration(600)
+                .tween("text", function() {
+                    const oldVal = parseInt(this.textContent.replace(/,/g, '')) || 0;
+                    const interp = d3.interpolateRound(oldVal, stats.overall.grandTotal);
+                    return function(t) { this.textContent = d3.format(",")(interp(t)); };
+                });
+
+            document.getElementById('proportion-legend').innerHTML = pieData.map(p => {
+                const pct = ((p.value / total) * 100).toFixed(1);
+                return `<span class="flex items-center gap-1.5 text-slate-600"><span class="w-2.5 h-2.5 rounded-full" style="background:${p.color}"></span>${p.name} (${pct}%)</span>`;
+            }).join('');
+        }
+
+        function renderTrendChart() {
+            const container = d3.select("#trend-chart");
+            container.selectAll("*").remove();
+            if (trendPoints.length < 2) return;
+
+            const width = 620, height = 220;
+            const margin = { top: 16, right: 20, bottom: 34, left: 42 };
+            const innerW = width - margin.left - margin.right;
+            const innerH = height - margin.top - margin.bottom;
+
+            const svg = container.append("svg")
+                .attr("viewBox", `0 0 ${width} ${height}`)
+                .style("width", "100%")
+                .style("height", "auto");
+
+            const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+            const x = d3.scalePoint()
+                .domain(trendPoints.map(d => d.label))
+                .range([0, innerW])
+                .padding(0.15);
+
+            const y = d3.scaleLinear().domain([0, 100]).range([innerH, 0]);
+
+            // Grid lines
+            g.append("g")
+                .selectAll("line")
+                .data([0, 25, 50, 75, 100])
+                .enter()
+                .append("line")
+                .attr("x1", 0).attr("x2", innerW)
+                .attr("y1", d => y(d)).attr("y2", d => y(d))
+                .attr("stroke", "#e2e8f0")
+                .attr("stroke-dasharray", d => d === 0 ? "none" : "3,3");
+
+            // Y Axis
+            g.append("g")
+                .call(d3.axisLeft(y).tickValues([0, 25, 50, 75, 100]).tickFormat(d => `${d}%`).tickSize(0))
+                .call(ax => ax.select(".domain").remove())
+                .selectAll("text")
+                .style("font-size", "10px")
+                .style("fill", "#64748b");
+
+            // X Axis (show every 2nd label + Today so labels never collide)
+            const tickLabels = trendPoints
+                .filter((d, i) => i % 2 === 0 || i === trendPoints.length - 1)
+                .map(d => d.label);
+
+            g.append("g")
+                .attr("transform", `translate(0,${innerH})`)
+                .call(d3.axisBottom(x).tickValues(tickLabels).tickSize(0))
+                .call(ax => ax.select(".domain").remove())
+                .selectAll("text")
+                .attr("dy", "1.1em")
+                .style("font-size", "10px")
+                .style("fill", "#64748b");
+
+            // Area under Enforced line
+            const area = d3.area()
+                .x(d => x(d.label))
+                .y0(innerH)
+                .y1(d => y(d.enforcedPct))
+                .curve(d3.curveMonotoneX);
+
+            const defs = svg.append("defs");
+            const grad = defs.append("linearGradient").attr("id", "enforced-grad").attr("x1", 0).attr("y1", 0).attr("x2", 0).attr("y2", 1);
+            grad.append("stop").attr("offset", "0%").attr("stop-color", "#6366f1").attr("stop-opacity", 0.22);
+            grad.append("stop").attr("offset", "100%").attr("stop-color", "#6366f1").attr("stop-opacity", 0.01);
+
+            g.append("path").datum(trendPoints).attr("fill", "url(#enforced-grad)").attr("d", area);
+
+            // Overall line (dashed slate)
+            const overallLine = d3.line()
+                .x(d => x(d.label))
+                .y(d => y(d.overallPct))
+                .curve(d3.curveMonotoneX);
+
+            g.append("path")
+                .datum(trendPoints)
+                .attr("fill", "none")
+                .attr("stroke", "#94a3b8")
+                .attr("stroke-width", 2)
+                .attr("stroke-dasharray", "4,3")
+                .attr("d", overallLine);
+
+            // Enforced line (indigo)
+            const enforcedLine = d3.line()
+                .x(d => x(d.label))
+                .y(d => y(d.enforcedPct))
+                .curve(d3.curveMonotoneX);
+
+            g.append("path")
+                .datum(trendPoints)
+                .attr("fill", "none")
+                .attr("stroke", "#4f46e5")
+                .attr("stroke-width", 2.5)
+                .attr("d", enforcedLine);
+
+            const tooltip = d3.select("#chart-tooltip");
+
+            // Interactive points
+            g.selectAll("circle.enforced-pt")
+                .data(trendPoints)
+                .enter()
+                .append("circle")
+                .attr("class", "enforced-pt")
+                .attr("cx", d => x(d.label))
+                .attr("cy", d => y(d.enforcedPct))
+                .attr("r", (d, i) => i === activeSnapshotIndex ? 5.5 : 3.5)
+                .attr("fill", (d, i) => i === activeSnapshotIndex ? "#4f46e5" : "#ffffff")
+                .attr("stroke", "#4f46e5")
+                .attr("stroke-width", 2)
+                .style("cursor", "pointer")
+                .on("mouseover", function(event, d) {
+                    d3.select(this).attr("r", 6);
+                    tooltip.style("opacity", 1).html(`
+                        <div class="font-semibold mb-1">${d.fullLabel}</div>
+                        <div class="text-indigo-300">Enforced: <strong>${d.enforcedPct.toFixed(1)}%</strong> (${d.enforcedRaw}/${d.enforcedTotal})</div>
+                        <div class="text-slate-300">Overall: <strong>${d.overallPct.toFixed(1)}%</strong> (${d.overallRaw}/${d.overallTotal})</div>
+                    `);
+                })
+                .on("mousemove", function(event) {
+                    tooltip.style("left", (event.pageX + 12) + "px").style("top", (event.pageY - 38) + "px");
+                })
+                .on("mouseout", function(event, d) {
+                    const idx = trendPoints.indexOf(d);
+                    d3.select(this).attr("r", idx === activeSnapshotIndex ? 5.5 : 3.5);
+                    tooltip.style("opacity", 0);
+                })
+                .on("click", function(event, d) {
+                    const idx = trendPoints.indexOf(d);
+                    if (idx >= 0) selectSnapshot(idx);
+                });
+        }
+
+        function updateTrendActivePoint() {
+            d3.selectAll("#trend-chart circle.enforced-pt")
+                .attr("r", (d, i) => i === activeSnapshotIndex ? 5.5 : 3.5)
+                .attr("fill", (d, i) => i === activeSnapshotIndex ? "#4f46e5" : "#ffffff");
+        }
+
+        function renderCoverageTable() {
+            let chartData = currentParsedData.filter(d => d.grandTotal > 0);
+
+            if (tableFilter === 'ENFORCED') chartData = chartData.filter(d => d.status === 'ENFORCED');
+            else if (tableFilter === 'PARTIAL') chartData = chartData.filter(d => d.status === 'PARTIAL');
+            else if (tableFilter === 'UNENFORCED') chartData = chartData.filter(d => d.status === 'UNENFORCED');
+            else if (tableFilter === 'HAS_UNPROTECTED') chartData = chartData.filter(d => d.grandUnprotected > 0);
+
+            const q = tableSearch.trim().toLowerCase();
+            if (q) {
+                chartData = chartData.filter(d => d.rawMemberType.toLowerCase().includes(q));
             }
 
-            const generateUnitBlocks = (raw, total, colorDark, colorLight) => {
-                if (total === 0) return ``;
-                
+            chartData.sort((a, b) => {
+                let indexA = frozenSortOrder ? frozenSortOrder.indexOf(a.memberType) : -1;
+                let indexB = frozenSortOrder ? frozenSortOrder.indexOf(b.memberType) : -1;
+                if (indexA === -1) indexA = 999999;
+                if (indexB === -1) indexB = 999999;
+                if (indexA === indexB) return b.grandTotal - a.grandTotal;
+                return indexA - indexB;
+            });
+
+            const generateUnitBlocks = (memberName, scope, raw, total, colorDark, colorLight) => {
+                if (total === 0) return '<span class="text-xs text-slate-300">—</span>';
+
+                const unprotected = total - raw;
                 let blocksHtml = '<div class="flex flex-wrap gap-[2px] w-full mb-2">';
-                for(let i=0; i<raw; i++) {
+                for (let i = 0; i < raw; i++) {
                     blocksHtml += `<div class="w-[8px] h-[8px] ${colorDark} rounded-[1px] flex-shrink-0"></div>`;
                 }
-                const unprotected = total - raw;
-                for(let i=0; i<unprotected; i++) {
+                for (let i = 0; i < unprotected; i++) {
                     blocksHtml += `<div class="w-[8px] h-[8px] ${colorLight} rounded-[1px] flex-shrink-0"></div>`;
                 }
                 blocksHtml += '</div>';
 
                 const percentage = ((raw / total) * 100).toFixed(1);
+                const escapedName = memberName.replace(/'/g, "\\'");
+                const unprotectedBtn = unprotected > 0
+                    ? `<button type="button" onclick="event.stopPropagation(); openInstanceExplorer('${escapedName}', '${scope}', 'UNPROTECTED')" class="ml-2 px-1.5 py-0.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-semibold transition-colors cursor-pointer" title="Explore ${unprotected} unprotected T* instances">${unprotected} T*</button>`
+                    : `<span class="ml-2 px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">100%</span>`;
 
                 return `
                     <div class="flex flex-col w-full">
                         ${blocksHtml}
                         <div class="text-[11px] leading-none text-slate-500 font-medium flex items-center justify-between pt-1 border-t border-slate-100/70">
-                            <div><span class="text-slate-700">${raw}</span> / ${total}</div>
-                            <div class="text-slate-400 ml-2 bg-white px-1.5 py-0.5 rounded shadow-sm border border-slate-100">${percentage}%</div>
+                            <div><span class="text-slate-700 font-semibold">${raw}</span> / ${total}</div>
+                            <div class="flex items-center">
+                                <span class="text-slate-400 bg-white px-1.5 py-0.5 rounded border border-slate-100">${percentage}%</span>
+                                ${unprotectedBtn}
+                            </div>
                         </div>
                     </div>
                 `;
             };
 
             const chartBody = document.getElementById("chart-body");
-            let chartRowsHtml = '';
+            if (chartData.length === 0) {
+                chartBody.innerHTML = `<tr><td colspan="3" class="px-6 py-10 text-center text-sm text-slate-400">No container types match the current filter.</td></tr>`;
+                return;
+            }
 
+            let html = '';
             chartData.forEach(d => {
-                const isSupportedClass = d.isSupported ? '' : 'text-slate-500 italic';
-                
-                // Add Badges conditionally based on full support, partial support, or none.
+                const escapedName = d.rawMemberType.replace(/'/g, "\\'");
                 let badge = '';
-                if (!d.isSupported) {
-                    badge = `<span class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded text-[10px] font-medium bg-white border border-slate-200 text-slate-600">Not Supported</span>`;
-                } else if (clangPartialSupported.has(d.rawMemberType)) {
-                    badge = `<span class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded text-[10px] font-medium bg-amber-50 border border-amber-200 text-amber-700">Partial Support</span>`;
+                let rowBgClass = 'bg-white';
+                let nameClass = 'text-slate-800';
+
+                if (d.status === 'ENFORCED') {
+                    badge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-indigo-50 border border-indigo-200 text-indigo-700">Enforced</span>`;
+                } else if (d.status === 'PARTIAL') {
+                    badge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-50 border border-amber-200 text-amber-700">Partial</span>`;
+                } else {
+                    badge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-white border border-slate-200 text-slate-500">Not Enforced</span>`;
+                    rowBgClass = 'bg-slate-50/70';
+                    nameClass = 'text-slate-500';
                 }
 
-                const rowBgClass = d.isSupported ? 'bg-white' : 'bg-slate-100';
-                
-                const prodDark = 'bg-blue-500';
-                const prodLight = 'bg-blue-200';
-                const testDark = 'bg-orange-500';
-                const testLight = 'bg-orange-200';
-                
-                chartRowsHtml += `
-                    <tr class="hover:bg-slate-50/80 transition-colors group ${rowBgClass} cursor-pointer" onclick="openInstanceExplorer('${d.rawMemberType}')" title="Click to explore ${d.rawMemberType} instances">
-                        <td class="px-6 py-4 border-r border-slate-100/50 align-top">
-                            <div class="font-medium text-slate-800 ${isSupportedClass} flex items-center justify-between gap-1.5">
+                html += `
+                    <tr class="hover:bg-indigo-50/30 transition-colors group ${rowBgClass} cursor-pointer" onclick="openInstanceExplorer('${escapedName}')" title="Click to explore ${d.rawMemberType} instances">
+                        <td class="px-6 py-4 border-r border-slate-100/80 align-top">
+                            <div class="font-medium ${nameClass} flex items-center justify-between gap-2">
                                 <div class="flex items-center flex-wrap gap-1.5">
-                                    <span class="group-hover:text-indigo-600 transition-colors">${d.memberType}</span> ${badge}
+                                    <span class="font-mono text-xs group-hover:text-indigo-600 transition-colors">${escapeHtml(d.memberType)}</span>
+                                    ${badge}
                                 </div>
                                 <svg class="w-3.5 h-3.5 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                             </div>
                         </td>
-                        <td class="px-6 py-4 border-r border-slate-100/50 align-top" onclick="event.stopPropagation(); openInstanceExplorer('${d.rawMemberType}', 'PROD')" title="Explore Production ${d.rawMemberType} instances">
-                            ${generateUnitBlocks(d.prodRaw, d.prodTotal, prodDark, prodLight)}
+                        <td class="px-6 py-4 border-r border-slate-100/80 align-top" onclick="event.stopPropagation(); openInstanceExplorer('${escapedName}', 'PROD')" title="Explore Production ${d.rawMemberType} instances">
+                            ${generateUnitBlocks(d.rawMemberType, 'PROD', d.prodRaw, d.prodTotal, 'bg-blue-500', 'bg-blue-200')}
                         </td>
-                        <td class="px-6 py-4 align-top" onclick="event.stopPropagation(); openInstanceExplorer('${d.rawMemberType}', 'TEST')" title="Explore Test ${d.rawMemberType} instances">
-                            ${generateUnitBlocks(d.testRaw, d.testTotal, testDark, testLight)}
+                        <td class="px-6 py-4 align-top" onclick="event.stopPropagation(); openInstanceExplorer('${escapedName}', 'TEST')" title="Explore Test ${d.rawMemberType} instances">
+                            ${generateUnitBlocks(d.rawMemberType, 'TEST', d.testRaw, d.testTotal, 'bg-orange-500', 'bg-orange-200')}
                         </td>
                     </tr>
                 `;
             });
-
-            chartBody.innerHTML = chartRowsHtml;
+            chartBody.innerHTML = html;
         }
 
-        // --- FETCHING LOGIC ---
-        
-        async function fetchCsvData(url) {
-            const loading = document.getElementById('loading-indicator');
-            loading.classList.remove('hidden');
-            try {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const csvText = await response.text();
-                renderDashboard(csvText);
-            } catch (error) {
-                console.error(`Error loading CSV (${url}):`, error);
-                if (!url.includes('mock')) alert(`Failed to load data from ${url}. See console for details.`);
-            } finally {
-                loading.classList.add('hidden');
-            }
+        // ==========================================
+        // SNAPSHOT LOADING & NAVIGATION
+        // ==========================================
+        async function loadCsvCached(url) {
+            if (csvCache.has(url)) return csvCache.get(url);
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const text = await res.text();
+            csvCache.set(url, text);
+            return text;
         }
 
         function updateSnapshotBadge(entry) {
@@ -688,109 +896,161 @@
             }
         }
 
+        async function selectSnapshot(index) {
+            if (index < 0 || index >= snapshotEntries.length || index === activeSnapshotIndex) return;
+            activeSnapshotIndex = index;
+            const entry = snapshotEntries[index];
+
+            document.querySelectorAll('#date-buttons-container button').forEach((btn, i) => {
+                const isActive = i === index;
+                btn.classList.toggle("bg-indigo-600", isActive);
+                btn.classList.toggle("text-white", isActive);
+                btn.classList.toggle("border-indigo-600", isActive);
+                btn.classList.toggle("shadow-sm", isActive);
+                btn.classList.toggle("bg-white", !isActive);
+                btn.classList.toggle("text-slate-700", !isActive);
+                btn.classList.toggle("border-slate-300", !isActive);
+                btn.classList.toggle("hover:bg-slate-50", !isActive);
+            });
+
+            updateSnapshotBadge(entry);
+            updateTrendActivePoint();
+
+            const loading = document.getElementById('loading-indicator');
+            loading.classList.remove('hidden');
+            try {
+                const csvText = await loadCsvCached(entry.file);
+                renderDashboard(csvText);
+            } catch (err) {
+                console.error(`Error loading CSV (${entry.file}):`, err);
+            } finally {
+                loading.classList.add('hidden');
+            }
+        }
+
+        async function preloadHistoricalTrend() {
+            const results = await Promise.all(snapshotEntries.map(async entry => {
+                try {
+                    const csvText = await loadCsvCached(entry.file);
+                    const stats = computeStats(parseCsv(csvText));
+                    return {
+                        label: entry.is_today ? 'Today' : entry.date,
+                        fullLabel: entry.is_today ? `Today (${entry.full_date || '2026-11-24'})` : entry.date,
+                        enforcedRaw: stats.enforced.grandRaw,
+                        enforcedTotal: stats.enforced.grandTotal,
+                        enforcedPct: stats.enforced.grandTotal > 0 ? (stats.enforced.grandRaw / stats.enforced.grandTotal) * 100 : 0,
+                        overallRaw: stats.overall.grandRaw,
+                        overallTotal: stats.overall.grandTotal,
+                        overallPct: stats.overall.grandTotal > 0 ? (stats.overall.grandRaw / stats.overall.grandTotal) * 100 : 0,
+                    };
+                } catch {
+                    return null;
+                }
+            }));
+            trendPoints = results.filter(Boolean);
+            renderTrendChart();
+        }
+
         async function init() {
+            setupTableFilterEvents();
+            setupExplorerEvents();
+
             try {
                 const response = await fetch('./index.json');
                 if (!response.ok) throw new Error("index.json not found");
-                
+
                 const rawMapping = await response.json();
-                let entries = [];
-                
-                if (Array.isArray(rawMapping)) {
-                    entries = rawMapping.map(d => ({
+                snapshotEntries = Array.isArray(rawMapping)
+                    ? rawMapping.map(d => ({
                         date: d.date,
                         file: d.file,
                         full_date: d.full_date || d.fullDate || null,
-                        is_today: d.date === 'Today' || d.is_today || d.isToday || false
-                    }));
-                } else {
-                    entries = Object.keys(rawMapping).map(key => ({
+                        is_today: d.date === 'Today' || d.is_today || d.isToday || false,
+                    }))
+                    : Object.keys(rawMapping).map(key => ({
                         date: key,
                         file: rawMapping[key],
                         full_date: null,
-                        is_today: key === 'Today'
+                        is_today: key === 'Today',
                     }));
-                }
 
-                // SORT ENTRIES ASCENDING: chronological order with Today as the last item
-                entries.sort((a, b) => {
+                snapshotEntries.sort((a, b) => {
                     if (a.is_today) return 1;
                     if (b.is_today) return -1;
                     return new Date(a.date) - new Date(b.date);
                 });
-                
+
                 const container = document.getElementById('date-buttons-container');
                 container.innerHTML = '';
-                
-                if (entries.length === 0) {
-                    container.innerHTML = '<span class="text-sm text-slate-500">No data available</span>';
-                    return;
-                }
 
-                let activeButton = null;
-
-                entries.forEach((entry, index) => {
+                snapshotEntries.forEach((entry, index) => {
                     const btn = document.createElement('button');
                     if (entry.is_today) {
-                        btn.innerHTML = `<span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>Today</span>`;
+                        btn.innerHTML = `<span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400"></span>Today</span>`;
                         btn.title = `Today (${entry.full_date || '2026-11-24'})`;
                     } else {
                         btn.textContent = entry.date;
                     }
-                    btn.value = entry.file;
-                    
-                    btn.className = "px-4 py-2 text-sm font-medium rounded-lg transition-colors border outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 whitespace-nowrap";
-                    
-                    // Default select the LAST button (Today)
-                    if (index === entries.length - 1) {
-                        btn.classList.add("bg-blue-600", "text-white", "border-blue-600", "shadow-sm");
-                        activeButton = btn;
-                        updateSnapshotBadge(entry);
-                    } else {
-                        btn.classList.add("bg-white", "text-slate-700", "border-slate-300", "hover:bg-slate-50");
-                    }
-
-                    btn.addEventListener('click', () => {
-                        if (activeButton === btn) return; 
-                        
-                        if (activeButton) {
-                            activeButton.classList.remove("bg-blue-600", "text-white", "border-blue-600", "shadow-sm");
-                            activeButton.classList.add("bg-white", "text-slate-700", "border-slate-300", "hover:bg-slate-50");
-                        }
-                        
-                        btn.classList.remove("bg-white", "text-slate-700", "border-slate-300", "hover:bg-slate-50");
-                        btn.classList.add("bg-blue-600", "text-white", "border-blue-600", "shadow-sm");
-                        
-                        activeButton = btn;
-                        updateSnapshotBadge(entry);
-                        fetchCsvData(btn.value);
-                    });
-
+                    btn.className = "px-3.5 py-1.5 text-xs font-medium rounded-lg transition-colors border outline-none focus:ring-2 focus:ring-indigo-500 whitespace-nowrap cursor-pointer bg-white text-slate-700 border-slate-300 hover:bg-slate-50";
+                    btn.addEventListener('click', () => selectSnapshot(index));
                     container.appendChild(btn);
                 });
 
-                // Load initial newest data (Today)
-                if (entries.length > 0) {
-                    const latestEntry = entries[entries.length - 1];
-                    updateSnapshotBadge(latestEntry);
-                    fetchCsvData(latestEntry.file);
-
-                    // Scroll wrapper to right so default newest button is visible without swiping
+                if (snapshotEntries.length > 0) {
+                    await selectSnapshot(snapshotEntries.length - 1);
                     setTimeout(() => {
                         const scrollContainer = document.getElementById('date-scroll-container');
-                        if (scrollContainer) {
-                            scrollContainer.scrollLeft = scrollContainer.scrollWidth;
-                        }
+                        if (scrollContainer) scrollContainer.scrollLeft = scrollContainer.scrollWidth;
                     }, 50);
+                    preloadHistoricalTrend();
                 }
-
-                // Initialize instance explorer events
-                setupExplorerEvents();
-
             } catch (error) {
-                console.warn("Could not load index.json. Using fallback mock data for demonstration.", error);
-                setupMockUI();
+                console.warn("Could not load index.json:", error);
             }
+        }
+
+        function setupTableFilterEvents() {
+            document.querySelectorAll('.table-filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tableFilter = btn.dataset.filter;
+                    document.querySelectorAll('.table-filter-btn').forEach(b => {
+                        const active = b === btn;
+                        b.classList.toggle('bg-indigo-600', active);
+                        b.classList.toggle('text-white', active);
+                        b.classList.toggle('shadow-sm', active);
+                        b.classList.toggle('bg-white', !active);
+                        b.classList.toggle('text-slate-600', !active);
+                        b.classList.toggle('border', !active);
+                        b.classList.toggle('border-slate-200', !active);
+                    });
+                    renderCoverageTable();
+                });
+            });
+
+            const searchInput = document.getElementById('table-search-input');
+            if (searchInput) {
+                searchInput.addEventListener('input', e => {
+                    tableSearch = e.target.value;
+                    renderCoverageTable();
+                });
+            }
+
+            const remainingCard = document.getElementById('kpi-remaining-card');
+            if (remainingCard) {
+                remainingCard.addEventListener('click', () => openInstanceExplorer('ALL', 'ALL', 'UNPROTECTED', true));
+            }
+
+            // Keyboard left/right snapshot navigation
+            document.addEventListener('keydown', e => {
+                const modal = document.getElementById('instance-modal');
+                if (modal && !modal.classList.contains('hidden')) return;
+                if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
+                if (e.key === 'ArrowLeft' && activeSnapshotIndex > 0) {
+                    selectSnapshot(activeSnapshotIndex - 1);
+                } else if (e.key === 'ArrowRight' && activeSnapshotIndex < snapshotEntries.length - 1) {
+                    selectSnapshot(activeSnapshotIndex + 1);
+                }
+            });
         }
 
         // ==========================================
@@ -804,8 +1064,9 @@
         let explorerState = {
             search: '',
             container: 'ALL',
-            scope: 'ALL',       // 'ALL', 'PROD', 'TEST'
-            protection: 'ALL',  // 'ALL', 'PROTECTED', 'UNPROTECTED'
+            scope: 'ALL',
+            protection: 'ALL',
+            enforcedOnly: false,
         };
 
         async function loadInstancesData() {
@@ -820,7 +1081,7 @@
                     containerType: d["Container Type"],
                     isProtected: d["Protected by raw_ptr (0/1)"] === "1",
                     lineNumber: d["Line Number"],
-                    fullType: d["Full Type"]
+                    fullType: d["Full Type"],
                 }));
                 populateContainerSelect();
                 return allInstances;
@@ -836,14 +1097,12 @@
             if (!select || !allInstances) return;
 
             const counts = {};
-            allInstances.forEach(i => {
-                counts[i.containerType] = (counts[i.containerType] || 0) + 1;
-            });
+            allInstances.forEach(i => { counts[i.containerType] = (counts[i.containerType] || 0) + 1; });
 
             const sortedTypes = Object.keys(counts).sort((a, b) => a.localeCompare(b));
             let optionsHtml = `<option value="ALL">All Containers (${allInstances.length.toLocaleString()})</option>`;
             sortedTypes.forEach(t => {
-                optionsHtml += `<option value="${t}">${t} (${counts[t]})</option>`;
+                optionsHtml += `<option value="${escapeHtml(t)}">${escapeHtml(t)} (${counts[t]})</option>`;
             });
             select.innerHTML = optionsHtml;
         }
@@ -852,27 +1111,18 @@
             if (!allInstances) return;
 
             const q = explorerState.search.trim().toLowerCase();
-            const container = explorerState.container;
-            const scope = explorerState.scope;
-            const prot = explorerState.protection;
-
             filteredInstances = allInstances.filter(inst => {
-                if (container !== 'ALL' && inst.containerType !== container) {
-                    return false;
-                }
-                if (scope === 'PROD' && inst.isTest) return false;
-                if (scope === 'TEST' && !inst.isTest) return false;
-
-                if (prot === 'PROTECTED' && !inst.isProtected) return false;
-                if (prot === 'UNPROTECTED' && inst.isProtected) return false;
-
+                if (explorerState.enforcedOnly && !clangEnforced.has(inst.containerType)) return false;
+                if (explorerState.container !== 'ALL' && inst.containerType !== explorerState.container) return false;
+                if (explorerState.scope === 'PROD' && inst.isTest) return false;
+                if (explorerState.scope === 'TEST' && !inst.isTest) return false;
+                if (explorerState.protection === 'PROTECTED' && !inst.isProtected) return false;
+                if (explorerState.protection === 'UNPROTECTED' && inst.isProtected) return false;
                 if (q) {
-                    const matchPath = inst.filePath.toLowerCase().includes(q);
-                    const matchType = inst.fullType.toLowerCase().includes(q);
-                    const matchContainer = inst.containerType.toLowerCase().includes(q);
-                    if (!matchPath && !matchType && !matchContainer) return false;
+                    if (!inst.filePath.toLowerCase().includes(q) &&
+                        !inst.fullType.toLowerCase().includes(q) &&
+                        !inst.containerType.toLowerCase().includes(q)) return false;
                 }
-
                 return true;
             });
 
@@ -886,11 +1136,10 @@
             const emptyState = document.getElementById('instance-empty-state');
             const tableContainer = document.getElementById('instance-table-container');
             const loadMoreContainer = document.getElementById('instance-load-more');
-
             if (!tbody) return;
 
             const total = filteredInstances.length;
-            statsText.textContent = `Showing ${Math.min(displayedCount, total)} of ${total.toLocaleString()} instances (out of ${allInstances.length.toLocaleString()} total)`;
+            statsText.textContent = `Showing ${Math.min(displayedCount, total)} of ${total.toLocaleString()} matching instances (${allInstances.length.toLocaleString()} total)`;
 
             if (total === 0) {
                 tableContainer.classList.add('hidden');
@@ -903,44 +1152,34 @@
             emptyState.classList.add('hidden');
 
             const pageItems = filteredInstances.slice(0, displayedCount);
-            let rowsHtml = '';
-
-            pageItems.forEach(inst => {
+            tbody.innerHTML = pageItems.map(inst => {
                 const codeSearchUrl = `https://source.chromium.org/chromium/chromium/src/+/main:${inst.filePath};l=${inst.lineNumber}`;
-                
                 const scopeBadge = inst.isTest
                     ? `<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-orange-50 text-orange-700 border border-orange-200">Test</span>`
                     : `<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">Production</span>`;
-
                 const protBadge = inst.isProtected
                     ? `<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">raw_ptr</span>`
                     : `<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">Unprotected T*</span>`;
 
-                rowsHtml += `
+                return `
                     <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="px-4 py-3 font-mono text-[11px] max-w-[280px] truncate" title="${inst.filePath}:${inst.lineNumber}">
-                            <a href="${codeSearchUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1">
-                                <span class="truncate">${inst.filePath}</span>:<span class="text-slate-400">${inst.lineNumber}</span>
+                        <td class="px-4 py-2.5 font-mono text-[11px] max-w-[280px] truncate" title="${escapeHtml(inst.filePath)}:${inst.lineNumber}">
+                            <a href="${codeSearchUrl}" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 hover:underline flex items-center gap-1">
+                                <span class="truncate">${escapeHtml(inst.filePath)}</span>:<span class="text-slate-400">${inst.lineNumber}</span>
                                 <svg class="w-3 h-3 flex-shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                             </a>
                         </td>
-                        <td class="px-4 py-3 font-medium text-slate-700 whitespace-nowrap">${inst.containerType}</td>
-                        <td class="px-4 py-3 whitespace-nowrap">${scopeBadge}</td>
-                        <td class="px-4 py-3 whitespace-nowrap">${protBadge}</td>
-                        <td class="px-4 py-3 font-mono text-[11px] text-slate-700 break-all max-w-[320px]">
+                        <td class="px-4 py-2.5 font-mono text-[11px] text-slate-700 whitespace-nowrap">${escapeHtml(inst.containerType)}</td>
+                        <td class="px-4 py-2.5 whitespace-nowrap">${scopeBadge}</td>
+                        <td class="px-4 py-2.5 whitespace-nowrap">${protBadge}</td>
+                        <td class="px-4 py-2.5 font-mono text-[11px] text-slate-700 break-all max-w-[320px]">
                             <code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-800">${escapeHtml(inst.fullType)}</code>
                         </td>
                     </tr>
                 `;
-            });
+            }).join('');
 
-            tbody.innerHTML = rowsHtml;
-
-            if (displayedCount < total) {
-                loadMoreContainer.classList.remove('hidden');
-            } else {
-                loadMoreContainer.classList.add('hidden');
-            }
+            loadMoreContainer.classList.toggle('hidden', displayedCount >= total);
         }
 
         function escapeHtml(str) {
@@ -948,42 +1187,35 @@
             return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
-        window.openInstanceExplorer = async function(container = 'ALL', scope = 'ALL', prot = 'ALL') {
+        window.openInstanceExplorer = async function(container = 'ALL', scope = 'ALL', prot = 'ALL', enforcedOnly = false) {
             await loadInstancesData();
 
-            explorerState.container = container;
-            explorerState.scope = scope;
-            explorerState.protection = prot;
-            explorerState.search = '';
+            explorerState = { search: '', container, scope, protection: prot, enforcedOnly };
 
             const searchInput = document.getElementById('instance-search-input');
             const clearBtn = document.getElementById('clear-search-btn');
             const containerSelect = document.getElementById('instance-container-select');
-            
+            const enforcedCb = document.getElementById('instance-enforced-only');
+
             if (searchInput) searchInput.value = '';
             if (clearBtn) clearBtn.classList.add('hidden');
             if (containerSelect) containerSelect.value = container;
+            if (enforcedCb) enforcedCb.checked = enforcedOnly;
 
-            // Sync Scope Buttons
             document.querySelectorAll('.scope-btn').forEach(btn => {
-                if (btn.dataset.scope === scope) {
-                    btn.classList.add('bg-white', 'text-slate-800', 'shadow-sm');
-                    btn.classList.remove('text-slate-500');
-                } else {
-                    btn.classList.remove('bg-white', 'text-slate-800', 'shadow-sm');
-                    btn.classList.add('text-slate-500');
-                }
+                const active = btn.dataset.scope === scope;
+                btn.classList.toggle('bg-white', active);
+                btn.classList.toggle('text-slate-800', active);
+                btn.classList.toggle('shadow-sm', active);
+                btn.classList.toggle('text-slate-500', !active);
             });
 
-            // Sync Protection Buttons
             document.querySelectorAll('.prot-btn').forEach(btn => {
-                if (btn.dataset.prot === prot) {
-                    btn.classList.add('bg-white', 'text-slate-800', 'shadow-sm');
-                    btn.classList.remove('text-slate-500');
-                } else {
-                    btn.classList.remove('bg-white', 'text-slate-800', 'shadow-sm');
-                    btn.classList.add('text-slate-500');
-                }
+                const active = btn.dataset.prot === prot;
+                btn.classList.toggle('bg-white', active);
+                btn.classList.toggle('text-slate-800', active);
+                btn.classList.toggle('shadow-sm', active);
+                btn.classList.toggle('text-slate-500', !active);
             });
 
             applyInstanceFilters();
@@ -1011,29 +1243,21 @@
             const searchInput = document.getElementById('instance-search-input');
             const clearSearchBtn = document.getElementById('clear-search-btn');
             const containerSelect = document.getElementById('instance-container-select');
+            const enforcedCb = document.getElementById('instance-enforced-only');
             const loadMoreBtn = document.getElementById('load-more-btn');
 
             if (openBtn) openBtn.addEventListener('click', () => openInstanceExplorer());
             if (closeBtn) closeBtn.addEventListener('click', closeInstanceExplorer);
+            if (modal) modal.addEventListener('click', e => { if (e.target === modal) closeInstanceExplorer(); });
 
-            if (modal) {
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) closeInstanceExplorer();
-                });
-            }
-
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
-                    closeInstanceExplorer();
-                }
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) closeInstanceExplorer();
             });
 
             if (searchInput) {
-                searchInput.addEventListener('input', (e) => {
+                searchInput.addEventListener('input', e => {
                     explorerState.search = e.target.value;
-                    if (clearSearchBtn) {
-                        clearSearchBtn.classList.toggle('hidden', !e.target.value);
-                    }
+                    if (clearSearchBtn) clearSearchBtn.classList.toggle('hidden', !e.target.value);
                     applyInstanceFilters();
                 });
             }
@@ -1048,8 +1272,15 @@
             }
 
             if (containerSelect) {
-                containerSelect.addEventListener('change', (e) => {
+                containerSelect.addEventListener('change', e => {
                     explorerState.container = e.target.value;
+                    applyInstanceFilters();
+                });
+            }
+
+            if (enforcedCb) {
+                enforcedCb.addEventListener('change', e => {
+                    explorerState.enforcedOnly = e.target.checked;
                     applyInstanceFilters();
                 });
             }
@@ -1058,10 +1289,11 @@
                 btn.addEventListener('click', () => {
                     explorerState.scope = btn.dataset.scope;
                     document.querySelectorAll('.scope-btn').forEach(b => {
-                        b.classList.toggle('bg-white', b === btn);
-                        b.classList.toggle('text-slate-800', b === btn);
-                        b.classList.toggle('shadow-sm', b === btn);
-                        b.classList.toggle('text-slate-500', b !== btn);
+                        const active = b === btn;
+                        b.classList.toggle('bg-white', active);
+                        b.classList.toggle('text-slate-800', active);
+                        b.classList.toggle('shadow-sm', active);
+                        b.classList.toggle('text-slate-500', !active);
                     });
                     applyInstanceFilters();
                 });
@@ -1071,40 +1303,20 @@
                 btn.addEventListener('click', () => {
                     explorerState.protection = btn.dataset.prot;
                     document.querySelectorAll('.prot-btn').forEach(b => {
-                        b.classList.toggle('bg-white', b === btn);
-                        b.classList.toggle('text-slate-800', b === btn);
-                        b.classList.toggle('shadow-sm', b === btn);
-                        b.classList.toggle('text-slate-500', b !== btn);
+                        const active = b === btn;
+                        b.classList.toggle('bg-white', active);
+                        b.classList.toggle('text-slate-800', active);
+                        b.classList.toggle('shadow-sm', active);
+                        b.classList.toggle('text-slate-500', !active);
                     });
                     applyInstanceFilters();
                 });
             });
 
-            if (resetBtn) {
-                resetBtn.addEventListener('click', () => {
-                    openInstanceExplorer('ALL', 'ALL', 'ALL');
-                });
-            }
-
-            if (loadMoreBtn) {
-                loadMoreBtn.addEventListener('click', () => {
-                    displayedCount += PAGE_SIZE;
-                    renderInstanceTable();
-                });
-            }
+            if (resetBtn) resetBtn.addEventListener('click', () => openInstanceExplorer('ALL', 'ALL', 'ALL', false));
+            if (loadMoreBtn) loadMoreBtn.addEventListener('click', () => { displayedCount += PAGE_SIZE; renderInstanceTable(); });
         }
 
-        // --- FALLBACK LOGIC --- (For previewers lacking external files)
-        function setupMockUI() {
-            const container = document.getElementById('date-buttons-container');
-            container.innerHTML = '<button class="px-4 py-2 text-sm font-medium rounded-lg transition-colors border bg-blue-600 text-white border-blue-600 shadow-sm whitespace-nowrap cursor-default outline-none">Latest Built Data (Mock fallback)</button>';
-            
-            const mockCsvData = `Member Type,Production raw_ptr<T>,Production T*,Production Total,Test raw_ptr<T>,Test T*,Test Total,Grand Total\nAnyInvocable,0,3,3,0,0,0,3\nArenaSpsc,0,1,1,0,0,0,1\nAssociatedReceiverSet,0,1,1,0,0,0,1\nAutoReset,0,22,22,0,12,12,34\nBrowserInterfaceBrokerImpl,0,1,1,0,0,0,1\nCSimpleArray,0,2,2,0,0,0,2\nCSimpleMap,0,1,1,0,0,0,1\nChunkedVector,0,1,1,0,0,0,1\nComPtr,0,0,0,0,2,2,2\nCrossThreadFunction,0,2,2,0,0,0,2\nDenseMap,0,1,1,0,0,0,1\nHashMap,0,6,6,0,1,1,7\nHashSet,0,4,4,0,0,0,4\nHashingLRUCache,0,1,1,0,0,0,1\nHeapArray,0,1,1,0,0,0,1\nHeapVector,0,2,2,0,0,0,2\nIDMap,0,3,3,0,0,0,3\nInlinedVector,0,3,3,0,0,0,3\nLRUCache,1,0,1,0,0,0,1\nLinkedHashSet,0,2,2,0,0,0,2\nMatcher,0,0,0,0,1,1,1\nMember,0,28,28,0,0,0,28\nMockCallback,0,0,0,0,2,2,2\nMockFunction,0,0,0,0,6,6,6\nMockRepeatingCallback,0,0,0,0,2,2,2\nNSArray,0,24,24,0,1,1,25\nNSCache,0,4,4,0,0,0,4\nNSDictionary,0,8,8,0,0,0,8\nNSMutableArray,0,4,4,0,0,0,4\nNSMutableDictionary,0,4,4,0,0,0,4\nNSMutableSet,0,1,1,0,0,0,1\nNoCfiIcall,0,10,10,0,0,0,10\nNodeSetView,0,42,42,0,0,0,42\nOnceCallback,0,38,38,0,18,18,56\nOnceCallbackList,0,4,4,0,0,0,4\nOptional,0,1,1,0,0,0,1\nOwnedObjects,0,1,1,0,0,0,1\nRepeatingCallback,0,54,54,0,26,26,80\nRepeatingCallbackList,0,41,41,0,4,4,45\nSafeOptional,49,0,49,0,0,0,49\nScopedArCoreObject,0,7,7,0,0,0,7\nScopedCardboardObject,0,1,1,0,0,0,1\nSettingsTable,0,0,0,0,1,1,1\nSmallVector,0,1,1,0,0,0,1\nSpan,0,2,2,0,1,1,3\nStatusOr,0,18,18,0,0,0,18\nStrictMock,0,0,0,0,1,1,1\nStringMap,0,1,1,0,0,0,1\nTypeIfNeeded,0,1,1,0,0,0,1\nUniqueReceiverSet,0,2,2,0,0,0,2\nUntracedMember,0,1,1,0,0,0,1\nVec,0,3,3,0,0,0,3\nVector,0,17,17,0,2,2,19\nWeakPtr,0,0,0,1,0,1,1\nWeakPtrFactory,0,0,0,1,0,1,1\narray,0,9,9,2,10,12,21\natomic,0,66,66,0,1,1,67\nbtree_map,0,7,7,0,0,0,7\nbtree_set,0,3,3,0,0,0,3\ncircular_deque,1,4,5,0,2,2,7\nconditional_t,1,1,2,0,0,0,2\ndeque,1,2,3,0,0,0,3\nexpected,0,14,14,0,0,0,14\nflat_hash_map,6,41,47,1,6,7,54\nflat_hash_set,2,20,22,0,1,1,23\nflat_map,55,117,172,13,13,26,198\nflat_set,67,18,85,5,2,7,92\nfunction,0,20,20,0,7,7,27\ninitializer_list,0,0,0,0,2,2,2\nlist,17,7,24,27,32,59,83\nmap,99,276,375,45,91,136,511\nmultimap,1,1,2,0,0,0,2\nmultiset,1,1,2,0,0,0,2\noptional,6,30,36,1,21,22,58\npair,0,20,20,0,3,3,23\nqueue,6,1,7,4,3,7,14\nraw_ptr,4,14,18,6,6,12,30\nraw_ref,0,0,0,2,3,5,5\nraw_span,0,7,7,0,6,6,13\nset,88,57,145,26,6,32,177\nspan,0,71,71,0,1,1,72\nstack,0,0,0,3,2,5,5\ntuple,0,8,8,0,0,0,8\nunique_ptr,0,7,7,0,5,5,12\nunordered_map,16,39,55,4,5,9,64\nunordered_set,12,5,17,1,1,2,19\nvariant,7,17,24,0,3,3,27\nvector,233,617,850,175,174,349,1199`;
-
-            renderDashboard(mockCsvData);
-        }
-
-        // Execute init safely, regardless of whether DOMContentLoaded has already passed
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);
         } else {
