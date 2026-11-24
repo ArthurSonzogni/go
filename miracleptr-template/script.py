@@ -93,6 +93,19 @@ VALID_CPP_IDENT_RE = re.compile(
 )
 CV_QUALIFIER_RE = re.compile(r'\b(?:const|volatile)\b')
 CLASS_OR_STRUCT_WORD_RE = re.compile(rb'\b(?:class|struct|union)\b')
+# Strip Chromium export/thread-safety macros that break Tree-sitter's class/field
+# parsing, replacing with spaces of the same length so line numbers stay exact.
+CHROMIUM_MACRO_RE = re.compile(
+    rb'\bCOMPONENT_EXPORT\s*\([^)]*\)'
+    rb'|\b[A-Z][A-Z0-9_]*_EXPORT(?:_PRIVATE)?\b'
+    rb'|\b(?:PT_)?GUARDED_BY\s*\([^)]*\)'
+)
+
+
+def sanitize_source_for_parsing(source_code):
+    return CHROMIUM_MACRO_RE.sub(
+        lambda m: re.sub(rb'[^\n]', b' ', m.group(0)), source_code
+    )
 
 # ==========================================
 # 2. Helper Functions
@@ -325,7 +338,7 @@ def process_file(args):
 
     try:
         with open(full_path, 'rb') as f:
-            source_code = f.read()
+            source_code = sanitize_source_for_parsing(f.read())
 
         tree = parser.parse(source_code)
         cursor = QueryCursor(query)

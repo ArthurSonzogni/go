@@ -4,15 +4,25 @@ android_webview/browser/gfx/browser_view_renderer.h,FALSE,std::map,1,256,"std::m
 android_webview/browser/lifecycle/aw_contents_lifecycle_notifier.h,FALSE,std::map,0,97,"std::map<const AwContents*, AwContentsLifecycleNotifier::AwContentsData>"
 android_webview/browser/metrics/visibility_metrics_logger.h,FALSE,std::map,0,129,"std::map<Client*, VisibilityInfo>"
 apps/saved_files_service.cc,FALSE,std::map,1,182,"std::map<int, raw_ptr<SavedFileEntry, CtnExperimental>>"
+ash/accelerators/ash_accelerator_configuration.h,FALSE,std::map,1,199,"std::map<AcceleratorActionId, raw_ptr<const DeprecatedAcceleratorData>>"
+ash/accelerators/ash_accelerator_configuration.h,FALSE,std::map,1,216,"std::map<AcceleratorActionId, raw_ptr<const DeprecatedAcceleratorData>>"
 ash/accelerometer/accelerometer_provider_mojo_unittest.cc,TRUE,std::map,1,142,"std::map<int32_t, raw_ptr<chromeos::sensors::FakeSensorDevice, DanglingUntriaged>>"
 ash/accessibility/accessibility_event_handler_manager.h,FALSE,std::vector,1,54,"std::vector<raw_ptr<ui::EventHandler, DanglingUntriaged>>"
 ash/accessibility/accessibility_prefs_merge_conflict_dialog.h,FALSE,std::unordered_map,0,76,"std::unordered_map<std::string_view, HoverHighlightView*>"
 ash/ambient/model/ambient_animation_photo_provider.h,FALSE,base::flat_map,0,120,"base::flat_map<const DynamicImageAssetImpl*, PhotoWithDetails>"
 ash/ambient/ui/ambient_animation_progress_tracker.h,FALSE,base::flat_set,1,91,base::flat_set<raw_ptr<const lottie::Animation>>
 ash/ambient/ui/ambient_animation_progress_tracker.h,FALSE,base::flat_set,1,93,base::flat_set<raw_ptr<const lottie::Animation>>
+ash/ambient/ui/photo_view.h,FALSE,std::array,0,83,"std::array<AmbientBackgroundImageView*, 2>"
 ash/app_list/apps_grid_row_change_animator.h,FALSE,std::map,0,74,"std::map<views::View*, std::unique_ptr<ui::Layer>>"
+ash/app_list/model/folder_image.h,FALSE,std::vector,1,118,std::vector<raw_ptr<AppListItem>>
 ash/app_list/views/app_list_folder_view.cc,FALSE,std::vector,1,514,std::vector<raw_ptr<TopIconAnimationView>>
+ash/app_list/views/app_list_search_view.h,FALSE,std::vector,1,142,"std::vector<raw_ptr<SearchResultContainerView, DanglingUntriaged>>"
+ash/app_list/views/apps_grid_view.h,FALSE,std::optional,0,1048,std::optional<AppListItemView*>
 ash/app_list/views/button_focus_skipper.h,FALSE,std::vector,1,42,"std::vector<raw_ptr<views::View, DanglingUntriaged>>"
+ash/app_list/views/contents_view.h,FALSE,std::vector,1,214,std::vector<raw_ptr<AppListPage>>
+ash/app_list/views/continue_task_container_view.h,FALSE,std::vector,1,168,"std::vector<raw_ptr<ContinueTaskView, DanglingUntriaged>>"
+ash/app_list/views/continue_task_container_view.h,FALSE,std::vector,1,195,"std::vector<raw_ptr<ContinueTaskView, DanglingUntriaged>>"
+ash/app_list/views/recent_apps_view.h,FALSE,std::vector,1,105,std::vector<raw_ptr<AppListItemView>>
 ash/app_list/views/result_selection_controller_unittest.cc,TRUE,std::vector,1,635,"std::vector<raw_ptr<SearchResultContainerView, DanglingUntriaged>>"
 ash/app_list/views/search_result_image_list_view.h,FALSE,std::vector,1,80,"std::vector<raw_ptr<SearchResultImageView, DanglingUntriaged>>"
 ash/app_list/views/search_result_image_list_view.h,FALSE,std::vector,1,85,"std::vector<raw_ptr<views::Label, DanglingUntriaged>>"
@@ -20,21 +30,28 @@ ash/app_list/views/search_result_list_view.h,FALSE,std::vector,1,151,std::vector
 ash/app_menu/notification_overflow_view.h,FALSE,std::vector,1,64,"std::vector<raw_ptr<NotificationOverflowImageView, DanglingUntriaged>>"
 ash/auth/views/pin_keyboard_view.h,FALSE,base::flat_map,1,76,"base::flat_map<int, raw_ptr<IconButton>>"
 ash/calendar/calendar_controller.h,FALSE,std::map,1,55,"std::map<const AccountId, raw_ptr<CalendarClient>>"
+ash/capture_mode/capture_mode_controller.h,FALSE,base::flat_map,0,873,"base::flat_map<aura::Window*, uint32_t>"
 ash/capture_mode/capture_mode_menu_group.h,FALSE,std::vector,1,162,"std::vector<raw_ptr<CaptureModeOption, DanglingUntriaged>>"
 ash/capture_mode/capture_mode_menu_group.h,FALSE,std::vector,1,171,"std::vector<raw_ptr<CaptureModeMenuItem, DanglingUntriaged>>"
 ash/capture_mode/capture_mode_session_focus_cycler.h,FALSE,std::map,0,367,"std::map<aura::Window*, std::unique_ptr<HighlightableWindow>>"
 ash/capture_mode/capture_mode_session_focus_cycler.h,FALSE,std::map,1,376,"std::map<FineTunePosition, raw_ptr<views::AXVirtualView>>"
+ash/capture_mode/fake_camera_device.h,FALSE,base::flat_map,0,118,"base::flat_map<Subscription*, std::unique_ptr<Subscription>>"
+ash/capture_mode/video_recording_watcher.h,FALSE,base::flat_map,0,303,"base::flat_map<aura::Window*, std::unique_ptr<WindowDimmer>>"
 ash/curtain/stack_layout.h,FALSE,std::map,0,65,"std::map<views::View*, RespectDimension>"
 ash/curtain/stack_layout.h,FALSE,std::map,0,66,"std::map<views::View*, VerticalAlignment>"
 ash/display/display_animator.h,FALSE,std::map,0,60,"std::map<aura::Window*, std::unique_ptr<ui::LayerSolidColor>>"
+ash/display/screen_orientation_controller.h,FALSE,std::unordered_map,0,291,"std::unordered_map<aura::Window*, LockInfo>"
 ash/focus/focus_cycler.h,FALSE,std::vector,1,60,"std::vector<raw_ptr<views::Widget, DanglingUntriaged>>"
 ash/focus/focus_cycler_unittest.cc,TRUE,std::vector,1,53,"std::vector<raw_ptr<views::View, DanglingUntriaged>>"
+ash/game_dashboard/game_dashboard_controller.h,FALSE,std::map,0,169,"std::map<aura::Window*, std::unique_ptr<GameDashboardContext>>"
 ash/host/ash_window_tree_host_unified.h,FALSE,std::vector,1,50,std::vector<raw_ptr<AshWindowTreeHost>>
 ash/hud_display/tab_strip.h,FALSE,std::vector,1,79,std::vector<raw_ptr<HUDTabButton>>
 ash/login/ui/access_code_input.h,FALSE,std::vector,1,303,std::vector<raw_ptr<AccessibleInputField>>
 ash/login/ui/login_auth_factors_view_unittest.cc,TRUE,std::vector,1,215,"std::vector<raw_ptr<FakeAuthFactorModel, DanglingUntriaged>>"
 ash/login/ui/login_pin_view.h,FALSE,std::vector,1,130,std::vector<raw_ptr<NonAccessibleView>>
 ash/login/ui/login_pin_view.h,FALSE,std::vector,1,131,std::vector<raw_ptr<DigitPinButton>>
+ash/login/ui/scrollable_users_list_view.h,FALSE,std::vector,1,109,std::vector<raw_ptr<LoginUserView>>
+ash/metrics/window_presentation_metrics_recorder.h,FALSE,base::flat_map,0,55,"base::flat_map<aura::Window*, base::TimeTicks>"
 ash/public/cpp/test/test_shelf_item_delegate.h,TRUE,std::vector,1,44,std::vector<raw_ptr<aura::Window>>
 ash/quick_insert/views/quick_insert_search_results_view.h,FALSE,std::vector,1,144,std::vector<raw_ptr<QuickInsertSectionView>>
 ash/quick_insert/views/quick_insert_section_view.h,FALSE,std::vector,1,183,std::vector<raw_ptr<QuickInsertTraversableItemContainer>>
@@ -49,6 +66,8 @@ ash/root_window_controller.h,FALSE,std::vector,1,364,std::vector<raw_ptr<RootWin
 ash/sensor_info/sensor_provider_unittest.cc,TRUE,std::map,1,144,"std::map<int32_t, raw_ptr<chromeos::sensors::FakeSensorDevice>>"
 ash/session/test_pref_service_provider.h,TRUE,base::flat_map,1,52,"base::flat_map<AccountId, raw_ptr<PrefService>>"
 ash/shelf/drag_window_from_shelf_controller.cc,FALSE,std::vector,1,208,"std::vector<raw_ptr<aura::Window, DanglingUntriaged>>"
+ash/shelf/login_shelf_view.h,FALSE,std::vector,1,274,"std::vector<raw_ptr<LoginShelfButton, DanglingUntriaged>>"
+ash/shelf/login_shelf_view.h,FALSE,std::set,1,289,"std::set<raw_ptr<TrayBackgroundView, DanglingUntriaged>>"
 ash/shelf/shelf_window_watcher.h,FALSE,std::set,1,114,std::set<raw_ptr<aura::Window>>
 ash/style/option_button_group.h,FALSE,std::vector,1,58,std::vector<raw_ptr<OptionButtonBase>>
 ash/style/style_viewer/system_ui_components_grid_view.cc,FALSE,std::vector,1,235,"std::vector<raw_ptr<views::View, DanglingUntriaged>>"
@@ -59,19 +78,39 @@ ash/system/audio/unified_audio_detailed_view_controller_unittest.cc,TRUE,std::ma
 ash/system/audio/unified_audio_detailed_view_controller_unittest.cc,TRUE,std::map,1,343,"std::map<uint64_t, raw_ptr<views::View, DanglingUntriaged>>"
 ash/system/audio/unified_audio_detailed_view_controller_unittest.cc,TRUE,std::map,1,345,"std::map<uint64_t, raw_ptr<views::View, DanglingUntriaged>>"
 ash/system/audio/unified_audio_detailed_view_controller_unittest.cc,TRUE,std::map,1,346,"std::map<uint64_t, raw_ptr<views::View, DanglingUntriaged>>"
+ash/system/audio/unified_volume_view.h,FALSE,std::array,0,56,"std::array<const gfx::VectorIcon*, 3>"
 ash/system/bluetooth/bluetooth_device_list_controller_impl.h,FALSE,base::flat_map,1,70,"base::flat_map<std::string, raw_ptr<BluetoothDeviceListItemView, DanglingUntriaged>>"
+ash/system/brightness/unified_brightness_view.h,FALSE,std::array,0,47,"std::array<const gfx::VectorIcon*, 3>"
+ash/system/cast/cast_detailed_view.h,FALSE,std::map,0,92,"std::map<views::View*, std::string>"
 ash/system/focus_mode/focus_mode_detailed_view.cc,FALSE,std::vector,1,243,std::vector<raw_ptr<views::View>>
 ash/system/focus_mode/sounds/sound_section_view.h,FALSE,std::vector,1,65,std::vector<raw_ptr<PlaylistView>>
 ash/system/focus_mode/sounds/soundscape/playlist_tracker.h,FALSE,std::vector,1,41,std::vector<raw_ptr<const SoundscapeTrack>>
 ash/system/holding_space/holding_space_item_views_section.h,FALSE,std::map,1,152,"std::map<std::string, raw_ptr<HoldingSpaceItemView, DanglingUntriaged>>"
+ash/system/holding_space/holding_space_tray_bubble.h,FALSE,std::vector,1,83,std::vector<raw_ptr<HoldingSpaceTrayChildBubble>>
+ash/system/holding_space/holding_space_tray_child_bubble.h,FALSE,std::vector,1,108,std::vector<raw_ptr<HoldingSpaceItemViewsSection>>
 ash/system/ime_menu/ime_list_view.h,FALSE,std::map,0,96,"std::map<views::View*, std::string>"
 ash/system/ime_menu/ime_list_view.h,FALSE,std::map,0,97,"std::map<views::View*, std::string>"
 ash/system/media/quick_settings_media_view.h,FALSE,std::map,1,81,"std::map<const std::string, raw_ptr<global_media_controls::MediaItemUIView, DanglingUntriaged>>"
+ash/system/network/vpn_detailed_view.h,FALSE,std::map,0,101,"std::map<const views::View* const, VpnProviderPtr>"
+ash/system/network/vpn_detailed_view.h,FALSE,std::map,0,104,"std::map<const views::View* const, std::string>"
+ash/system/notification_center/ash_message_popup_collection.h,FALSE,std::set,1,227,std::set<raw_ptr<views::Widget>>
 ash/system/notification_center/views/notification_list_view_unittest.cc,TRUE,std::vector,1,122,"std::vector<raw_ptr<message_center::Notification, DanglingUntriaged>>"
 ash/system/palette/palette_tool_manager.h,FALSE,std::map,1,113,"std::map<PaletteGroup, raw_ptr<PaletteTool, DanglingUntriaged>>"
+ash/system/phonehub/phone_hub_more_apps_button.h,FALSE,std::vector,1,55,std::vector<raw_ptr<AppLoadingIcon>>
 ash/system/phonehub/phone_hub_recent_apps_view.h,FALSE,std::vector,1,135,"std::vector<raw_ptr<AppLoadingIcon, DanglingUntriaged>>"
+ash/system/phonehub/phone_hub_recent_apps_view.h,FALSE,std::vector,1,167,"std::vector<raw_ptr<views::View, DanglingUntriaged>>"
 ash/system/power/power_event_observer.cc,FALSE,std::map,0,219,"std::map<ui::Compositor*, CompositorInfo>"
+ash/system/scheduled_feature/scheduled_feature.h,FALSE,base::flat_map,0,252,"base::flat_map<PrefService*, ScheduleSnapshot>"
+ash/system/status_area_widget.h,FALSE,std::vector,1,350,"std::vector<raw_ptr<TrayBackgroundView, DanglingUntriaged>>"
+ash/system/time/calendar_month_view.h,FALSE,std::vector,1,207,std::vector<raw_ptr<CalendarDateCellView>>
+ash/system/toast/anchored_nudge_manager_impl.h,FALSE,std::map,1,134,"std::map<std::string, raw_ptr<AnchoredNudge>>"
 ash/system/toast/system_nudge_view.cc,FALSE,std::vector,1,173,std::vector<raw_ptr<views::View>>
+ash/system/toast/toast_manager_impl.h,FALSE,base::flat_map,0,103,"base::flat_map<aura::Window*, std::unique_ptr<ToastOverlay>>"
+ash/system/unified/feature_tiles_container_view.h,FALSE,std::vector,1,105,"std::vector<raw_ptr<PageContainer, DanglingUntriaged>>"
+ash/system/unified/feature_tiles_container_view.h,FALSE,std::vector,1,109,"std::vector<raw_ptr<RowContainer, DanglingUntriaged>>"
+ash/system/unified/notification_icons_controller.h,FALSE,std::vector,1,174,std::vector<raw_ptr<NotificationIconTrayItemView>>
+ash/system/unified/unified_system_tray.h,FALSE,std::list,1,303,std::list<raw_ptr<TrayItemView>>
+ash/system/unified/user_chooser_view.h,FALSE,std::vector,1,105,std::vector<raw_ptr<UserItemButton>>
 ash/system/video_conference/effects/video_conference_tray_effects_manager.h,FALSE,std::vector,1,145,"std::vector<raw_ptr<VcEffectsDelegate, DanglingUntriaged>>"
 ash/touch/touch_hud_debug.h,FALSE,std::array,0,72,"std::array<views::Label*, kMaxTouchPoints>"
 ash/touch/touch_hud_renderer.h,FALSE,std::map,1,53,"std::map<int, raw_ptr<TouchPointView>>"
@@ -92,59 +131,87 @@ ash/wm/desks/desk.h,FALSE,base::flat_map,0,386,"base::flat_map<aura::Window*, st
 ash/wm/desks/desk_bar_view_base.cc,FALSE,std::vector,1,536,"std::vector<raw_ptr<DeskMiniView, DanglingUntriaged>>"
 ash/wm/desks/desk_bar_view_base.cc,FALSE,base::flat_map,0,537,"base::flat_map<views::View*, int>"
 ash/wm/desks/desk_bar_view_base.cc,FALSE,base::flat_map,0,659,"base::flat_map<views::View*, int>"
+ash/wm/desks/desk_bar_view_base.h,FALSE,std::vector,1,432,"std::vector<raw_ptr<DeskMiniView, DanglingUntriaged>>"
+ash/wm/desks/desks_controller.h,FALSE,base::flat_set,1,558,"base::flat_set<raw_ptr<aura::Window, DanglingUntriaged>>"
 ash/wm/desks/desks_unittest.cc,TRUE,std::vector,1,373,"std::vector<raw_ptr<const Desk, DanglingUntriaged>>"
+ash/wm/desks/desks_window_occlusion_calculator.h,FALSE,base::flat_map,0,65,"base::flat_map<aura::Window*, base::flat_map<aura::Window*, aura::Window::OcclusionState>>"
+ash/wm/desks/root_window_desk_switch_animator.h,FALSE,std::vector,1,398,std::vector<raw_ptr<ui::Layer>>
 ash/wm/desks/templates/restore_data_collector.h,FALSE,std::vector,1,69,"std::vector<raw_ptr<aura::Window, DanglingUntriaged>>"
 ash/wm/desks/templates/saved_desk_grid_view.h,FALSE,std::vector,1,104,"std::vector<raw_ptr<SavedDeskItemView, DanglingUntriaged>>"
 ash/wm/desks/templates/saved_desk_library_view.h,FALSE,base::flat_map,1,118,"base::flat_map<DeskTemplateType, raw_ptr<SavedDeskGridView, DanglingUntriaged>>"
 ash/wm/desks/templates/saved_desk_library_view.h,FALSE,std::vector,1,130,"std::vector<raw_ptr<SavedDeskGridView, DanglingUntriaged>>"
 ash/wm/desks/templates/saved_desk_library_view.h,FALSE,std::vector,1,134,"std::vector<raw_ptr<views::Label, DanglingUntriaged>>"
+ash/wm/float/float_controller.h,FALSE,base::flat_map,0,193,"base::flat_map<aura::Window*, std::unique_ptr<FloatedWindowInfo>>"
+ash/wm/float/float_controller.h,FALSE,base::flat_map,0,199,"base::flat_map<aura::Window*, std::unique_ptr<WorkspaceEventHandler>>"
 ash/wm/layer_tree_synchronizer.h,FALSE,base::flat_map,0,80,"base::flat_map< const ui::Layer*, std::pair<gfx::RoundedCornersF, bool>>"
+ash/wm/mru_window_tracker.h,FALSE,std::vector,1,131,"std::vector<raw_ptr<aura::Window, DanglingUntriaged>>"
+ash/wm/multi_display/persistent_window_controller.h,FALSE,base::flat_map,0,65,"base::flat_map<aura::Window*, gfx::Rect>"
+ash/wm/overview/birch/birch_bar_controller.h,FALSE,std::vector,1,167,std::vector<raw_ptr<BirchBarView>>
 ash/wm/overview/birch/birch_bar_view.h,FALSE,std::vector,1,210,std::vector<raw_ptr<BirchChipButtonBase>>
 ash/wm/overview/birch/tab_app_selection_view.h,FALSE,std::vector,1,102,std::vector<raw_ptr<TabAppSelectionItemView>>
 ash/wm/overview/overview_window_drag_controller.h,FALSE,base::flat_map,0,252,"base::flat_map<OverviewGrid*, GridDesksBarData>"
 ash/wm/overview/scoped_overview_hide_windows.h,FALSE,std::map,0,47,"std::map<aura::Window*, bool>"
+ash/wm/overview/scoped_overview_transform_window.h,FALSE,base::flat_map,0,210,"base::flat_map<aura::Window*, std::unique_ptr<TransientInfo>>"
 ash/wm/resize_shadow_controller.h,FALSE,base::flat_map,0,100,"base::flat_map<aura::Window*, std::unique_ptr<WindowResizeShadow>>"
 ash/wm/root_window_layout_manager.h,FALSE,std::vector,1,41,std::vector<raw_ptr<aura::Window>>
 ash/wm/snap_group/snap_group.h,FALSE,base::flat_map,0,188,"base::flat_map<aura::Window*, SnapPosition>"
+ash/wm/splitview/split_view_controller.h,FALSE,base::flat_map,0,631,"base::flat_map<aura::Window*, gfx::Rect>"
 ash/wm/splitview/split_view_metrics_controller.h,FALSE,std::vector,1,263,"std::vector<raw_ptr<aura::Window, DanglingUntriaged>>"
 ash/wm/splitview/split_view_metrics_controller.h,FALSE,std::set,1,269,"std::set<raw_ptr<aura::Window, DanglingUntriaged>>"
+ash/wm/system_modal_container_layout_manager.h,FALSE,std::vector,1,129,std::vector<raw_ptr<aura::Window>>
+ash/wm/system_modal_container_layout_manager.h,FALSE,std::set,1,133,std::set<raw_ptr<const aura::Window>>
+ash/wm/tablet_mode/tablet_mode_window_manager.h,FALSE,std::unordered_set,1,201,"std::unordered_set<raw_ptr<aura::Window, DanglingUntriaged>>"
+ash/wm/tablet_mode/tablet_mode_window_manager.h,FALSE,std::unordered_set,1,206,"std::unordered_set<raw_ptr<aura::Window, DanglingUntriaged>>"
+ash/wm/video_detector.h,FALSE,std::set,1,106,std::set<raw_ptr<aura::Window>>
 ash/wm/window_cycle/window_cycle_item_view.h,FALSE,std::vector,1,101,"std::vector<raw_ptr<WindowCycleItemView, DanglingUntriaged>>"
+ash/wm/window_cycle/window_cycle_view.h,FALSE,std::vector,1,169,"std::vector<raw_ptr<WindowMiniViewBase, DanglingUntriaged>>"
+ash/wm/window_cycle/window_cycle_view.h,FALSE,std::vector,1,202,"std::vector<raw_ptr<WindowMiniViewBase, DanglingUntriaged>>"
+ash/wm/window_preview_view.h,FALSE,base::flat_map,1,72,"base::flat_map<aura::Window*, raw_ptr<WindowMirrorView>>"
+ash/wm/window_preview_view.h,FALSE,base::flat_map,0,72,"base::flat_map<aura::Window*, raw_ptr<WindowMirrorView>>"
+ash/wm/window_preview_view.h,FALSE,base::flat_set,1,78,base::flat_set<raw_ptr<aura::Window>>
+ash/wm/window_restore/window_restore_controller.h,FALSE,base::flat_set,1,162,"base::flat_set<raw_ptr<aura::Window, DanglingUntriaged>>"
+ash/wm/window_restore/window_restore_controller.h,FALSE,std::map,0,168,"std::map<aura::Window*, base::CancelableOnceClosure>"
 ash/wm/workspace/multi_window_resize_controller.h,FALSE,std::vector,1,134,"std::vector<raw_ptr<aura::Window, DanglingUntriaged>>"
 ash/wm/workspace/workspace_event_handler_unittest.cc,TRUE,std::vector,1,107,std::vector<raw_ptr<const void>>
+ash/wm/workspace/workspace_layout_manager.h,FALSE,std::set,1,183,"std::set<raw_ptr<aura::Window, DanglingUntriaged>>"
 ash/wm/workspace/workspace_window_resizer.h,FALSE,std::vector,1,182,"std::vector<raw_ptr<aura::Window, DanglingUntriaged>>"
 base/allocator/dispatcher/initializer_unittest.cc,TRUE,std::map,0,52,"std::map<void*, std::function<void()>>"
 base/allocator/dispatcher/internal/dispatcher_internal.h,FALSE,std::tuple,0,400,std::tuple<ObserverTypes*...>
 base/allocator/dispatcher/tls.h,FALSE,std::atomic,0,291,std::atomic<ChunkT*>
 base/allocator/dispatcher/tls.h,FALSE,std::atomic,0,469,std::atomic<Chunk*>
-base/allocator/partition_allocator/src/partition_alloc/partition_alloc_hooks.h,FALSE,std::atomic,0,107,std::atomic<AllocationObserverHook*>
-base/allocator/partition_allocator/src/partition_alloc/partition_alloc_hooks.h,FALSE,std::atomic,0,108,std::atomic<FreeObserverHook*>
-base/allocator/partition_allocator/src/partition_alloc/partition_alloc_hooks.h,FALSE,std::atomic,0,110,std::atomic<AllocationOverrideHook*>
-base/allocator/partition_allocator/src/partition_alloc/partition_alloc_hooks.h,FALSE,std::atomic,0,111,std::atomic<FreeOverrideHook*>
-base/allocator/partition_allocator/src/partition_alloc/partition_alloc_hooks.h,FALSE,std::atomic,0,112,std::atomic<ReallocOverrideHook*>
-base/allocator/partition_allocator/src/partition_alloc/partition_alloc_hooks.h,FALSE,std::atomic,0,114,std::atomic<QuarantineOverrideHook*>
 base/allocator/partition_allocator/src/partition_alloc/pointers/instance_tracer.cc,FALSE,std::array,0,39,"std::array<const void*, 32>"
-base/allocator/partition_allocator/src/partition_alloc/scheduler_loop_quarantine_support.h,FALSE,std::variant,0,141,"std::variant<internal::GlobalSchedulerLoopQuarantineBranch*, internal::ThreadBoundSchedulerLoopQuarantineBranch*>"
 base/allocator/partition_allocator/src/partition_alloc/shim/allocator_shim_default_dispatch_to_partition_alloc.cc,FALSE,std::atomic,0,109,std::atomic<T*>
 base/android/feature_map.h,FALSE,flat_map,1,59,"flat_map<std::string_view, raw_ptr<const Feature>>"
 base/android/feature_map.h,FALSE,flat_map,1,63,"flat_map<std::string, raw_ptr<const FeatureParam<bool>>>"
 base/android/feature_map.h,FALSE,flat_map,1,65,"flat_map<std::string, raw_ptr<const FeatureParam<int>>>"
 base/android/feature_map.h,FALSE,flat_map,1,66,"flat_map<std::string, raw_ptr<const FeatureParam<double>>>"
 base/android/feature_map.h,FALSE,flat_map,1,68,"flat_map<std::string, raw_ptr<const FeatureParam<std::string>>>"
+base/android/pre_freeze_background_memory_trimmer.h,FALSE,std::vector,1,251,std::vector<raw_ptr<const PreFreezeMetric>>
+base/containers/weak_value_table.h,FALSE,absl::flat_hash_map,1,205,"absl::flat_hash_map<Key, raw_ptr<ValueT>>"
 base/debug/stack_trace.h,FALSE,std::array,0,174,"std::array<const void*, kMaxTraces>"
+base/feature_list.h,FALSE,std::map,0,853,"std::map<std::string, const Feature*, std::less<>>"
 base/files/file_descriptor_watcher_posix.h,FALSE,AutoReset,0,136,AutoReset<FileDescriptorWatcher*>
+base/files/important_file_writer.h,FALSE,std::variant,1,245,"std::variant<std::monostate, raw_ptr<DataSerializer>, raw_ptr<BackgroundDataSerializer>>"
 base/memory/raw_ptr_asan_event.h,FALSE,std::array,0,81,"std::array<const void*, 12>"
+base/memory/shared_memory_tracker.h,FALSE,std::map,0,78,"std::map<void*, UsageInfo>"
 base/memory_coordinator/memory_consumer_registry.h,FALSE,absl::flat_hash_set,0,89,absl::flat_hash_set<MemoryConsumerRegistryDestructionObserver*>
 base/message_loop/message_pump_for_io_event_win.h,FALSE,std::vector,1,41,std::vector<raw_ptr<IOEventWatchController>>
+base/message_loop/message_pump_kqueue.h,FALSE,IDMap,0,174,"IDMap<FdWatchController*, uint64_t>"
+base/message_loop/message_pump_kqueue.h,FALSE,IDMap,0,177,"IDMap<MachPortWatchController*, mach_port_t>"
 base/message_loop/message_pump_unittest.cc,TRUE,std::map,0,170,"std::map<MessagePump::Delegate*, int>"
+base/metrics/field_trial.h,FALSE,std::vector,1,858,"std::vector<raw_ptr<Observer, DanglingUntriaged>>"
+base/metrics/field_trial.h,FALSE,std::vector,1,863,"std::vector<raw_ptr<Observer, DanglingUntriaged>>"
 base/metrics/histogram_snapshot_manager_unittest.cc,TRUE,std::vector,1,70,std::vector<raw_ptr<const HistogramBase>>
 base/metrics/histogram_threadsafe_unittest.cc,TRUE,raw_span,0,137,raw_span<HistogramBase*>
 base/metrics/sample_vector.h,FALSE,std::atomic,0,157,std::atomic<HistogramBase::AtomicCount*>
+base/observer_list_threadsafe.h,FALSE,std::unordered_map,0,325,"std::unordered_map<ObserverType*, ObserverTaskRunnerInfo>"
 base/observer_list_threadsafe_unittest.cc,TRUE,std::vector,1,266,std::vector<raw_ptr<Foo>>
 base/profiler/thread_group_profiler.h,FALSE,flat_map,0,153,"flat_map<internal::WorkerThread*, scoped_refptr<Profiler>>"
 base/profiler/thread_group_profiler_unittest.cc,TRUE,std::set,1,289,std::set<raw_ptr<FakeWorkerThread>>
 base/profiler/thread_group_profiler_unittest.cc,TRUE,std::map,0,291,"std::map<PlatformThreadId, MockProfiler*>"
 base/sampling_heap_profiler/lock_free_address_hash_set.h,FALSE,std::atomic,0,123,std::atomic<void*>
 base/sampling_heap_profiler/lock_free_address_hash_set.h,FALSE,std::atomic,0,135,std::atomic<Node*>
+base/sampling_heap_profiler/sampling_heap_profiler.h,FALSE,std::unordered_map,0,160,"std::unordered_map<void*, OrderedSample>"
 base/scoped_multi_source_observation_unittest.cc,TRUE,std::vector,1,28,std::vector<raw_ptr<TestSourceObserver>>
 base/scoped_observation_unittest.cc,TRUE,std::vector,1,30,std::vector<raw_ptr<TestSourceObserver>>
 base/supports_user_data.cc,FALSE,absl::flat_hash_map,0,16,"absl::flat_hash_map<const void*, std::unique_ptr<Data>>"
@@ -155,28 +222,40 @@ base/task/deferred_sequenced_task_runner.h,FALSE,std::atomic,0,102,std::atomic<S
 base/task/execution_fence.cc,FALSE,absl::flat_hash_set,0,72,absl::flat_hash_set<SequenceManager*>
 base/task/sequence_manager/associated_thread_id.h,FALSE,std::atomic,0,130,std::atomic<AssociatedThreadId*>
 base/task/sequence_manager/sequence_manager_impl.h,FALSE,std::map,0,345,"std::map<internal::TaskQueueImpl*, std::unique_ptr<internal::TaskQueueImpl>>"
+base/task/sequence_manager/sequence_manager_impl.h,FALSE,std::atomic,0,498,std::atomic<const base::TickClock*>
 base/task/sequence_manager/task_queue_impl.h,FALSE,base::flat_map,1,586,"base::flat_map<raw_ptr<OnTaskPostedCallbackHandleImpl>, OnTaskPostedHandler>"
 base/task/sequence_manager/task_queue_selector_unittest.cc,TRUE,std::map,0,162,"std::map<TaskQueueImpl*, size_t>"
 base/task/thread_pool/worker_thread_set.h,FALSE,std::set,1,64,"std::set<raw_ptr<WorkerThread, DanglingUntriaged>, Compare>"
 base/test/test_suite.h,TRUE,raw_ptr,0,120,raw_ptr<char*>
 base/threading/hang_watcher.h,FALSE,AutoReset,0,637,AutoReset<HangWatchState*>
+base/threading/platform_thread_metrics.h,FALSE,std::map,1,164,"std::map<PlatformThreadId, raw_ptr<HistogramBase>>"
 base/threading/scoped_blocking_call_internal.h,FALSE,base::AutoReset,0,197,base::AutoReset<UncheckedScopedBlockingCall*>
 base/threading/sequence_local_storage_map.h,FALSE,base::AutoReset,0,202,base::AutoReset<SequenceLocalStorageMap*>
 base/threading/simple_thread.h,FALSE,base::queue,1,227,base::queue<raw_ptr<Delegate>>
 base/threading/thread_id_name_manager.h,FALSE,std::vector,1,92,std::vector<raw_ptr<Observer>>
 base/win/map.h,FALSE,base::flat_map,0,425,"base::flat_map<int64_t, ABI::Windows::Foundation::Collections:: MapChangedEventHandler<LogicalK, LogicalV>*>"
 base/win/vector.h,FALSE,base::flat_map,0,402,"base::flat_map<int64_t, ABI::Windows::Foundation::Collections:: VectorChangedEventHandler<LogicalT>*>"
+cc/animation/animation.h,FALSE,ProtectedSequenceReadable,1,235,ProtectedSequenceReadable<raw_ptr<AnimationTimeline>>
+cc/layers/layer.h,FALSE,ProtectedSequenceReadable,1,1177,ProtectedSequenceReadable<raw_ptr<Layer>>
 cc/layers/render_surface_impl.h,FALSE,std::vector,1,406,std::vector<raw_ptr<LayerImpl>>
+cc/layers/texture_layer.h,FALSE,ProtectedSequenceForbidden,1,155,"ProtectedSequenceForbidden<raw_ptr<TextureLayerClient, DanglingUntriaged>>"
 cc/metrics/events_metrics_manager.h,FALSE,std::vector,1,102,std::vector<raw_ptr<ScopedMonitorImpl>>
 cc/metrics/scroll_jank_v4_decider_unittest.cc,TRUE,std::optional,0,218,std::optional<const Real*>
 cc/metrics/scroll_jank_v4_frame_timeline_calculator.cc,FALSE,std::vector,1,169,std::vector<raw_ptr<ScrollEventMetrics>>
+cc/paint/image_transfer_cache_entry.h,FALSE,std::array,0,67,"std::array<const SkPixmap*, SkYUVAInfo::kMaxPlanes>"
 cc/paint/paint_op_buffer_iterator.h,FALSE,absl::InlinedVector,1,242,"absl::InlinedVector<raw_ptr<const PaintOp>, 3>"
 cc/resources/ui_resource_manager.h,FALSE,std::unordered_map,0,85,"std::unordered_map<SkPixelRef*, std::unique_ptr<ScopedUIResource>>"
+cc/slim/layer_tree_impl.h,FALSE,base::flat_map,1,228,"base::flat_map<viz::OffsetTag, raw_ptr<SurfaceLayer>>"
 cc/test/fake_tile_manager.h,FALSE,std::vector,1,29,std::vector<raw_ptr<Tile>>
+cc/tiles/tile_manager.h,FALSE,absl::flat_hash_map,1,408,"absl::flat_hash_map<Tile::Id, raw_ptr<Tile>>"
+cc/tiles/tile_manager.h,FALSE,absl::flat_hash_set,1,435,absl::flat_hash_set<raw_ptr<Tile>>
 cc/tiles/tiles_with_resource_iterator.h,FALSE,std::set,1,73,std::set<raw_ptr<Tile>>
 cc/tiles/tiling_set_eviction_queue.h,FALSE,std::vector,1,206,"std::vector<raw_ptr<PictureLayerTiling, UnprotectedInRelease>>"
 cc/trees/commit_state.h,FALSE,absl::flat_hash_map,1,214,"absl::flat_hash_map<int, raw_ptr<Layer>>"
 cc/trees/damage_tracker_unittest.cc,TRUE,std::vector,1,400,"std::vector<raw_ptr<TestLayerImpl, DanglingUntriaged>>"
+cc/trees/layer_tree_host.h,FALSE,absl::flat_hash_map,1,1193,"absl::flat_hash_map<ElementId, raw_ptr<Layer>>"
+cc/trees/layer_tree_host_impl.h,FALSE,std::set,1,1212,std::set<raw_ptr<VideoFrameController>>
+cc/trees/layer_tree_host_impl.h,FALSE,std::set,1,1236,std::set<raw_ptr<LatencyInfoSwapPromiseMonitor>>
 cc/trees/swap_promise_manager.h,FALSE,std::set,1,57,std::set<raw_ptr<LatencyInfoSwapPromiseMonitor>>
 cc/trees/throttle_decider.h,FALSE,base::flat_map,1,45,"base::flat_map<viz::CompositorRenderPassId, raw_ptr<const viz::CompositorRenderPass, DanglingUntriaged>>"
 chrome/browser/accessibility/live_caption/live_caption_speech_recognition_host_browsertest.h,TRUE,std::map,0,96,"std::map<content::RenderFrameHost*, mojo::Remote<media::mojom::SpeechRecognitionRecognizerClient>>"
@@ -314,6 +393,10 @@ chrome/browser/enterprise/idle/idle_service_interactive_uitest.cc,TRUE,std::set,
 chrome/browser/enterprise/idle/idle_service_interactive_uitest.cc,TRUE,absl::flat_hash_map,1,114,"absl::flat_hash_map<raw_ptr<BrowserWindowInterface>, base::CallbackListSubscription>"
 chrome/browser/enterprise/remote_commands/job_profile_picker.h,FALSE,std::variant,1,33,"std::variant<raw_ptr<Profile>, raw_ptr<ProfileManager>>"
 chrome/browser/enterprise/reporting/extension_request/extension_request_observer_factory.h,FALSE,std::map,0,52,"std::map<Profile*, std::unique_ptr<ExtensionRequestObserver>, ProfileCompare>"
+chrome/browser/enterprise/watermark/watermark_example.h,FALSE,std::vector,1,64,std::vector<raw_ptr<views::Slider>>
+chrome/browser/enterprise/watermark/watermark_example.h,FALSE,std::vector,1,65,std::vector<raw_ptr<views::Label>>
+chrome/browser/enterprise/watermark/watermark_example.h,FALSE,std::vector,1,66,std::vector<raw_ptr<views::Slider>>
+chrome/browser/enterprise/watermark/watermark_example.h,FALSE,std::vector,1,67,std::vector<raw_ptr<views::Label>>
 chrome/browser/extensions/activity_log/activity_log.cc,FALSE,std::map,1,273,"std::map<std::string, raw_ptr<const ApiInfo>>"
 chrome/browser/extensions/api/debugger/debugger_api.h,FALSE,std::set,1,69,"std::set<raw_ptr<ExtensionDevToolsClientHost, DanglingUntriaged>>"
 chrome/browser/extensions/api/declarative_content/chrome_content_rules_registry.h,FALSE,std::map,0,172,"std::map<content::WebContents*, std::set<raw_ptr<const ContentRule>>>"
@@ -769,6 +852,7 @@ chrome/credential_provider/test/com_fakes.h,FALSE,std::unordered_map,0,153,"std:
 chrome/credential_provider/test/com_fakes.h,FALSE,std::unordered_map,0,156,"std::unordered_map< ICredentialProviderCredential*, std::unordered_map<DWORD, CREDENTIAL_PROVIDER_FIELD_INTERACTIVE_STATE>>"
 chrome/credential_provider/test/com_fakes.h,FALSE,std::unordered_map,0,160,"std::unordered_map<ICredentialProviderCredential*, std::unordered_map<DWORD, std::wstring>>"
 chrome/renderer/plugins/chrome_plugin_placeholder.cc,FALSE,std::set,1,89,std::set<raw_ptr<ChromePluginPlaceholder>>
+chrome/renderer/v8_unwinder.h,FALSE,std::set,1,97,"std::set<raw_ptr<const base::ModuleCache::Module, DanglingUntriaged>, ModuleCompare>"
 chrome/services/sharing/nearby/platform/ble_v2_gatt_client.h,FALSE,base::flat_set,1,129,base::flat_set<raw_ptr<base::WaitableEvent>>
 chrome/services/sharing/nearby/platform/ble_v2_gatt_client.h,FALSE,base::flat_set,1,131,base::flat_set<raw_ptr<base::WaitableEvent>>
 chrome/services/sharing/nearby/platform/ble_v2_gatt_client.h,FALSE,base::flat_set,1,133,base::flat_set<raw_ptr<base::WaitableEvent>>
@@ -827,6 +911,8 @@ chromeos/ash/components/mojo_proxy/mojo_core/core/watcher_dispatcher.h,FALSE,bas
 chromeos/ash/components/mojo_proxy/mojo_core/core/watcher_set.h,FALSE,base::flat_map,0,68,"base::flat_map<WatcherDispatcher*, Entry>"
 chromeos/ash/components/osauth/impl/auth_hub_mode_lifecycle_unittest.cc,TRUE,base::flat_map,1,115,"base::flat_map<AshAuthFactor, raw_ptr<MockAuthFactorEngine, AcrossTasksDanglingUntriaged>>"
 chromeos/ash/components/osauth/impl/auth_hub_vector_lifecycle_unittest.cc,TRUE,base::flat_map,1,163,"base::flat_map< AshAuthFactor, raw_ptr<AuthFactorEngine::FactorEngineObserver, DanglingUntriaged>>"
+chromeos/ash/components/osauth/impl/cryptohome_core_impl.h,FALSE,base::flat_set,1,62,base::flat_set<raw_ptr<Client>>
+chromeos/ash/components/osauth/impl/cryptohome_core_impl.h,FALSE,base::flat_set,1,63,base::flat_set<raw_ptr<Client>>
 chromeos/ash/components/phonehub/multidevice_feature_access_manager.h,FALSE,base::flat_map,1,207,"base::flat_map<int, raw_ptr<NotificationAccessSetupOperation>>"
 chromeos/ash/components/phonehub/multidevice_feature_access_manager.h,FALSE,base::flat_map,1,209,"base::flat_map<int, raw_ptr<CombinedAccessSetupOperation>>"
 chromeos/ash/components/phonehub/multidevice_feature_access_manager.h,FALSE,base::flat_map,1,211,"base::flat_map<int, raw_ptr<FeatureSetupConnectionOperation>>"
@@ -848,6 +934,7 @@ chromeos/ash/experiences/arc/metrics/arc_wm_metrics.h,FALSE,base::flat_map,0,96,
 chromeos/ash/experiences/arc/metrics/arc_wm_metrics.h,FALSE,base::flat_map,0,101,"base::flat_map<aura::Window*, std::unique_ptr<WindowCloseObserver>>"
 chromeos/ash/experiences/arc/metrics/arc_wm_metrics.h,FALSE,base::flat_map,0,106,"base::flat_map<aura::Window*, std::unique_ptr<WindowStateChangeObserver>>"
 chromeos/ash/experiences/arc/metrics/arc_wm_metrics.h,FALSE,base::flat_map,0,111,"base::flat_map<aura::Window*, std::unique_ptr<WindowRotationObserver>>"
+chromeos/ash/experiences/arc/toast/arc_toast_surface_manager.h,FALSE,std::vector,1,42,std::vector<raw_ptr<exo::ToastSurface>>
 chromeos/ash/services/bluetooth_config/discovery_session_manager_impl_unittest.cc,TRUE,std::vector,1,214,"std::vector<raw_ptr<FakeDevicePairingHandler, DanglingUntriaged>>"
 chromeos/ash/services/bluetooth_config/fake_device_pairing_handler.h,FALSE,std::vector,1,55,"std::vector<raw_ptr<device::BluetoothDevice, DanglingUntriaged>>"
 chromeos/ash/services/bluetooth_config/fake_discovery_session_manager.h,FALSE,std::vector,1,43,"std::vector<raw_ptr<FakeDevicePairingHandler, DanglingUntriaged>>"
@@ -873,11 +960,13 @@ chromeos/ash/services/secure_channel/pending_connection_manager_impl_unittest.cc
 chromeos/ash/services/secure_channel/pending_connection_manager_impl_unittest.cc,TRUE,base::flat_map,1,275,"base::flat_map<ConnectionAttemptDetails, raw_ptr<FakeConnectionAttempt<NearbyInitiatorFailureType>, DanglingUntriaged>>"
 chromeos/ash/services/secure_channel/secure_channel_service_unittest.cc,TRUE,std::unordered_map,1,473,"std::unordered_map<base::UnguessableToken, raw_ptr<FakeClientConnectionParameters>, base::UnguessableTokenHash>"
 chromeos/components/cdm_factory_daemon/output_protection_impl_unittest.cc,TRUE,std::vector,1,150,"std::vector<raw_ptr<display::DisplaySnapshot, DanglingUntriaged>>"
+chromeos/ui/frame/caption_buttons/frame_caption_button_container_view.h,FALSE,std::map,1,239,"std::map<views::CaptionButtonIcon, raw_ptr<const gfx::VectorIcon>>"
 chromeos/ui/frame/immersive/immersive_focus_watcher.cc,FALSE,std::set,1,91,"std::set<raw_ptr<aura::Window, DanglingUntriaged>>"
 components/affiliations/core/browser/fake_affiliation_fetcher.h,FALSE,base::queue,1,79,base::queue<raw_ptr<FakeAffiliationFetcher>>
 components/android_autofill/browser/form_data_android_unittest.cc,TRUE,std::vector,1,122,std::vector<raw_ptr<MockFormFieldDataAndroidBridge>>
 components/app_restore/arc_read_handler.h,FALSE,std::set,1,150,std::set<raw_ptr<aura::Window>>
 components/app_restore/arc_save_handler.h,FALSE,std::set,1,137,std::set<raw_ptr<aura::Window>>
+components/app_restore/full_restore_save_handler.h,FALSE,base::flat_map,1,257,"base::flat_map<base::FilePath, raw_ptr<apps::AppRegistryCache, DanglingUntriaged>>"
 components/autofill/content/browser/content_autofill_driver_factory.h,FALSE,std::map,0,125,"std::map<content::RenderFrameHost*, std::unique_ptr<ContentAutofillDriver>>"
 components/autofill/content/browser/content_autofill_driver_unittest.cc,TRUE,std::array,1,598,"std::array<raw_ptr<content::RenderFrameHost>, 4>"
 components/autofill/content/browser/test_autofill_client_injector.h,TRUE,std::map,0,87,"std::map<content::WebContents*, T*>"
@@ -940,10 +1029,13 @@ components/crash/content/browser/crash_handler_host_linux.h,FALSE,std::set,1,177
 components/desks_storage/core/desk_model.h,FALSE,std::vector,1,92,"std::vector<raw_ptr<const ash::DeskTemplate, DanglingUntriaged>>"
 components/device_signals/core/system_signals/win/com_fakes.h,FALSE,std::vector,1,229,"std::vector<raw_ptr<IWscProduct, DanglingUntriaged>>"
 components/devtools/simple_devtools_protocol_client/simple_devtools_protocol_client.h,FALSE,base::flat_map,1,82,"base::flat_map<std::string, raw_ptr<SimpleDevToolsProtocolClient>>"
+components/discardable_memory/client/client_discardable_shared_memory_manager.h,FALSE,std::set,1,198,std::set<raw_ptr<DiscardableMemoryImpl>>
 components/domain_reliability/dispatcher.h,FALSE,std::set,1,68,"std::set<raw_ptr<Task, DanglingUntriaged>>"
 components/download/content/public/all_download_item_notifier.h,FALSE,std::set,1,96,"std::set<raw_ptr<DownloadItem, DanglingUntriaged>>"
 components/download/internal/common/download_file_unittest.cc,TRUE,std::vector,1,561,std::vector<raw_ptr<StrictMock<MockInputStream>>>
 components/download/internal/common/download_item_impl_unittest.cc,TRUE,std::map,0,430,"std::map<DownloadItem*, std::unique_ptr<DownloadItem>>"
+components/download/public/common/all_download_event_notifier.h,FALSE,std::set,1,75,std::set<raw_ptr<DownloadItem>>
+components/download/public/common/android/auto_resumption_handler.h,FALSE,std::set,1,117,"std::set<raw_ptr<download::DownloadItem, DanglingUntriaged>>"
 components/download/public/common/desktop/desktop_auto_resumption_handler.h,FALSE,std::map,0,34,"std::map<std::string, DownloadItem*>"
 components/enterprise/connectors/core/realtime_reporting_client_base_unittest.cc,TRUE,std::vector,1,125,std::vector<raw_ptr<policy::CloudPolicyClient>>
 components/enterprise/net/core/enterprise_proxy_service.h,FALSE,base::flat_set,1,307,base::flat_set<raw_ptr<ProxyProvisioningDomainManager>>
@@ -971,6 +1063,13 @@ components/feature_engagement/internal/chrome_variations_configuration_unittest.
 components/feature_engagement/test/scoped_iph_feature_list.h,FALSE,std::set,1,91,std::set<raw_ptr<const base::Feature>>
 components/feed/core/v2/stream_model/feature_tree.h,FALSE,std::vector,1,51,"std::vector<raw_ptr<const feedstore::Content, DanglingUntriaged>>"
 components/feed/core/v2/xsurface_datastore.h,FALSE,std::vector,1,107,std::vector<raw_ptr<XsurfaceDatastoreDataReader>>
+components/global_media_controls/media_item_manager_impl.h,FALSE,base::flat_set,1,79,"base::flat_set<raw_ptr<MediaItemProducer, DanglingUntriaged>>"
+components/global_media_controls/public/media_item_ui_observer_set.h,FALSE,std::map,1,41,"std::map<std::string, raw_ptr<MediaItemUI>>"
+components/global_media_controls/public/views/media_item_ui_detailed_view.h,FALSE,std::vector,1,211,"std::vector<raw_ptr<views::Button, DanglingUntriaged>>"
+components/global_media_controls/public/views/media_item_ui_detailed_view.h,FALSE,base::flat_map,1,258,"base::flat_map<int, raw_ptr<ChapterItemView, DanglingUntriaged>>"
+components/global_media_controls/public/views/media_item_ui_list_view.h,FALSE,std::map,1,73,"std::map<const std::string, raw_ptr<MediaItemUIView, DanglingUntriaged>>"
+components/global_media_controls/public/views/media_item_ui_list_view.h,FALSE,std::map,1,75,"std::map<const std::string, raw_ptr<MediaItemUIUpdatedView, DanglingUntriaged>>"
+components/global_media_controls/public/views/media_item_ui_updated_view.h,FALSE,std::vector,1,223,std::vector<raw_ptr<MediaActionButton>>
 components/guest_view/browser/guest_view_manager.h,FALSE,std::map,0,250,"std::map<content::FrameTreeNodeId, GuestViewBase*>"
 components/gwp_asan/client/extreme_lightweight_detector_quarantine.h,FALSE,std::atomic,0,202,std::atomic<ToBeFreedArray*>
 components/history/core/browser/expire_history_backend.h,FALSE,base::queue,1,335,"base::queue<raw_ptr<const ExpiringVisitsReader, DanglingUntriaged>>"
@@ -979,6 +1078,7 @@ components/history/core/browser/web_history_service.h,FALSE,std::map,0,295,"std:
 components/history/core/browser/web_history_service.h,FALSE,std::map,0,300,"std::map<Request*, std::unique_ptr<Request>>"
 components/image_fetcher/core/image_data_fetcher.h,FALSE,std::map,0,102,"std::map<const network::SimpleURLLoader*, std::unique_ptr<ImageDataFetcherRequest>>"
 components/infobars/core/infobar_container_with_priority_unittest.cc,TRUE,std::vector,1,142,std::vector<raw_ptr<InfoBar>>
+components/input/cursor_manager.h,FALSE,std::map,0,87,"std::map<RenderWidgetHostViewInput*, ui::Cursor>"
 components/input/render_widget_targeter.h,FALSE,std::unordered_set,1,238,std::unordered_set<raw_ptr<RenderWidgetHostViewInput>>
 components/invalidation/invalidation_listener_impl.h,FALSE,std::map,1,114,"std::map<std::string, raw_ptr<Observer>>"
 components/keyed_service/core/dependency_graph.h,FALSE,std::vector,1,62,"std::vector<raw_ptr<DependencyNode, DanglingUntriaged>>"
@@ -1058,6 +1158,9 @@ components/permissions/permission_request_manager.h,FALSE,std::map,0,744,"std::m
 components/permissions/test/mock_permission_prompt_factory.h,FALSE,std::vector,1,97,std::vector<raw_ptr<MockPermissionPrompt>>
 components/policy/core/common/cloud/external_policy_data_fetcher_unittest.cc,TRUE,std::map,1,66,"std::map<int, raw_ptr<ExternalPolicyDataFetcher::Job>>"
 components/policy/core/common/management/management_service.h,FALSE,std::variant,1,120,"std::variant<raw_ptr<PrefService, DanglingUntriaged>, scoped_refptr<PersistentPrefStore>>"
+components/policy/core/common/policy_service_impl.h,FALSE,std::set,1,225,"std::set<raw_ptr<ConfigurationPolicyProvider, DanglingUntriaged>>"
+components/policy/core/common/policy_service_impl.h,FALSE,std::set,1,242,"std::set<raw_ptr<ConfigurationPolicyProvider, DanglingUntriaged>>"
+components/policy/core/common/schema_registry.h,FALSE,std::set,1,134,std::set<raw_ptr<SchemaRegistry>>
 components/power_bookmarks/core/bookmark_client_base.h,FALSE,std::vector,1,103,std::vector<raw_ptr<SuggestedSaveLocationProvider>>
 components/power_bookmarks/core/power_bookmark_service.h,FALSE,std::vector,1,56,std::vector<raw_ptr<PowerBookmarkDataProvider>>
 components/printing/browser/print_manager.h,FALSE,std::map,0,113,"std::map<content::RenderFrameHost*, mojo::AssociatedRemote<printing::mojom::PrintRenderFrame>>"
@@ -1069,6 +1172,8 @@ components/push_notification/push_notification_client_manager.h,FALSE,base::flat
 components/regional_capabilities/regional_capabilities_service.h,FALSE,std::optional,1,291,std::optional<raw_ref<const ProgramSettings>>
 components/regional_capabilities/regional_capabilities_utils.h,FALSE,std::vector,1,121,std::vector<raw_ptr<const TemplateURLPrepopulateData::PrepopulatedEngine>>
 components/regional_capabilities/regional_capabilities_utils.h,FALSE,std::vector,1,123,std::vector<raw_ptr<const TemplateURLPrepopulateData::PrepopulatedEngine>>
+components/remote_cocoa/app_shim/immersive_mode_controller_cocoa.h,FALSE,std::set,0,214,std::set<NSWindow*>
+components/remote_cocoa/app_shim/native_widget_ns_window_bridge.h,FALSE,std::vector,1,516,std::vector<raw_ptr<NativeWidgetNSWindowBridge>>
 components/safe_browsing/content/browser/navigation_observer/safe_browsing_navigation_observer_manager.h,FALSE,base::flat_map,0,198,"base::flat_map<content::NavigationHandle*, std::unique_ptr<NavigationEvent>>"
 components/safe_browsing/content/browser/password_protection/password_protection_request_content.h,FALSE,std::set,1,166,std::set<raw_ptr<PasswordProtectionCommitDeferringCondition>>
 components/safe_browsing/content/common/file_type_policies/file_type_policies.h,FALSE,std::map,1,183,"std::map<std::string, raw_ptr<const DownloadFileType>>"
@@ -1089,7 +1194,9 @@ components/segmentation_platform/internal/execution/mock_model_provider.h,FALSE,
 components/segmentation_platform/internal/execution/mock_model_provider.h,FALSE,std::map,0,89,"std::map<proto::SegmentId, MockDefaultModelProvider*>"
 components/segmentation_platform/internal/scheduler/model_execution_scheduler_impl.h,FALSE,std::vector,1,72,"std::vector<raw_ptr<Observer, DanglingUntriaged>>"
 components/segmentation_platform/internal/signals/url_signal_handler.h,FALSE,base::flat_set,1,89,base::flat_set<raw_ptr<HistoryDelegate>>
+components/services/app_service/public/cpp/app_capability_access_cache.h,FALSE,std::map,1,190,"std::map<std::string, raw_ptr<CapabilityAccess, CtnExperimental>>"
 components/services/app_service/public/cpp/app_capability_access_cache_wrapper.h,FALSE,std::map,1,48,"std::map<AccountId, raw_ptr<AppCapabilityAccessCache, CtnExperimental>>"
+components/services/app_service/public/cpp/app_registry_cache.h,FALSE,std::map,1,288,"std::map<std::string, raw_ptr<App>, std::less<>>"
 components/services/app_service/public/cpp/app_registry_cache_wrapper.h,FALSE,std::map,1,56,"std::map<AccountId, raw_ptr<AppRegistryCache>>"
 components/services/app_service/public/cpp/app_service_registry.h,FALSE,std::map,0,45,"std::map<AccountId, AppService*>"
 components/services/app_service/public/cpp/instance_registry.h,FALSE,std::optional,0,42,std::optional<content::BrowserContext*>
@@ -1110,6 +1217,7 @@ components/services/storage/storage_service_impl.h,FALSE,std::map,1,101,"std::ma
 components/sessions/core/tab_restore_service_helper.h,FALSE,std::set,1,321,std::set<raw_ptr<LiveTabContext>>
 components/sharing_message/fake_sharing_handler_registry.h,FALSE,std::map,1,38,"std::map<components_sharing_message::SharingMessage::PayloadCase, raw_ptr<SharingMessageHandler, DanglingUntriaged>>"
 components/signin/internal/identity_manager/fake_account_fetcher_factory.h,FALSE,std::map,0,64,"std::map<CoreAccountId, FakeAccountCapabilitiesFetcher*>"
+components/sqlite_vfs/sqlite_sandboxed_vfs.h,FALSE,base::flat_map,1,107,"base::flat_map<base::FilePath, raw_ptr<SandboxedFile>>"
 components/stream_transport/internal/upstream_message_client/upstream_message_client.h,FALSE,base::flat_map,0,101,"base::flat_map<PendingRequest*, std::unique_ptr<PendingRequest>>"
 components/subresource_filter/content/browser/content_subresource_filter_throttle_manager.h,FALSE,std::map,0,351,"std::map<content::RenderFrameHost*, std::unique_ptr<AsyncDocumentSubresourceFilter>>"
 components/subresource_filter/content/browser/content_subresource_filter_throttle_manager.h,FALSE,std::map,1,359,"std::map<int64_t, raw_ptr<ActivationStateComputingNavigationThrottle>>"
@@ -1125,6 +1233,7 @@ components/sync/engine/sync_scheduler_impl_unittest.cc,TRUE,base::AutoReset,0,49
 components/sync/service/glue/sync_engine_impl_unittest.cc,TRUE,raw_ptr,1,132,raw_ptr<raw_ptr<FakeSyncManager>>
 components/sync/service/sync_service_impl_startup_unittest.cc,TRUE,std::map,1,199,"std::map<DataType, raw_ptr<FakeDataTypeController, DanglingUntriaged>>"
 components/sync/service/sync_service_impl_unittest.cc,TRUE,std::map,1,346,"std::map<DataType, raw_ptr<FakeDataTypeController, DanglingUntriaged>>"
+components/sync/test/embedded_fake_server_adapter.h,FALSE,base::flat_set,1,99,base::flat_set<raw_ptr<base::WaitableEvent>>
 components/sync/test/fake_gcm_driver_sync_invalidation_sender.h,FALSE,std::vector,1,77,std::vector<raw_ptr<instance_id::FakeGCMDriverForInstanceID>>
 components/sync/test/mock_data_type_processor.h,FALSE,std::map,1,189,"std::map<ClientTagHash, raw_ptr<const UpdateResponseData>>"
 components/sync_bookmarks/synced_bookmark_tracker.h,FALSE,absl::flat_hash_map,1,276,"absl::flat_hash_map<const bookmarks::BookmarkNode*, raw_ptr<SyncedBookmarkTrackerEntity>>"
@@ -1137,6 +1246,7 @@ components/sync_sessions/test_synced_window_delegates_getter.h,TRUE,std::vector,
 components/tabs/public/tab_strip_collection.h,FALSE,std::unordered_map,1,220,"std::unordered_map<tab_groups::TabGroupId, raw_ptr<TabGroupTabCollection>, tab_groups::TabGroupIdHash>"
 components/tabs/public/tab_strip_collection.h,FALSE,std::unordered_map,1,226,"std::unordered_map<split_tabs::SplitTabId, raw_ptr<SplitTabCollection>, split_tabs::SplitTabIdHash>"
 components/trusted_vault/standalone_trusted_vault_frontend.h,FALSE,base::flat_map,1,162,"base::flat_map<SecurityDomainId, raw_ptr<StandaloneTrustedVaultClient>>"
+components/ui_devtools/dom_agent.h,FALSE,std::unordered_map,1,120,"std::unordered_map<int, raw_ptr<UIElement, DanglingUntriaged>>"
 components/ui_devtools/ui_element_unittest.cc,TRUE,std::vector,1,45,"std::vector<raw_ptr<UIElement, DanglingUntriaged>>"
 components/ui_devtools/views/dom_agent_aura.h,FALSE,std::vector,1,49,std::vector<raw_ptr<aura::Window>>
 components/ui_devtools/views/dom_agent_mac.h,FALSE,std::vector,1,48,std::vector<raw_ptr<views::Widget>>
@@ -1156,8 +1266,14 @@ components/user_education/test/test_user_education_storage_service.h,TRUE,std::m
 components/user_education/views/help_bubble_view.h,FALSE,std::vector,1,142,std::vector<raw_ptr<views::Label>>
 components/user_education/views/help_bubble_view.h,FALSE,std::vector,1,145,std::vector<raw_ptr<views::MdTextButton>>
 components/value_store/test_value_store_factory.h,TRUE,std::map,1,57,"std::map<base::FilePath, raw_ptr<ValueStore, DanglingUntriaged>>"
+components/variations/variations_ids_provider.h,FALSE,std::vector,1,386,std::vector<raw_ptr<Observer>>
 components/visited_url_ranking/internal/url_grouping/group_suggestions_manager.h,FALSE,base::flat_map,0,84,"base::flat_map<GroupSuggestionsDelegate*, DelegateMetadata>"
+components/viz/client/frame_eviction_manager.h,FALSE,std::map,0,134,"std::map<FrameEvictionManagerClient*, size_t>"
+components/viz/common/frame_sinks/begin_frame_source.h,FALSE,base::flat_set,1,352,"base::flat_set<raw_ptr<BeginFrameObserver, DanglingUntriaged>>"
+components/viz/common/frame_sinks/begin_frame_source.h,FALSE,base::flat_set,1,353,"base::flat_set<raw_ptr<BeginFrameObserver, DanglingUntriaged>>"
+components/viz/common/frame_sinks/begin_frame_source.h,FALSE,base::flat_set,1,409,"base::flat_set<raw_ptr<BeginFrameObserver, DanglingUntriaged>>"
 components/viz/common/frame_sinks/begin_frame_source.h,FALSE,base::flat_set,1,500,"base::flat_set<raw_ptr<BeginFrameObserver, DanglingUntriaged>>"
+components/viz/host/client_frame_sink_video_capturer.h,FALSE,std::vector,1,172,std::vector<raw_ptr<Overlay>>
 components/viz/service/debugger/viz_debugger.h,FALSE,std::vector,1,258,std::vector<raw_ptr<StaticSource>>
 components/viz/service/display/bsp_tree_perftest.cc,TRUE,std::vector,1,135,std::vector<raw_ptr<cc::LayerImpl>>
 components/viz/service/display/direct_renderer.h,FALSE,base::flat_map,1,370,"base::flat_map<AggregatedRenderPassId, raw_ptr<const DrawQuad, DanglingUntriaged>>"
@@ -1173,7 +1289,11 @@ components/viz/service/display_embedder/skia_output_surface_impl.h,FALSE,std::ve
 components/viz/service/display_embedder/skia_output_surface_impl_on_gpu.h,FALSE,base::flat_set,1,570,base::flat_set<raw_ptr<ImageContextImpl>>
 components/viz/service/display_embedder/skia_output_surface_impl_on_gpu.h,FALSE,base::flat_set,1,573,base::flat_set<raw_ptr<ImageContextImpl>>
 components/viz/service/display_embedder/skia_output_surface_impl_on_gpu.h,FALSE,base::flat_set,1,612,base::flat_set<raw_ptr<AsyncReadResultHelper>>
+components/viz/service/frame_sinks/compositor_frame_sink_support.h,FALSE,std::vector,1,445,std::vector<raw_ptr<CapturableFrameSink::Client>>
+components/viz/service/frame_sinks/compositor_frame_sink_support.h,FALSE,base::flat_set,1,544,base::flat_set<raw_ptr<Surface>>
 components/viz/service/frame_sinks/frame_sink_bundle_impl.h,FALSE,base::flat_map,0,112,"base::flat_map<BeginFrameSource*, std::unique_ptr<SinkGroup>>"
+components/viz/service/frame_sinks/frame_sink_manager_impl.h,FALSE,base::flat_map,0,630,"base::flat_map<BeginFrameSource*, FrameSinkId>"
+components/viz/service/frame_sinks/frame_sink_manager_impl.h,FALSE,base::flat_map,1,641,"base::flat_map<FrameSinkId, raw_ptr<CompositorFrameSinkSupport>>"
 components/viz/service/frame_sinks/video_capture/shared_memory_video_frame_pool.h,FALSE,base::flat_map,0,80,"base::flat_map<const media::VideoFrame*, base::ReadOnlySharedMemoryRegion>"
 components/viz/service/frame_sinks/video_detector_unittest.cc,TRUE,std::set,1,257,"std::set<raw_ptr<CompositorFrameSinkSupport, DanglingUntriaged>>"
 components/viz/service/performance_hint/hint_session.cc,FALSE,base::flat_set,1,200,base::flat_set<raw_ptr<AdpfHintSession>>
@@ -1185,6 +1305,7 @@ components/viz/service/surfaces/surface_allocation_group.h,FALSE,base::flat_set,
 components/viz/test/fake_external_begin_frame_source.h,FALSE,std::set,1,75,std::set<raw_ptr<BeginFrameObserver>>
 components/viz/test/fake_external_begin_frame_source.h,FALSE,base::flat_map,0,76,"base::flat_map<BeginFrameObserver*, int64_t>"
 components/viz/test/test_gles2_interface.h,TRUE,std::vector,1,193,std::vector<raw_ptr<TestGLES2Interface>>
+components/vrp_flags/vrp_flags_impl.h,FALSE,std::vector,1,60,std::vector<raw_ptr<uint64_t>>
 components/web_distiller/core/task_tracker.h,FALSE,std::deque,1,158,std::deque<raw_ptr<ViewRequestDelegate>>
 components/webapps/isolated_web_apps/reading/reader_registry_unittest.cc,TRUE,base::AutoReset,0,214,base::AutoReset<web_package::SignedWebBundleSignatureVerifier*>
 components/webapps/isolated_web_apps/reading/response_reader_factory_unittest.cc,TRUE,base::AutoReset,0,185,base::AutoReset<web_package::SignedWebBundleSignatureVerifier*>
@@ -1196,19 +1317,24 @@ components/webdata/common/web_data_request_manager.h,FALSE,std::map,1,131,"std::
 components/webdata/common/web_database.h,FALSE,std::map,1,158,"std::map<WebDatabaseTable::TypeKey, raw_ptr<WebDatabaseTable>>"
 components/webrtc/thread_wrapper.h,FALSE,base::AutoReset,0,133,base::AutoReset<ThreadWrapper*>
 components/zucchini/disassembler_elf.h,FALSE,std::vector,1,235,std::vector<raw_ptr<const typename Traits::Elf_Shdr>>
+content/browser/accessibility/browser_accessibility_state_impl.h,FALSE,std::list,1,264,std::list<raw_ptr<WebContentsImpl>>
 content/browser/android/synchronous_compositor_browsertest.cc,TRUE,std::map,1,78,"std::map<viz::FrameSinkId, raw_ptr<SynchronousCompositor>>"
 content/browser/audio/audio_service_browsertest.cc,TRUE,base::AutoReset,0,410,base::AutoReset<audio::mojom::AudioService*>
+content/browser/back_forward_cache/back_forward_cache_impl.h,FALSE,std::multiset,1,630,std::multiset<raw_ptr<RenderProcessHost>>
+content/browser/background_fetch/background_fetch_scheduler.h,FALSE,base::circular_deque,1,187,base::circular_deque<raw_ptr<BackgroundFetchJobController>>
 content/browser/background_fetch/storage/database_task.h,FALSE,std::map,0,167,"std::map<DatabaseTask*, std::unique_ptr<DatabaseTask>>"
 content/browser/background_sync/background_sync_scheduler.h,FALSE,std::map,0,73,"std::map<StoragePartitionImpl*, std::unique_ptr<base::OneShotTimer>>"
 content/browser/background_sync/background_sync_scheduler.h,FALSE,std::map,0,75,"std::map<StoragePartitionImpl*, std::unique_ptr<base::OneShotTimer>>"
 content/browser/bluetooth/bluetooth_adapter_factory_wrapper.h,FALSE,std::unordered_set,1,99,std::unordered_set<raw_ptr<WebBluetoothServiceImpl>>
 content/browser/browsing_data/browsing_data_remover_impl.h,FALSE,std::vector,1,181,"std::vector<raw_ptr<Observer, DanglingUntriaged>>"
+content/browser/browsing_data/browsing_data_remover_impl.h,FALSE,std::map,1,294,"std::map<StoragePartitionConfig, raw_ptr<StoragePartition>>"
 content/browser/browsing_data/browsing_data_remover_impl_unittest.cc,TRUE,std::vector,1,1521,"std::vector<raw_ptr<BrowsingDataRemover::Observer, DanglingUntriaged>>"
 content/browser/browsing_instance.h,FALSE,base::flat_map,1,327,"base::flat_map<SiteShard, raw_ptr<SiteInstanceImpl>>"
 content/browser/cache_storage/cache_storage.cc,FALSE,std::map,0,626,"std::map<CacheStorageCache*, std::string>"
 content/browser/cache_storage/cache_storage.h,FALSE,std::map,0,331,"std::map<CacheStorageCache*, std::unique_ptr<CacheStorageCache>>"
 content/browser/cache_storage/cache_storage_cache_entry_handler.h,FALSE,std::set,1,164,std::set<raw_ptr<DiskCacheBlobEntry>>
 content/browser/compositor/viz_process_transport_factory.h,FALSE,base::flat_map,0,146,"base::flat_map<ui::Compositor*, CompositorData>"
+content/browser/declarative_performance_observer/declarative_performance_observer.h,FALSE,std::optional,1,141,std::optional<raw_ptr<StoragePartition>>
 content/browser/devtools/devtools_agent_host_impl.h,FALSE,std::vector,1,184,"std::vector<raw_ptr<DevToolsSession, DanglingUntriaged>>"
 content/browser/devtools/devtools_agent_host_impl.h,FALSE,base::flat_map,0,185,"base::flat_map<DevToolsAgentHostClient*, std::unique_ptr<DevToolsSession>>"
 content/browser/devtools/devtools_renderer_channel.h,FALSE,base::flat_set,1,101,base::flat_set<raw_ptr<WorkerOrWorkletDevToolsAgentHost>>
@@ -1224,19 +1350,23 @@ content/browser/devtools/protocol/target_handler.h,FALSE,std::map,0,223,"std::ma
 content/browser/devtools/protocol/target_handler.h,FALSE,base::flat_map,0,224,"base::flat_map<TargetAutoAttacher*, bool >"
 content/browser/devtools/protocol/target_handler.h,FALSE,std::set,1,231,std::set<raw_ptr<DevToolsAgentHost>>
 content/browser/devtools/protocol/target_handler.h,FALSE,base::flat_set,1,234,base::flat_set<raw_ptr<Throttle>>
+content/browser/devtools/render_frame_devtools_agent_host.h,FALSE,base::flat_set,1,198,"base::flat_set<raw_ptr<NavigationRequest, DanglingUntriaged>>"
 content/browser/devtools/service_worker_devtools_manager.h,FALSE,base::flat_set,1,183,base::flat_set<raw_ptr<ServiceWorkerDevToolsAgentHost>>
 content/browser/devtools/shared_worker_devtools_manager.h,FALSE,std::map,0,69,"std::map<SharedWorkerHost*, scoped_refptr<SharedWorkerDevToolsAgentHost>>"
 content/browser/devtools/shared_worker_devtools_manager.h,FALSE,base::flat_set,1,73,base::flat_set<raw_ptr<SharedWorkerDevToolsAgentHost>>
 content/browser/devtools/tracing_process_set_monitor.h,FALSE,std::unordered_set,1,64,std::unordered_set<raw_ptr<const DevToolsAgentHost>>
 content/browser/devtools/worker_devtools_manager.h,FALSE,std::map,0,48,"std::map<const DedicatedWorkerHost*, scoped_refptr<DedicatedWorkerDevToolsAgentHost>>"
+content/browser/digital_credentials/digital_credential_environment.h,FALSE,base::flat_map,0,76,"base::flat_map<FrameTreeNode*, std::unique_ptr<ObservedWallet>>"
 content/browser/display_cutout/display_cutout_host_impl.h,FALSE,std::map,0,65,"std::map<RenderFrameHost*, blink::mojom::ViewportFit>"
 content/browser/display_cutout/safe_area_insets_host_impl_unittest.cc,TRUE,std::optional,0,89,std::optional<RenderFrameHost*>
 content/browser/display_cutout/safe_area_insets_host_impl_unittest.cc,TRUE,std::optional,0,90,std::optional<RenderFrameHost*>
+content/browser/dom_storage/dom_storage_context_wrapper.h,FALSE,std::map,1,183,"std::map<std::string, raw_ptr<SessionStorageNamespaceHandleImpl>>"
 content/browser/download/download_manager_impl_unittest.cc,TRUE,std::map,1,202,"std::map<uint32_t, raw_ptr<download::MockDownloadItemImpl, DanglingUntriaged>>"
 content/browser/download/save_file_manager.h,FALSE,absl::flat_hash_map,1,251,"absl::flat_hash_map<SaveItemId, raw_ptr<SavePackage>>"
 content/browser/download/save_package.h,FALSE,std::map,1,381,"std::map<GURL, raw_ptr<SaveItem, DanglingUntriaged>>"
 content/browser/download/save_package.h,FALSE,std::unordered_map,1,387,"std::unordered_map<FrameTreeNodeId, raw_ptr<SaveItem, DanglingUntriaged>>"
 content/browser/file_system_access/file_system_access_lock_manager.cc,FALSE,base::flat_map,1,457,"base::flat_map<GlobalRenderFrameHostId, raw_ref<LockHandle>>"
+content/browser/file_system_access/file_system_access_watcher_manager.h,FALSE,std::map,1,211,"std::map<blink::StorageKey, raw_ref<FileSystemAccessObserverQuotaManager>>"
 content/browser/file_system_access/file_system_access_watcher_manager.h,FALSE,std::list,1,239,std::list<raw_ref<FileSystemAccessChangeSource>>
 content/browser/find_request_manager.h,FALSE,std::unordered_set,1,285,std::unordered_set<raw_ptr<RenderFrameHost>>
 content/browser/find_request_manager.h,FALSE,std::unordered_map,0,323,"std::unordered_map<RenderFrameHost*, FrameRects>"
@@ -1250,6 +1380,7 @@ content/browser/locks/lock_manager.h,FALSE,base::flat_map,1,122,"base::flat_map<
 content/browser/media/audible_metrics.h,FALSE,std::set,1,69,"std::set<raw_ptr<const WebContents, DanglingUntriaged>>"
 content/browser/media/desktop_media_window_registry_aura.cc,FALSE,base::IDMap,0,58,base::IDMap<aura::Window*>
 content/browser/media/forwarding_audio_stream_factory.h,FALSE,base::flat_set,1,179,"base::flat_set<raw_ptr<AudioStreamBroker::LoopbackSink, DanglingUntriaged>>"
+content/browser/media/media_web_contents_observer.h,FALSE,std::map,0,371,"std::map<RenderFrameHost*, std::unique_ptr<base::WeakPtrFactory<MediaWebContentsObserver>>>"
 content/browser/navigation_browsertest.cc,TRUE,std::vector,1,172,std::vector<raw_ptr<NavigationRequest>>
 content/browser/payments/payment_app_context_impl.h,FALSE,std::map,0,63,"std::map<PaymentManager*, std::unique_ptr<PaymentManager>>"
 content/browser/renderer_host/agent_scheduling_group_host.cc,FALSE,std::set,1,60,std::set<raw_ptr<const SiteInstanceGroup>>
@@ -1268,6 +1399,7 @@ content/browser/renderer_host/navigation_throttle_registry_impl.h,FALSE,std::set
 content/browser/renderer_host/navigation_throttle_runner_unittest.cc,TRUE,std::set,1,235,std::set<raw_ptr<NavigationThrottle>>
 content/browser/renderer_host/navigation_transitions/navigation_entry_screenshot_manager.h,FALSE,base::LRUCacheSet,0,104,base::LRUCacheSet<NavigationEntryScreenshotCacheEvictor*>
 content/browser/renderer_host/render_frame_host_impl.cc,FALSE,std::variant,1,465,"std::variant<std::monostate, raw_ptr<RenderFrameHostImpl>, raw_ptr<RenderFrameProxyHost>>"
+content/browser/renderer_host/render_frame_host_impl.h,FALSE,std::map,0,4828,"std::map<NavigationRequest*, std::unique_ptr<NavigationRequest>>"
 content/browser/renderer_host/render_frame_host_impl.h,FALSE,BrowserInterfaceBrokerImpl,0,5514,"BrowserInterfaceBrokerImpl<RenderFrameHostImpl, RenderFrameHost*>"
 content/browser/renderer_host/render_frame_host_manager_browsertest.cc,TRUE,std::set,1,2157,"std::set<raw_ptr<RenderViewHost, DanglingUntriaged>>"
 content/browser/renderer_host/render_frame_host_manager_unittest.cc,TRUE,std::map,0,2702,"std::map<RenderFrameProxyHost*, std::unique_ptr<Remote>>"
@@ -1280,14 +1412,17 @@ content/browser/renderer_host/render_view_host_impl.cc,FALSE,std::unordered_set,
 content/browser/renderer_host/render_widget_host_view_aura_unittest.cc,TRUE,std::vector,1,7808,"std::vector<raw_ptr<RenderWidgetHostViewBase, DanglingUntriaged>>"
 content/browser/renderer_host/render_widget_host_view_aura_unittest.cc,TRUE,std::vector,1,7809,"std::vector<raw_ptr<MockRenderWidgetHostImpl, DanglingUntriaged>>"
 content/browser/renderer_host/render_widget_host_view_aura_unittest.cc,TRUE,std::vector,1,7811,"std::vector<raw_ptr<MockRenderWidgetHostImpl, DanglingUntriaged>>"
+content/browser/renderer_host/spare_render_process_host_manager_impl.h,FALSE,std::vector,1,246,std::vector<raw_ptr<RenderProcessHost>>
 content/browser/service_host/utility_process_host.h,FALSE,std::optional,1,197,std::optional<raw_ptr<ZygoteCommunication>>
 content/browser/service_host/utility_sandbox_delegate.h,FALSE,std::optional,1,96,std::optional<raw_ptr<ZygoteCommunication>>
 content/browser/service_worker/service_worker_context_core.h,FALSE,std::map,1,658,"std::map<int64_t, raw_ptr<ServiceWorkerRegistration, DanglingUntriaged>>"
 content/browser/service_worker/service_worker_context_core.h,FALSE,std::map,1,660,"std::map<int64_t, raw_ptr<ServiceWorkerVersion, DanglingUntriaged>>"
 content/browser/service_worker/service_worker_context_unittest.cc,TRUE,std::vector,1,1433,std::vector<raw_ptr<ServiceWorkerContext>>
+content/browser/site_instance_group.h,FALSE,base::flat_set,1,231,base::flat_set<raw_ptr<SiteInstanceImpl>>
 content/browser/site_per_process_browsertest.cc,TRUE,std::vector,1,7837,std::vector<raw_ptr<RenderFrameHostImpl>>
 content/browser/site_per_process_browsertest.cc,TRUE,std::vector,1,14640,std::vector<raw_ptr<RenderFrameHost>>
 content/browser/site_per_process_scroll_browsertest.cc,TRUE,std::map,0,633,"std::map<RenderFrameProxyHost*, std::unique_ptr<SynchronizeVisualPropertiesInterceptor>>"
+content/browser/sms/sms_fetcher_impl.h,FALSE,base::flat_map,0,80,"base::flat_map<Subscriber*, base::OnceClosure>"
 content/browser/snapshot_browsertest.cc,TRUE,std::map,0,159,"std::map<content::RenderWidgetHost*, std::vector<SkColor>>"
 content/browser/ssl/ssl_manager.cc,FALSE,std::set,1,102,std::set<raw_ptr<SSLManager>>
 content/browser/tracing/background_tracing_manager_impl.h,FALSE,std::set,1,93,std::set<raw_ptr<tracing::mojom::BackgroundTracingAgent>>
@@ -1295,11 +1430,19 @@ content/browser/tracing/background_tracing_manager_impl.h,FALSE,std::set,1,94,st
 content/browser/web_contents/web_contents_impl.cc,FALSE,base::flat_set,1,494,base::flat_set<raw_ptr<WebContentsImpl>>
 content/browser/web_contents/web_contents_impl.cc,FALSE,std::set,1,1325,std::set<raw_ptr<WebContentsImpl>>
 content/browser/web_contents/web_contents_impl.h,FALSE,std::vector,1,1908,std::vector<raw_ptr<WebContents>>
+content/browser/web_contents/web_contents_impl.h,FALSE,std::map,0,2414,"std::map<WebContentsImpl*, std::unique_ptr<WebContentsDestructionObserver>>"
+content/browser/web_contents/web_contents_impl.h,FALSE,std::map,1,2419,"std::map<GlobalRoutingID, raw_ptr<RenderWidgetHost>>"
+content/browser/web_contents/web_contents_impl.h,FALSE,std::map,0,2422,"std::map<RenderWidgetHost*, std::unique_ptr<RenderWidgetHostDestructionObserver>>"
+content/browser/web_contents/web_contents_impl.h,FALSE,base::flat_map,1,2654,"base::flat_map<viz::FrameSinkId, raw_ptr<RenderWidgetHostImpl>>"
+content/browser/web_contents/web_contents_impl.h,FALSE,std::set,1,2830,std::set<raw_ptr<RenderFrameHostImpl>>
 content/browser/webauth/authenticator_environment.h,FALSE,std::map,0,81,"std::map<FrameTreeNode*, std::unique_ptr<VirtualAuthenticatorManagerImpl>>"
 content/browser/webauth/virtual_fido_discovery_factory.h,FALSE,std::set,1,70,std::set<raw_ptr<VirtualFidoDiscovery>>
 content/browser/webid/network_request_manager.h,FALSE,base::flat_map,0,157,"base::flat_map<network::SimpleURLLoader*, base::UnguessableToken>"
+content/browser/webrtc/webrtc_diagnostics_impl.h,FALSE,std::set,1,188,std::set<raw_ptr<PerContext>>
 content/browser/worker_host/dedicated_worker_service_impl.h,FALSE,base::flat_map,1,57,"base::flat_map<blink::DedicatedWorkerToken, raw_ptr<DedicatedWorkerHost>>"
 content/browser/worker_host/shared_worker_service_impl.h,FALSE,base::flat_map,1,177,"base::flat_map<blink::SharedWorkerToken, raw_ptr<SharedWorkerHost, DanglingUntriaged>>"
+content/browser/xr/service/browser_xr_runtime_impl.h,FALSE,std::set,1,137,std::set<raw_ptr<VRServiceImpl>>
+content/browser/xr/service/xr_runtime_manager_impl.h,FALSE,std::set,1,167,std::set<raw_ptr<VRServiceImpl>>
 content/child/child_process.h,FALSE,base::AutoReset,0,116,base::AutoReset<ChildProcess*>
 content/child/child_thread_impl.h,FALSE,base::AutoReset,0,188,base::AutoReset<ChildThreadImpl*>
 content/child/font_warmup_win.cc,FALSE,std::map,0,187,"std::map<void*, scoped_refptr<FakeGdiObject>>"
@@ -1307,10 +1450,16 @@ content/common/memory_coordinator/memory_coordinator_policy_manager.h,FALSE,base
 content/common/memory_coordinator/memory_coordinator_policy_manager.h,FALSE,base::flat_set,1,254,base::flat_set<raw_ptr<MemoryCoordinatorPolicy>>
 content/common/memory_coordinator/memory_coordinator_policy_manager.h,FALSE,base::flat_set,1,305,base::flat_set<raw_ptr<MemoryCoordinatorPolicy>>
 content/common/memory_coordinator/memory_coordinator_policy_manager.h,FALSE,base::flat_map,0,316,"base::flat_map<MemoryCoordinatorPolicy*, ConsumerFilter>"
+content/public/browser/render_frame_host_receiver_set.h,FALSE,mojo::AssociatedReceiverSet,0,172,"mojo::AssociatedReceiverSet<Interface, RenderFrameHost*>"
+content/public/browser/render_frame_host_receiver_set.h,FALSE,std::map,0,176,"std::map<RenderFrameHost*, std::vector<mojo::ReceiverId>>"
 content/public/browser/web_contents_delegate.h,FALSE,std::set,1,1004,std::set<raw_ptr<WebContents>>
+content/public/renderer/render_thread.h,FALSE,base::AutoReset,0,98,base::AutoReset<RenderThread*>
 content/public/test/mock_render_process_host.h,FALSE,base::flat_set,1,363,base::flat_set<raw_ptr<RenderProcessHostPriorityClient>>
 content/public/test/mock_render_process_host.h,FALSE,base::IDMap,0,365,base::IDMap<IPC::Listener*>
 content/public/test/test_navigation_observer.h,TRUE,std::map,0,252,"std::map<WebContents*, WebContentsState>"
+content/public/utility/utility_thread.h,FALSE,base::AutoReset,0,36,base::AutoReset<UtilityThread*>
+content/renderer/agent_scheduling_group.h,FALSE,absl::flat_hash_map,1,114,"absl::flat_hash_map<blink::LocalFrameToken, raw_ptr<RenderFrameImpl>>"
+content/renderer/media/renderer_web_media_player_delegate.h,FALSE,base::IDMap,0,109,base::IDMap<Observer*>
 content/renderer/worker/worker_thread_registry.h,FALSE,std::map,0,54,"std::map<int , base::SequencedTaskRunner*>"
 content/shell/browser/shell_devtools_manager_delegate.h,FALSE,base::flat_map,1,48,"base::flat_map<raw_ptr<content::DevToolsAgentHostClientChannel>, std::unique_ptr<shell::protocol::ShellDevToolsSession>>"
 content/shell/browser/shell_platform_delegate.h,FALSE,base::flat_map,0,182,"base::flat_map<Shell*, ShellData>"
@@ -1337,11 +1486,20 @@ content/web_test/renderer/test_runner.h,TRUE,std::vector,1,595,std::vector<raw_p
 dbus/object_proxy.h,FALSE,std::set,1,346,"std::set<raw_ptr<DBusPendingCall, DanglingUntriaged>>"
 device/bluetooth/bluetooth_adapter.h,FALSE,std::set,1,983,"std::set<raw_ptr<BluetoothDiscoverySession, DanglingUntriaged>>"
 device/bluetooth/bluetooth_device.h,FALSE,std::set,1,844,std::set<raw_ptr<BluetoothGattConnection>>
+device/bluetooth/bluez/bluetooth_adapter_bluez.h,FALSE,std::map,1,583,"std::map<device::BluetoothUUID, raw_ptr<BluetoothAdapterProfileBlueZ, DanglingUntriaged>>"
+device/bluetooth/bluez/bluetooth_adapter_bluez.h,FALSE,std::map,1,588,"std::map<device::BluetoothUUID, raw_ptr<BluetoothAdapterProfileBlueZ, DanglingUntriaged>>"
+device/bluetooth/bluez/bluetooth_adapter_bluez.h,FALSE,std::map,1,593,"std::map< device::BluetoothUUID, raw_ptr<std::vector<RegisterProfileCompletionPair>, DanglingUntriaged>>"
+device/bluetooth/bluez/bluetooth_adapter_bluez.h,FALSE,std::map,1,603,"std::map<dbus::ObjectPath, raw_ptr<BluetoothLocalGattServiceBlueZ, DanglingUntriaged>>"
 device/bluetooth/bluez/bluetooth_adapter_profile_bluez.h,FALSE,std::map,1,99,"std::map<std::string, raw_ptr<bluez::BluetoothProfileServiceProvider::Delegate>>"
 device/bluetooth/bluez/bluetooth_bluez_unittest.cc,TRUE,std::vector,1,249,"std::vector<raw_ptr<device::BluetoothLowEnergyScanSession, DanglingUntriaged>>"
+device/bluetooth/bluez/bluetooth_device_bluez.h,FALSE,std::unordered_set,1,315,"std::unordered_set< raw_ptr<device::BluetoothRemoteGattService, DanglingUntriaged>>"
 device/bluetooth/dbus/fake_bluetooth_gatt_characteristic_client.h,FALSE,std::map,1,203,"std::map<std::string, raw_ptr<DelayedCallback, DanglingUntriaged>>"
+device/bluetooth/floss/bluetooth_gatt_service_floss.h,FALSE,std::map,1,113,"std::map<int32_t, raw_ptr<FlossGattClientObserver>>"
+device/bluetooth/floss/bluetooth_gatt_service_floss.h,FALSE,std::map,1,114,"std::map<int32_t, raw_ptr<FlossGattServerObserver>>"
 device/bluetooth/test/bluetooth_test_win.h,TRUE,std::vector,1,258,std::vector<raw_ptr<FakeBluetoothLEDeviceWinrt>>
 device/bluetooth/test/bluetooth_test_win.h,TRUE,std::vector,1,259,std::vector<raw_ptr<FakeBluetoothLEDeviceStaticsWinrt>>
+device/fido/get_assertion_request_handler.h,FALSE,std::map,0,142,"std::map<FidoAuthenticator*, std::unique_ptr<AuthTokenRequester>>"
+device/fido/make_credential_request_handler.h,FALSE,std::map,0,138,"std::map<FidoAuthenticator*, std::unique_ptr<AuthTokenRequester>>"
 device/gamepad/xbox_data_fetcher_mac.h,FALSE,std::set,1,81,std::set<raw_ptr<XboxControllerMac>>
 device/vr/android/arcore/ar_compositor_frame_sink.h,FALSE,base::flat_map,1,160,"base::flat_map<viz::ResourceId, raw_ptr<WebXrFrame>>"
 device/vr/android/arcore/arcore_anchor_manager.h,FALSE,internal::ScopedArCoreObject,0,80,internal::ScopedArCoreObject<ArPose*>
@@ -1354,6 +1512,8 @@ device/vr/android/arcore/arcore_plane_manager.h,FALSE,internal::ScopedArCoreObje
 device/vr/android/arcore/arcore_plane_manager.h,FALSE,internal::ScopedArCoreObject,0,98,internal::ScopedArCoreObject<ArPose*>
 device/vr/android/arcore/arcore_plane_manager.h,FALSE,absl::flat_hash_map,0,104,"absl::flat_hash_map<ArPlane*, PlaneId>"
 device/vr/android/cardboard/cardboard_device_params.h,FALSE,std::variant,1,57,"std::variant<raw_ptr<uint8_t>, OwnedCardboardParams>"
+device/vr/android/cardboard/cardboard_image_transport.h,FALSE,internal::ScopedCardboardObject,0,63,internal::ScopedCardboardObject<CardboardDistortionRenderer*>
+device/vr/android/cardboard/cardboard_image_transport.h,FALSE,internal::ScopedCardboardObject,0,64,internal::ScopedCardboardObject<CardboardLensDistortion*>
 device/vr/android/cardboard/cardboard_render_loop.h,FALSE,internal::ScopedCardboardObject,0,172,internal::ScopedCardboardObject<CardboardHeadTracker*>
 device/vr/android/web_xr_presentation_state.h,FALSE,std::vector,1,263,std::vector<raw_ptr<WebXrFrame>>
 device/vr/android/web_xr_presentation_state.h,FALSE,base::queue,1,264,base::queue<raw_ptr<WebXrFrame>>
@@ -1408,18 +1568,26 @@ google_apis/gcm/engine/mcs_client.h,FALSE,std::map,1,235,"std::map<CollapseKey, 
 gpu/command_buffer/client/dawn_client_memory_transfer_service.h,FALSE,std::vector,1,75,std::vector<raw_ptr<void>>
 gpu/command_buffer/client/ring_buffer_test.cc,TRUE,std::vector,1,83,std::vector<raw_ptr<const volatile void>>
 gpu/command_buffer/client/test_shared_image_interface.h,TRUE,std::vector,1,231,std::vector<raw_ptr<GpuChannelLostObserver>>
+gpu/command_buffer/service/scheduler.h,FALSE,base::flat_map,0,437,"base::flat_map<SequenceId, Sequence*>"
+gpu/command_buffer/service/scheduler.h,FALSE,base::flat_map,0,440,"base::flat_map<base::SingleThreadTaskRunner*, PerThreadState>"
+gpu/command_buffer/service/shared_context_state.h,FALSE,base::LRUCache,0,442,"base::LRUCache<void*, sk_sp<SkSurface>>"
 gpu/command_buffer/service/shared_image/android_image_backing.h,FALSE,base::flat_set,1,48,base::flat_set<raw_ptr<const SharedImageRepresentation>>
 gpu/command_buffer/service/shared_image/egl_image_backing.h,FALSE,base::flat_map,0,121,"base::flat_map<gl::GLApi*, scoped_refptr<gl::SharedGLFenceEGL>>"
 gpu/command_buffer/service/shared_image/egl_image_backing.h,FALSE,base::flat_set,1,123,base::flat_set<raw_ptr<const GLRepresentationShared>>
 gpu/command_buffer/service/shared_image/external_vk_image_gl_representation.h,FALSE,std::vector,1,76,std::vector<raw_ptr<gles2::Texture>>
 gpu/command_buffer/service/shared_image/gl_texture_image_backing.cc,FALSE,std::vector,1,78,std::vector<raw_ptr<gles2::Texture>>
+gpu/command_buffer/service/shared_image/ozone_image_backing.h,FALSE,std::map,0,164,"std::map<gl::GLContext*, scoped_refptr<OzoneImageGLTexturesHolder>>"
 gpu/command_buffer/service/shared_image/test_image_backing.cc,TRUE,std::vector,1,47,std::vector<raw_ptr<gles2::Texture>>
 gpu/command_buffer/service/shared_image/test_image_backing.h,TRUE,std::vector,1,102,std::vector<raw_ptr<gles2::Texture>>
+gpu/command_buffer/service/texture_manager.h,FALSE,std::vector,1,1208,std::vector<raw_ptr<FramebufferManager>>
+gpu/command_buffer/service/texture_manager.h,FALSE,std::vector,1,1242,std::vector<raw_ptr<DestructionObserver>>
+gpu/ipc/client/gpu_channel_host.h,FALSE,std::vector,1,312,std::vector<raw_ptr<GpuChannelLostObserver>>
 gpu/ipc/host/gpu_disk_cache.h,FALSE,std::unordered_map,0,113,"std::unordered_map<GpuDiskCacheEntry*, std::unique_ptr<GpuDiskCacheEntry>>"
 headless/lib/browser/headless_devtools_manager_delegate.h,FALSE,std::map,0,57,"std::map<content::DevToolsAgentHostClientChannel*, std::unique_ptr<protocol::HeadlessDevToolsSession>>"
 ipc/ipc_mojo_bootstrap.cc,FALSE,std::set,1,109,std::set<raw_ptr<ChannelAssociatedGroupController>>
 media/audio/aecdump_recording_manager.h,FALSE,std::map,0,87,"std::map<AecdumpRecordingSource*, uint32_t>"
 media/audio/audio_manager_base.h,FALSE,absl::flat_hash_set,1,224,absl::flat_hash_set<raw_ptr<AudioInputStream>>
+media/audio/audio_output_dispatcher_impl.h,FALSE,std::vector,1,85,"std::vector<raw_ptr<AudioOutputStream, DanglingUntriaged>>"
 media/audio/audio_output_proxy_unittest.cc,TRUE,std::optional,0,124,std::optional<AudioOutputStream::AudioSourceCallback*>
 media/audio/mac/audio_manager_mac.h,FALSE,absl::flat_hash_set,0,230,absl::flat_hash_set<AudioInputStream*>
 media/audio/mac/audio_manager_mac.h,FALSE,absl::flat_hash_set,0,231,absl::flat_hash_set<AUAudioInputStream*>
@@ -1430,6 +1598,9 @@ media/base/pipeline_impl_unittest.cc,TRUE,std::vector,1,366,std::vector<raw_ptr<
 media/base/sequence.h,FALSE,std::conditional_t,1,100,"std::conditional_t<Owned, const std::optional<T>, raw_ptr<const T>>"
 media/capture/video/chromeos/camera_hal_dispatcher_impl.h,FALSE,std::set,1,332,"std::set<raw_ptr<CameraClientObserver, DanglingUntriaged>>"
 media/capture/video/chromeos/camera_hal_dispatcher_impl.h,FALSE,std::map,0,369,"std::map<CameraClientObserver*, std::unique_ptr<CameraClientObserver>>"
+media/capture/video/chromeos/request_manager.h,FALSE,absl::flat_hash_set,1,351,absl::flat_hash_set<raw_ptr<ResultMetadataObserver>>
+media/capture/video/chromeos/system_event_monitor_impl.h,FALSE,base::flat_map,0,73,"base::flat_map<DisplayObserver*, std::unique_ptr<DisplayObserver>>"
+media/capture/video/chromeos/system_event_monitor_impl.h,FALSE,base::flat_map,0,78,"base::flat_map<PowerObserver*, std::unique_ptr<PowerObserver>>"
 media/capture/video/linux/fake_v4l2_impl.cc,FALSE,std::queue,1,568,std::queue<raw_ptr<FakeV4L2Buffer>>
 media/capture/video/linux/fake_v4l2_impl.cc,FALSE,std::queue,1,569,std::queue<raw_ptr<FakeV4L2Buffer>>
 media/capture/video/mock_device_factory.h,FALSE,std::map,1,32,"std::map<media::VideoCaptureDeviceDescriptor, raw_ptr<media::VideoCaptureDevice>>"
@@ -1439,13 +1610,17 @@ media/cdm/library_cdm/clear_key_cdm/cdm_file_io_test.h,TRUE,base::stack,1,159,"b
 media/filters/chunk_demuxer.h,FALSE,std::map,1,596,"std::map<MediaTrack::Id, raw_ptr<ChunkDemuxerStream>>"
 media/filters/decrypting_media_resource.h,FALSE,std::vector,1,69,std::vector<raw_ptr<DemuxerStream>>
 media/filters/ffmpeg_demuxer.h,FALSE,base::flat_map,1,437,"base::flat_map<MediaTrack::Id, raw_ptr<FFmpegDemuxerStream, DanglingUntriaged>>"
+media/filters/manifest_demuxer.h,FALSE,base::flat_map,0,350,"base::flat_map<DemuxerStream*, std::unique_ptr<ManifestDemuxerStream>>"
 media/filters/stream_parser_factory.cc,FALSE,base::raw_span,0,97,base::raw_span<const CodecInfo* const>
 media/formats/hls/rendition_manager.h,FALSE,std::vector,1,142,std::vector<raw_ptr<const VariantStream>>
 media/formats/hls/rendition_manager.h,FALSE,std::optional,1,163,std::optional<raw_ptr<const VariantStream>>
 media/formats/hls/rendition_manager.h,FALSE,std::optional,1,167,std::optional<raw_ptr<const VariantStream>>
+media/fuchsia/video/fuchsia_video_decoder.h,FALSE,std::vector,1,151,std::vector<raw_ptr<OutputMailbox>>
 media/gfx/mappable_shared_image_video_frame_pool.cc,FALSE,std::list,1,271,std::list<raw_ptr<FrameResource>>
+media/gpu/android/codec_image_group.h,FALSE,absl::flat_hash_set,1,71,absl::flat_hash_set<raw_ptr<CodecImage>>
 media/gpu/android/maybe_render_early_manager.cc,FALSE,std::vector,1,66,std::vector<raw_ptr<CodecImage>>
 media/gpu/android/maybe_render_early_manager_unittest.cc,TRUE,std::vector,1,64,std::vector<raw_ptr<MockImage>>
+media/gpu/chromeos/platform_video_frame_pool.h,FALSE,std::map,1,130,"std::map<base::UnguessableToken, raw_ptr<FrameResource>>"
 media/gpu/test/raw_video.h,FALSE,std::vector,1,48,std::vector<raw_ptr<const uint8_t>>
 media/gpu/v4l2/v4l2_device.h,FALSE,base::flat_map,0,280,"base::flat_map<enum v4l2_buf_type, V4L2Queue*>"
 media/gpu/v4l2/v4l2_queue.cc,FALSE,std::vector,1,198,std::vector<raw_ptr<void>>
@@ -1457,10 +1632,17 @@ media/gpu/vaapi/test_utils.cc,TRUE,std::array,1,335,"std::array<raw_ptr<uint8_t>
 media/gpu/windows/d3d12_helpers.h,FALSE,std::array,0,100,"std::array<ID3D12Resource*, kMaxSize>"
 media/gpu/windows/d3d12_helpers.h,FALSE,std::array,0,104,"std::array<ID3D12VideoDecoderHeap*, kMaxSize>"
 media/gpu/windows/d3d12_helpers.h,FALSE,std::array,1,109,"std::array<raw_ptr<D3DPictureBuffer>, kMaxSize>"
+media/midi/midi_manager.h,FALSE,std::set,1,190,std::set<raw_ptr<MidiManagerClient>>
+media/midi/midi_manager.h,FALSE,std::set,1,193,std::set<raw_ptr<MidiManagerClient>>
+media/midi/midi_manager_android.h,FALSE,std::vector,1,77,std::vector<raw_ptr<MidiInputPortAndroid>>
+media/midi/midi_manager_android.h,FALSE,absl::flat_hash_map,0,80,"absl::flat_hash_map<MidiInputPortAndroid*, size_t>"
+media/midi/midi_manager_android.h,FALSE,std::vector,1,84,std::vector<raw_ptr<MidiOutputPortAndroid>>
+media/midi/midi_manager_android.h,FALSE,absl::flat_hash_map,0,86,"absl::flat_hash_map<MidiOutputPortAndroid*, size_t>"
 media/midi/midi_manager_winrt.cc,FALSE,absl::flat_hash_set,0,636,absl::flat_hash_set<IAsyncOperation<RuntimeType*>*>
 media/mojo/clients/mojo_renderer_unittest.cc,TRUE,std::vector,1,216,std::vector<raw_ptr<DemuxerStream>>
 media/mojo/services/cdm_service.cc,FALSE,std::map,0,142,"std::map<MojoCdmService*, std::unique_ptr<MojoCdmService>>"
 media/mojo/services/interface_factory_impl.h,FALSE,std::map,0,156,"std::map<MojoCdmService*, std::unique_ptr<MojoCdmService>>"
+media/mojo/services/mojo_cdm_service_context.h,FALSE,std::map,1,70,"std::map<base::UnguessableToken, raw_ptr<MojoCdmService>>"
 media/mojo/services/mojo_cdm_service_context.h,FALSE,std::map,1,75,"std::map<base::UnguessableToken, raw_ptr<chromeos::RemoteCdmContext>>"
 media/parsers/h264_parser.h,FALSE,Ranges,0,585,Ranges<const uint8_t*>
 media/parsers/h264_parser.h,FALSE,Ranges,0,589,Ranges<const uint8_t*>
@@ -1468,8 +1650,10 @@ media/parsers/h265_nalu_parser.h,FALSE,Ranges,0,181,Ranges<const uint8_t*>
 media/parsers/h265_nalu_parser.h,FALSE,Ranges,0,188,Ranges<const uint8_t*>
 media/renderers/renderer_impl_unittest.cc,TRUE,std::vector,1,374,std::vector<raw_ptr<DemuxerStream>>
 media/webrtc/audio_processor.cc,FALSE,base::HeapArray,0,124,base::HeapArray<float*>
+mojo/core/core_ipcz.cc,FALSE,std::map,0,67,"std::map<void*, scoped_refptr<ipcz_driver::SharedBufferMapping>>"
 mojo/public/cpp/bindings/lib/interface_endpoint_client.cc,FALSE,std::vector,1,160,std::vector<raw_ptr<SyncResponseInfo>>
 mojo/public/cpp/bindings/lib/sequence_local_sync_event_watcher.cc,FALSE,base::flat_set,1,204,"base::flat_set< raw_ptr<const SequenceLocalSyncEventWatcher, DanglingUntriaged>>"
+mojo/public/cpp/bindings/sync_handle_registry.h,FALSE,std::map,0,92,"std::map<base::WaitableEvent*, std::unique_ptr<EventCallbackList>>"
 mojo/public/cpp/bindings/tests/connector_unittest.cc,TRUE,raw_ptr,0,74,raw_ptr<Connector*>
 mojo/public/cpp/system/wait_set.cc,FALSE,std::set,1,334,"std::set<raw_ptr<base::WaitableEvent, DanglingUntriaged>>"
 net/base/prioritized_dispatcher.h,FALSE,PriorityQueue,0,150,PriorityQueue<Job*>
@@ -1490,6 +1674,10 @@ net/http/http_stream_factory_job_controller_unittest.cc,TRUE,std::vector,1,1339,
 net/http/http_stream_pool_attempt_manager.h,FALSE,base::flat_set,1,564,base::flat_set<raw_ptr<Job>>
 net/http/http_stream_pool_attempt_manager.h,FALSE,base::flat_set,1,566,base::flat_set<raw_ptr<Job>>
 net/http/mock_sspi_library_win.h,FALSE,std::set,1,117,std::set<raw_ptr<SecPkgInfoW>>
+net/log/net_log.h,FALSE,std::vector,1,386,std::vector<raw_ptr<ThreadSafeObserver>>
+net/log/net_log.h,FALSE,std::vector,1,388,std::vector<raw_ptr<ThreadSafeCaptureModeObserver>>
+net/nqe/network_quality_estimator.h,FALSE,std::unordered_map,1,678,"std::unordered_map<raw_ptr<const URLRequest>, AsyncNotifyStartTransactionInfo>"
+net/nqe/network_quality_estimator.h,FALSE,std::unordered_map,1,687,"std::unordered_map<raw_ptr<const URLRequest>, base::TimeTicks>"
 net/proxy_resolution/linux/linux_system_proxy_resolution_service.h,FALSE,std::set,1,77,std::set<raw_ptr<LinuxSystemProxyResolutionRequest>>
 net/proxy_resolution/mock_proxy_resolver.h,FALSE,std::vector,1,82,std::vector<raw_ptr<Job>>
 net/proxy_resolution/multi_threaded_proxy_resolver.h,FALSE,std::set,1,77,"std::set<raw_ptr<Job, DanglingUntriaged>>"
@@ -1508,6 +1696,7 @@ net/socket/client_socket_pool_base_unittest.cc,TRUE,std::vector,1,289,"std::vect
 net/socket/socket_test_util.h,TRUE,std::vector,1,824,"std::vector<raw_ptr<T, DanglingUntriaged>>"
 net/socket/socket_test_util.h,TRUE,std::vector,1,1386,"std::vector<raw_ptr<TestSocketRequest, DanglingUntriaged>>"
 net/socket/transport_client_socket_pool.h,FALSE,std::list,1,551,std::list<raw_ptr<ConnectJob>>
+net/socket/transport_client_socket_pool.h,FALSE,std::set,1,812,std::set<raw_ptr<HigherLayeredPool>>
 net/ssl/client_cert_matcher.h,FALSE,std::multimap,1,64,"std::multimap<base::raw_span<const uint8_t>, raw_ptr<CRYPTO_BUFFER>>"
 net/test/embedded_test_server/embedded_test_server.h,TRUE,std::map,0,805,"std::map<const StreamSocket*, std::unique_ptr<HttpConnection>>"
 net/websockets/websocket_deflate_stream_test.cc,TRUE,base::circular_deque,1,188,base::circular_deque<raw_ptr<const WebSocketFrame>>
@@ -1529,7 +1718,10 @@ services/audio/input_controller_unittest.cc,TRUE,std::optional,0,155,std::option
 services/audio/input_sync_writer.h,FALSE,std::vector,1,169,std::vector<raw_ptr<media::AudioInputBuffer>>
 services/audio/log_factory_manager_unittest.cc,TRUE,std::vector,1,77,"std::vector<raw_ptr<MockAudioLog, DanglingUntriaged>>"
 services/audio/loopback_coordinator.h,FALSE,std::set,1,90,std::set<raw_ptr<Observer>>
+services/audio/loopback_reference_manager.cc,FALSE,base::flat_set,1,307,base::flat_set<raw_ptr<ReferenceOutput::Listener>>
 services/audio/loopback_reference_manager_unittest.cc,TRUE,std::optional,0,77,std::optional<AudioInputCallback*>
+services/audio/loopback_signal_provider.h,FALSE,std::map,0,81,"std::map<LoopbackSource*, std::unique_ptr<SnooperNode>>"
+services/audio/output_controller.h,FALSE,std::vector,1,353,std::vector<raw_ptr<Snooper>>
 services/cert_verifier/cert_verifier_service_factory.h,FALSE,std::set,1,140,std::set<raw_ptr<internal::CertVerifierServiceImpl>>
 services/cert_verifier/cert_verifier_service_unittest.cc,TRUE,std::map,1,172,"std::map<net::CertVerifier::RequestParams, raw_ptr<DummyRequest, DanglingUntriaged>>"
 services/device/generic_sensor/platform_sensor_provider.h,FALSE,std::map,1,89,"std::map<mojom::SensorType, raw_ptr<PlatformSensor>>"
@@ -1542,9 +1734,15 @@ services/device/usb/usb_device.h,FALSE,std::list,1,177,std::list<raw_ptr<UsbDevi
 services/device/usb/usb_device_handle_impl.h,FALSE,std::set,1,167,std::set<raw_ptr<Transfer>>
 services/device/usb/usb_service_impl.h,FALSE,std::set,1,107,std::set<raw_ptr<libusb_device>>
 services/image_annotation/annotator.h,FALSE,std::map,1,300,"std::map<RequestKey, raw_ptr<mojo::Remote<mojom::ImageProcessor>, DanglingUntriaged>>"
+services/metrics/public/cpp/delegating_ukm_recorder.h,FALSE,std::unordered_map,0,100,"std::unordered_map<UkmRecorder*, Delegate>"
+services/network/devtools_durable_msg_collector_manager.h,FALSE,std::set,1,78,std::set<raw_ptr<DevtoolsDurableMessageCollector>>
+services/network/devtools_durable_msg_collector_manager.h,FALSE,std::multimap,1,81,"std::multimap<const base::UnguessableToken, raw_ptr<DevtoolsDurableMessageCollector>>"
 services/network/network_context_unittest.cc,TRUE,std::vector,1,7914,"std::vector<raw_ptr<net::ContextHostResolver, DanglingUntriaged>>"
+services/network/network_service.h,FALSE,std::set,1,563,std::set<raw_ptr<NetworkContext>>
+services/network/p2p/socket_manager.h,FALSE,base::flat_map,0,163,"base::flat_map<P2PSocket*, std::unique_ptr<P2PSocket>>"
 services/network/p2p/socket_manager_unittest.cc,TRUE,std::vector,1,292,std::vector<raw_ptr<PendingRequest>>
 services/network/public/cpp/simple_url_loader_unittest.cc,TRUE,std::list,1,2583,std::list<raw_ptr<MockURLLoader>>
+services/network/shared_dictionary/shared_dictionary_manager.h,FALSE,std::map,1,180,"std::map<net::SharedDictionaryIsolationKey, raw_ptr<SharedDictionaryStorage>>"
 services/network/shared_dictionary/shared_dictionary_storage_on_disk.h,FALSE,std::map,1,155,"std::map<base::UnguessableToken, raw_ptr<net::SharedDictionary>>"
 services/network/throttling/throttling_p2p_network_interceptor.h,FALSE,std::vector,1,43,std::vector<raw_ptr<P2PSocketUdp>>
 services/network/udp_socket_unittest.cc,TRUE,std::vector,1,160,"std::vector<raw_ptr<net::IOBuffer, DanglingUntriaged>>"
@@ -1564,13 +1762,24 @@ services/resource_coordinator/memory_instrumentation/graph.h,FALSE,std::vector,1
 services/service_manager/catalog.h,FALSE,std::map,1,44,"std::map<Manifest::ServiceName, raw_ptr<const Manifest>>"
 services/service_manager/catalog.h,FALSE,std::map,1,49,"std::map<Manifest::ServiceName, raw_ptr<const Manifest>>"
 services/tracing/perfetto/perfetto_service.h,FALSE,std::set,1,94,std::set<raw_ptr<ConsumerHost::TracingSession>>
+services/tracing/public/cpp/background_tracing/background_tracing_manager.h,FALSE,std::vector,1,302,std::vector<raw_ptr<TracingScenario>>
+services/tracing/public/cpp/background_tracing/background_tracing_manager.h,FALSE,std::set,1,310,std::set<raw_ptr<EnabledStateTestObserver>>
 services/tracing/public/cpp/perfetto/perfetto_traced_process.h,FALSE,raw_ptr,1,148,raw_ptr<const raw_ptr<PerfettoTracedProcess::DataSourceBase>>
+services/tracing/public/cpp/stack_sampling/tracing_sampler_profiler.cc,FALSE,base::flat_map,1,165,"base::flat_map<raw_ptr<TracingSamplerProfiler>, base::RepeatingCallback<std::unique_ptr<base::Unwinder>()>>"
 services/tracing/public/cpp/stack_sampling/tracing_sampler_profiler.cc,FALSE,base::flat_map,1,168,"base::flat_map<uint32_t, raw_ptr<TracingSamplerProfiler::DataSource>>"
 services/video_capture/video_source_impl.h,FALSE,std::map,0,79,"std::map<PushVideoStreamSubscriptionImpl*, std::unique_ptr<PushVideoStreamSubscriptionImpl>>"
+sql/database.h,FALSE,absl::flat_hash_set,1,1277,absl::flat_hash_set<raw_ptr<StatementRef>>
 sql/vfs_wrapper_fuchsia.cc,FALSE,base::flat_set,0,29,base::flat_set<VfsFile*>
 storage/browser/blob/blob_entry.h,FALSE,std::vector,1,78,std::vector<raw_ptr<ShareableBlobDataItem>>
+storage/browser/blob/blob_memory_controller.h,FALSE,base::LRUCache,0,354,"base::LRUCache<uint64_t, ShareableBlobDataItem*>"
+storage/browser/file_system/copy_or_move_operation_delegate.h,FALSE,std::map,0,196,"std::map<CopyOrMoveImpl*, std::unique_ptr<CopyOrMoveImpl>>"
+storage/browser/file_system/file_system_context.h,FALSE,std::map,1,449,"std::map<FileSystemType, raw_ptr<FileSystemBackend>>"
+storage/browser/file_system/file_system_context.h,FALSE,std::vector,1,457,std::vector<raw_ptr<MountPoints>>
 storage/browser/file_system/quota/quota_reservation_buffer.h,FALSE,std::map,1,74,"std::map<base::FilePath, raw_ptr<OpenFileHandleContext>>"
 storage/browser/quota/quota_manager_impl.cc,FALSE,std::map,0,782,"std::map<BucketDataDeleter*, std::unique_ptr<BucketDataDeleter>>"
+storage/browser/quota/quota_manager_impl.h,FALSE,base::flat_map,0,815,"base::flat_map<mojom::QuotaClient*, QuotaClientType>"
+storage/browser/quota/quota_manager_impl.h,FALSE,std::map,0,842,"std::map<BucketSetDataDeleter*, std::unique_ptr<BucketSetDataDeleter>>"
+storage/browser/quota/quota_manager_impl.h,FALSE,std::map,0,844,"std::map<BucketDataDeleter*, std::unique_ptr<BucketDataDeleter>>"
 storage/browser/quota/quota_task.h,FALSE,std::set,1,82,std::set<raw_ptr<QuotaTask>>
 testing/libfuzzer/renderer_fuzzing/renderer_fuzzing.h,FALSE,std::unordered_map,1,29,"std::unordered_map<std::string, raw_ptr<RendererFuzzerBase>>"
 third_party/blink/common/unique_name/unique_name_helper_unittest.cc,TRUE,std::vector,1,155,std::vector<raw_ptr<TestFrameAdapter>>
@@ -1581,7 +1790,6 @@ third_party/blink/public/web/modules/mediastream/media_stream_video_source.h,FAL
 third_party/blink/renderer/bindings/core/v8/profiler_trace_builder.h,FALSE,HashMap,0,173,"HashMap<const v8::CpuProfileNode*, wtf_size_t, ProfilerNodeStackHashTraits>"
 third_party/blink/renderer/bindings/core/v8/profiler_trace_builder.h,FALSE,HashMap,0,175,"HashMap<const v8::CpuProfileNode*, wtf_size_t, ProfilerNodeFrameHashTraits>"
 third_party/blink/renderer/bindings/core/v8/script_streamer.cc,FALSE,std::variant,0,647,"std::variant<ScriptDecoderWithClient*, ScriptDecoder*>"
-third_party/blink/renderer/bindings/core/v8/serialization/serialized_script_value.h,FALSE,HashMap,0,485,"HashMap<const void* const*, std::unique_ptr<Attachment>>"
 third_party/blink/renderer/controller/javascript_call_stack_generator.h,FALSE,HashMap,0,31,"HashMap<JavaScriptCallStackCollector*, std::unique_ptr<JavaScriptCallStackCollector>>"
 third_party/blink/renderer/core/css/css_math_function_value.cc,FALSE,Member,0,19,Member<void*>
 third_party/blink/renderer/core/css/css_property_value.cc,FALSE,Member,0,36,Member<void*>
@@ -1599,6 +1807,7 @@ third_party/blink/renderer/core/dom/node.cc,FALSE,Member,0,202,Member<void*>
 third_party/blink/renderer/core/dom/shadow_root.cc,FALSE,Member,0,99,Member<void*>
 third_party/blink/renderer/core/frame/web_frame_test.cc,TRUE,HashMap,0,1405,"HashMap<WebLocalFrame*, HashSet<String>>"
 third_party/blink/renderer/core/html/forms/listed_element.cc,FALSE,Member,0,65,Member<void*>
+third_party/blink/renderer/core/inspector/devtools_agent.h,FALSE,HashMap,0,159,"HashMap<WorkerThread*, std::unique_ptr<WorkerData>>"
 third_party/blink/renderer/core/inspector/inspector_dom_snapshot_agent.h,FALSE,HeapHashMap,0,121,"HeapHashMap<Member<const ComputedStyle>, protocol::Array<int>*>"
 third_party/blink/renderer/core/inspector/inspector_memory_agent.h,FALSE,HashMap,0,80,"HashMap<const void*, String>"
 third_party/blink/renderer/core/inspector/inspector_session_state.h,FALSE,Vector,0,291,Vector<Field*>
@@ -1626,6 +1835,7 @@ third_party/blink/renderer/core/style/computed_style.cc,FALSE,Member,0,141,Membe
 third_party/blink/renderer/core/style/computed_style.cc,FALSE,Member,0,150,Member<void*>
 third_party/blink/renderer/core/testing/sim/sim_network.h,FALSE,HashMap,0,55,"HashMap<String, SimRequestBase*>"
 third_party/blink/renderer/core/workers/worker_thread.h,FALSE,HashSet,0,491,HashSet<WorkerThread*>
+third_party/blink/renderer/modules/media/audio/audio_renderer_mixer.h,FALSE,base::flat_set,1,85,base::flat_set<raw_ptr<AudioRendererMixerInput>>
 third_party/blink/renderer/modules/mediastream/media_stream_video_capturer_source.h,FALSE,HashMap,0,158,"HashMap<const MediaStreamVideoTrack*, SubCaptureTargetInfo>"
 third_party/blink/renderer/modules/mediastream/media_stream_video_track.h,FALSE,Vector,0,249,Vector<WebMediaStreamSink*>
 third_party/blink/renderer/modules/mediastream/media_stream_video_track.h,FALSE,Vector,0,250,Vector<WebMediaStreamSink*>
@@ -1633,33 +1843,47 @@ third_party/blink/renderer/modules/mediastream/media_stream_video_track.h,FALSE,
 third_party/blink/renderer/modules/mediastream/media_stream_video_track.h,FALSE,HashSet,0,272,HashSet<WebMediaStreamSink*>
 third_party/blink/renderer/modules/mediastream/user_media_processor.cc,FALSE,Vector,0,657,Vector<blink::WebPlatformMediaStreamSource*>
 third_party/blink/renderer/modules/mediastream/video_track_adapter.cc,FALSE,base::flat_map,0,397,"base::flat_map<const MediaStreamVideoTrack*, VideoTrackParameters>"
+third_party/blink/renderer/modules/peerconnection/rtc_peer_connection.h,FALSE,HeapHashMap,0,547,"HeapHashMap<webrtc::DtlsTransportInterface*, WeakMember<RTCDtlsTransport>>"
+third_party/blink/renderer/modules/peerconnection/rtc_peer_connection.h,FALSE,HeapHashMap,0,550,"HeapHashMap<webrtc::IceTransportInterface*, WeakMember<RTCIceTransport>>"
 third_party/blink/renderer/modules/peerconnection/rtc_peer_connection_handler_test.cc,TRUE,std::map,0,671,"std::map<webrtc::MediaStreamTrackInterface*, webrtc::scoped_refptr<webrtc::RtpReceiverInterface>>"
 third_party/blink/renderer/modules/peerconnection/rtp_contributing_source_cache.h,FALSE,HashMap,0,82,"HashMap<RTCRtpReceiverPlatform*, RTCRtpSources>"
 third_party/blink/renderer/modules/peerconnection/rtp_contributing_source_cache.h,FALSE,HashMap,0,84,"HashMap<RTCRtpReceiverPlatform*, RTCRtpSources>"
 third_party/blink/renderer/modules/webaudio/audio_listener_handler.h,FALSE,HashSet,0,146,HashSet<PannerHandler*>
 third_party/blink/renderer/modules/webaudio/audio_node_input.h,FALSE,HashSet,0,98,HashSet<AudioNodeOutput*>
+third_party/blink/renderer/modules/webaudio/audio_node_output.h,FALSE,HashSet,0,170,HashSet<AudioNodeInput*>
+third_party/blink/renderer/modules/webaudio/audio_node_output.h,FALSE,HashSet,0,183,HashSet<AudioParamHandler*>
+third_party/blink/renderer/modules/webaudio/audio_param_handler.h,FALSE,HashSet,0,606,HashSet<ParamEvent*>
 third_party/blink/renderer/modules/webaudio/audio_summing_junction.h,FALSE,HashSet,0,78,HashSet<AudioNodeOutput*>
 third_party/blink/renderer/modules/webaudio/audio_summing_junction.h,FALSE,Vector,0,88,Vector<AudioNodeOutput*>
+third_party/blink/renderer/modules/webcodecs/decoder_template.h,FALSE,std::optional,0,257,std::optional<media::GpuVideoAcceleratorFactories*>
 third_party/blink/renderer/platform/bindings/parkable_string.h,FALSE,std::variant,1,425,"std::variant<raw_ptr<const SecureStringDigest>, std::unique_ptr<const SecureStringDigest>>"
 third_party/blink/renderer/platform/bindings/v8_per_context_data.h,FALSE,HeapHashMap,0,134,"HeapHashMap<const WrapperTypeInfo*, TraceWrapperV8Reference<v8::Object>>"
 third_party/blink/renderer/platform/bindings/v8_per_context_data.h,FALSE,HeapHashMap,0,137,"HeapHashMap<const WrapperTypeInfo*, TraceWrapperV8Reference<v8::Function>>"
-third_party/blink/renderer/platform/bindings/v8_per_isolate_data.h,FALSE,HashMap,0,340,"HashMap<const void*, v8::Eternal<v8::DictionaryTemplate>, SimplePtrHashTraits>"
-third_party/blink/renderer/platform/bindings/v8_per_isolate_data.h,FALSE,HashMap,0,344,"HashMap<const void*, Vector<v8::Eternal<v8::Name>>>"
+third_party/blink/renderer/platform/graphics/canvas_hibernation_handler.h,FALSE,HashSet,0,207,HashSet<CanvasHibernationHandler*>
 third_party/blink/renderer/platform/graphics/gpu/webgraphics_shared_image_interface_provider_impl.h,FALSE,Vector,0,56,Vector<BitmapGpuChannelLostObserver*>
+third_party/blink/renderer/platform/graphics/parkable_image_manager.h,FALSE,HashSet,0,113,HashSet<ParkableImageImpl*>
+third_party/blink/renderer/platform/graphics/parkable_image_manager.h,FALSE,HashSet,0,114,HashSet<ParkableImageImpl*>
+third_party/blink/renderer/platform/graphics/video_frame_sink_bundle.h,FALSE,HashMap,0,139,"HashMap<uint32_t, viz::mojom::blink::CompositorFrameSinkClient*>"
 third_party/blink/renderer/platform/image-decoders/image_decoder.h,FALSE,std::array,0,106,"std::array<void*, cc::kNumYUVPlanes>"
+third_party/blink/renderer/platform/instrumentation/canvas_memory_dump_provider.h,FALSE,HashSet,0,48,HashSet<CanvasMemoryDumpClient*>
 third_party/blink/renderer/platform/instrumentation/tracing/web_process_memory_dump.h,FALSE,HashMap,0,152,"HashMap<base::trace_event::MemoryAllocatorDump*, std::unique_ptr<WebMemoryAllocatorDump>>"
 third_party/blink/renderer/platform/mediastream/media_stream_audio_deliverer.h,FALSE,Vector,0,182,Vector<Consumer*>
 third_party/blink/renderer/platform/mediastream/media_stream_audio_deliverer.h,FALSE,Vector,0,186,Vector<Consumer*>
+third_party/blink/renderer/platform/mediastream/transferred_media_stream_component.h,FALSE,Vector,0,94,Vector<WebMediaStreamAudioSink*>
 third_party/blink/renderer/platform/peerconnection/webrtc_audio_sink.h,FALSE,Vector,0,161,Vector<webrtc::AudioTrackSinkInterface*>
+third_party/blink/renderer/platform/scheduler/common/process_time_override_coordinator.h,FALSE,base::flat_map,0,106,"base::flat_map<ScopedOverride*, base::TimeTicks>"
 third_party/blink/renderer/platform/scheduler/common/throttling/budget_pool.h,FALSE,HashSet,0,103,HashSet<TaskQueueThrottler*>
 third_party/blink/renderer/platform/scheduler/common/throttling/task_queue_throttler.h,FALSE,HashSet,0,123,HashSet<BudgetPool*>
 third_party/blink/renderer/platform/scheduler/common/tracing_helper.h,FALSE,HashSet,0,63,HashSet<TraceableVariable*>
-third_party/blink/renderer/platform/scheduler/main_thread/agent_group_scheduler_impl.h,FALSE,HashSet,0,96,HashSet<PageSchedulerImpl*>
 third_party/blink/renderer/platform/scheduler/main_thread/main_thread_scheduler_impl.h,FALSE,HashSet,0,760,HashSet<PageSchedulerImpl*>
 third_party/blink/renderer/platform/scheduler/main_thread/page_scheduler_impl.h,FALSE,HashSet,0,228,HashSet<FrameSchedulerImpl*>
+third_party/blink/renderer/platform/scheduler/test/fuzzer/thread_pool_manager.h,FALSE,blink::Vector,0,137,blink::Vector<ThreadManager*>
+third_party/blink/renderer/platform/scheduler/worker/worker_thread_scheduler.h,FALSE,HashSet,0,134,HashSet<WorkerSchedulerImpl*>
 third_party/blink/renderer/platform/text/text_break_iterator_icu.cc,FALSE,HashMap,0,114,"HashMap<icu::BreakIterator*, AtomicString>"
 third_party/blink/renderer/platform/widget/compositing/android_webview/synchronous_layer_tree_frame_sink.cc,FALSE,raw_ptr,1,79,raw_ptr<raw_ptr<SkCanvas>>
+third_party/blink/renderer/platform/wtf/text/atomic_string_table.h,FALSE,HashSet,0,120,HashSet<StringImpl*>
 ui/accessibility/ax_action_handler_registry.h,FALSE,std::map,1,106,"std::map<AXTreeID, raw_ptr<AXActionHandlerBase, DanglingUntriaged>>"
+ui/accessibility/ax_event_generator.h,FALSE,std::vector,1,370,"std::vector<raw_ptr<AXNode, DanglingUntriaged>>"
 ui/accessibility/ax_node.h,FALSE,std::vector,1,836,"std::vector<raw_ptr<AXNode, DanglingUntriaged>>"
 ui/accessibility/ax_table_info.h,FALSE,std::vector,1,91,"std::vector<raw_ptr<AXNode, DanglingUntriaged>>"
 ui/accessibility/ax_table_info.h,FALSE,std::vector,1,100,"std::vector<raw_ptr<AXNode, DanglingUntriaged>>"
@@ -1670,24 +1894,36 @@ ui/accessibility/ax_tree_serializer.h,FALSE,std::vector,1,274,"std::vector<raw_p
 ui/accessibility/ax_tree_source_checker_unittest.cc,TRUE,std::map,1,91,"std::map<AXNodeID, raw_ptr<FakeAXNode>>"
 ui/accessibility/platform/ax_fragment_root_win.cc,FALSE,absl::flat_hash_map,1,327,"absl::flat_hash_map<gfx::AcceleratedWidget, raw_ptr<AXFragmentRootWin>>"
 ui/accessibility/platform/fuchsia/accessibility_bridge_fuchsia_registry.h,FALSE,base::flat_map,0,52,"base::flat_map<aura::Window*, AccessibilityBridgeFuchsia*>"
+ui/accessibility/platform/one_shot_accessibility_tree_search.h,FALSE,std::vector,1,169,std::vector<raw_ptr<BrowserAccessibility>>
+ui/android/modal_dialog_wrapper.h,FALSE,std::vector,1,123,std::vector<raw_ptr<DialogModelMenuItem>>
 ui/android/view_android.h,FALSE,std::list,1,383,std::list<raw_ptr<ViewAndroid>>
 ui/aura/env.h,FALSE,std::vector,1,235,std::vector<raw_ptr<aura::WindowTreeHost>>
 ui/aura/env.h,FALSE,base::flat_map,0,239,"base::flat_map<const aura::Window*, gfx::Point>"
 ui/aura/gestures/gesture_recognizer_unittest.cc,TRUE,raw_ptr,0,4704,raw_ptr<aura::Window*>
 ui/aura/host_frame_rate_throttler.h,FALSE,base::flat_set,1,38,base::flat_set<raw_ptr<WindowTreeHost>>
+ui/aura/native_window_occlusion_tracker_win.h,FALSE,base::flat_map,1,368,"base::flat_map<HWND, raw_ptr<Window>>"
 ui/aura/window.h,FALSE,base::raw_span,1,147,"base::raw_span<const raw_ptr<Window, DanglingUntriaged>>"
 ui/aura/window_occlusion_change_builder.cc,FALSE,base::flat_map,0,69,"base::flat_map<Window*, OcclusionData>"
+ui/aura/window_occlusion_tracker.h,FALSE,base::flat_map,0,446,"base::flat_map<Window*, OcclusionData>"
+ui/aura/window_occlusion_tracker.h,FALSE,base::flat_map,0,449,"base::flat_map<Window*, size_t>"
+ui/aura/window_occlusion_tracker.h,FALSE,base::flat_set,1,458,base::flat_set<raw_ptr<Window>>
+ui/aura/window_occlusion_tracker.h,FALSE,base::flat_set,1,462,base::flat_set<raw_ptr<Window>>
+ui/aura/window_occlusion_tracker.h,FALSE,base::flat_map,0,465,"base::flat_map<Window*, RootWindowState>"
 ui/aura_extra/window_position_in_root_monitor.h,FALSE,std::vector,1,49,std::vector<raw_ptr<aura::Window>>
 ui/base/accelerators/accelerator_manager.h,FALSE,std::list,1,144,"std::list<raw_ptr<AcceleratorTarget, DanglingUntriaged>>"
 ui/base/interaction/anchored_dialog_registry_unittest.cc,TRUE,std::vector,1,88,std::vector<raw_ptr<AnchoredDialogRegistry::FocusTarget>>
 ui/base/interaction/element_tracker.cc,FALSE,std::list,1,156,"std::list<raw_ptr<TrackedElement, DanglingUntriaged>>"
 ui/base/interaction/element_tracker.cc,FALSE,std::set,1,220,"std::set<raw_ptr<ElementData, DanglingUntriaged>>"
+ui/base/interaction/element_tracker.h,FALSE,std::list,1,289,"std::list<raw_ptr<TrackedElement, DanglingUntriaged>>"
+ui/base/interaction/element_tracker_mac.h,FALSE,std::map,0,90,"std::map<NSMenu*, MenuData>"
 ui/base/interaction/interactive_test_internal.h,TRUE,std::list,1,415,std::list<raw_ptr<InteractionSequence>>
 ui/base/metadata/metadata_cache.h,FALSE,std::vector,1,41,std::vector<raw_ptr<ClassMetaData>>
 ui/base/metadata/metadata_types.h,FALSE,std::vector,1,179,std::vector<raw_ptr<MemberMetaDataBase>>
 ui/base/unowned_user_data/unowned_user_data_host.h,FALSE,std::map,1,69,"std::map<UntypedKey, raw_ptr<void>>"
 ui/base/win/hwnd_subclass.h,FALSE,std::vector,1,78,std::vector<raw_ptr<HWNDMessageFilter>>
 ui/compositor/compositor_lock.h,FALSE,std::vector,1,72,std::vector<raw_ptr<CompositorLock>>
+ui/compositor/layer.h,FALSE,std::vector,1,686,"std::vector<raw_ptr<Layer, DanglingUntriaged>>"
+ui/compositor/layer.h,FALSE,base::flat_set,1,691,"base::flat_set<raw_ptr<Layer, DanglingUntriaged>>"
 ui/compositor/scoped_layer_animation_settings.h,FALSE,std::set,1,68,"std::set<raw_ptr<ImplicitAnimationObserver, DanglingUntriaged>>"
 ui/display/mac/cv_display_link_mac.h,FALSE,std::set,1,107,"std::set<raw_ptr<VSyncCallbackMac, DanglingUntriaged>>"
 ui/display/manager/test/test_display_layout_manager.h,TRUE,std::vector,1,54,"std::vector<raw_ptr<DisplaySnapshot, DanglingUntriaged>>"
@@ -1695,14 +1931,20 @@ ui/display/manager/update_display_configuration_task.h,FALSE,std::vector,1,134,"
 ui/display/manager/update_display_configuration_task.h,FALSE,std::vector,1,139,"std::vector<raw_ptr<DisplaySnapshot, DanglingUntriaged>>"
 ui/display/manager/update_display_configuration_task_unittest.cc,TRUE,std::vector,1,231,"std::vector<raw_ptr<DisplaySnapshot, DanglingUntriaged>>"
 ui/events/event_handler.h,FALSE,base::stack,1,64,"base::stack<raw_ptr<EventDispatcher, DanglingUntriaged>>"
+ui/events/gestures/gesture_recognizer_impl.h,FALSE,std::map,1,125,"std::map<uint32_t, raw_ptr<GestureProviderAura>>"
 ui/events/ozone/evdev/libgestures_glue/gesture_property_provider.cc,FALSE,std::unordered_map,0,597,"std::unordered_map<std::string, GesturesProp*>"
 ui/events/platform/platform_event_source.h,FALSE,base::AutoReset,0,114,base::AutoReset<PlatformEventSource*>
 ui/events/platform/scoped_event_dispatcher.h,FALSE,base::AutoReset,1,37,base::AutoReset<raw_ptr<PlatformEventDispatcher>>
 ui/gtk/gtk_ui.h,FALSE,std::unordered_map,0,197,"std::unordered_map<GdkMonitor*, std::pair<ScopedGSignal, ScopedGSignal>>"
+ui/gtk/select_file_dialog_linux_gtk.h,FALSE,base::flat_map,0,191,"base::flat_map<GtkWidget*, DialogState>"
+ui/gtk/wayland/gtk_ui_platform_wayland.h,FALSE,std::map,0,56,"std::map<GtkWidget*, PendingTransient>"
 ui/linux/portal_settings_linux_unittest.cc,TRUE,std::vector,1,174,std::vector<raw_ptr<LinuxUiTheme>>
 ui/message_center/fake_message_center.h,FALSE,std::vector,1,123,std::vector<raw_ptr<NotificationBlocker>>
 ui/message_center/message_center_impl.h,FALSE,std::vector,1,165,std::vector<raw_ptr<NotificationBlocker>>
 ui/message_center/views/message_popup_collection_unittest.cc,TRUE,std::vector,1,121,std::vector<raw_ptr<MockMessagePopupView>>
+ui/message_center/views/notification_view_base.h,FALSE,std::vector,1,392,"std::vector<raw_ptr<views::LabelButton, DanglingUntriaged>>"
+ui/message_center/views/notification_view_base.h,FALSE,std::vector,1,393,"std::vector<raw_ptr<views::View, DanglingUntriaged>>"
+ui/message_center/views/notification_view_base.h,FALSE,std::map,0,402,"std::map<views::LabelButton*, std::optional<std::u16string>>"
 ui/ozone/platform/drm/gpu/gbm_surface_factory.h,FALSE,std::map,1,117,"std::map<gfx::AcceleratedWidget, raw_ptr<GbmSurfaceless>>"
 ui/ozone/platform/flatland/flatland_surface_factory.h,FALSE,base::flat_map,0,92,"base::flat_map<gfx::AcceleratedWidget, FlatlandSurface*>"
 ui/ozone/platform/flatland/flatland_window_manager.h,FALSE,base::IDMap,0,52,base::IDMap<FlatlandWindow*>
@@ -1737,10 +1979,26 @@ ui/views/actions/action_view_controller.h,FALSE,std::map,0,149,"std::map<View*, 
 ui/views/animation/animation_builder.h,FALSE,std::multimap,0,201,"std::multimap<ui::Layer*, std::unique_ptr<ui::LayerAnimationSequence>>"
 ui/views/bubble/bubble_anchor.h,FALSE,std::variant,1,93,"std::variant<std::nullptr_t, raw_ptr<View>, raw_ptr<ui::TrackedElement>>"
 ui/views/bubble/bubble_dialog_delegate_view.cc,FALSE,std::set,1,460,std::set<raw_ptr<CloseOnDeactivatePin>>
+ui/views/bubble/bubble_dialog_delegate_view.h,FALSE,std::optional,1,659,std::optional<raw_ptr<views::View>>
+ui/views/bubble/bubble_dialog_delegate_view.h,FALSE,std::optional,1,660,std::optional<raw_ptr<views::BubbleDialogDelegate>>
 ui/views/bubble/bubble_dialog_delegate_view_unittest.cc,TRUE,std::vector,1,2021,std::vector<raw_ptr<ui::AnchoredDialogRegistry::FocusTarget>>
 ui/views/bubble/bubble_dialog_model_host.cc,FALSE,base::flat_set,1,247,base::flat_set<raw_ptr<View>>
+ui/views/cocoa/native_widget_mac_ns_window_host.h,FALSE,std::vector,1,537,std::vector<raw_ptr<NativeWidgetMacNSWindowHost>>
+ui/views/cocoa/native_widget_mac_ns_window_host.h,FALSE,std::list,1,615,"std::list<raw_ptr<NativeWidgetMacEventMonitor, DanglingUntriaged>>"
+ui/views/cocoa/native_widget_mac_ns_window_host.h,FALSE,std::map,0,622,"std::map<std::string, void*>"
+ui/views/cocoa/native_widget_mac_ns_window_host.h,FALSE,std::map,0,626,"std::map<const views::View*, NSView*>"
 ui/views/controls/link_fragment_unittest.cc,TRUE,std::array,1,79,"std::array<raw_ptr<LinkFragment>, 3>"
+ui/views/controls/menu/menu_controller.h,FALSE,std::list,1,864,std::list<raw_ptr<internal::MenuControllerDelegate>>
+ui/views/controls/menu/menu_controller.h,FALSE,base::flat_set,1,993,base::flat_set<raw_ptr<MenuItemView>>
+ui/views/controls/menu/menu_item_view.h,FALSE,std::vector,1,847,"std::vector<raw_ptr<View, DanglingUntriaged>>"
+ui/views/controls/menu/menu_model_adapter.h,FALSE,std::map,1,124,"std::map<MenuItemView*, raw_ptr<ui::MenuModel, DanglingUntriaged>>"
+ui/views/controls/menu/menu_model_adapter.h,FALSE,std::map,0,124,"std::map<MenuItemView*, raw_ptr<ui::MenuModel, DanglingUntriaged>>"
+ui/views/controls/menu/menu_runner_impl.h,FALSE,std::set,1,101,"std::set<raw_ptr<MenuItemView, DanglingUntriaged>>"
+ui/views/corewm/tooltip_controller.h,FALSE,std::map,0,211,"std::map<aura::Window*, base::TimeDelta>"
+ui/views/corewm/tooltip_controller.h,FALSE,std::map,0,221,"std::map<aura::Window*, base::TimeDelta>"
 ui/views/examples/designer_example.h,FALSE,std::vector,1,132,std::vector<raw_ptr<GrabHandle>>
+ui/views/examples/designer_example.h,FALSE,std::vector,1,181,std::vector<raw_ptr<DesignerPropertyEditor>>
+ui/views/examples/designer_example.h,FALSE,std::set,1,187,std::set<raw_ptr<View>>
 ui/views/examples/radio_button_example.h,FALSE,std::vector,1,35,std::vector<raw_ptr<RadioButton>>
 ui/views/input_protection/input_protection_interactive_test.h,TRUE,std::map,1,274,"std::map<ui::ElementIdentifier, raw_ptr<views::Widget>>"
 ui/views/input_protection/occluded_widget_input_protector.h,FALSE,std::map,0,127,"std::map<views::Widget*, gfx::Rect>"
@@ -1749,10 +2007,14 @@ ui/views/interaction/element_tracker_views.h,FALSE,std::map,0,205,"std::map<cons
 ui/views/layout/animating_layout_manager_unittest.cc,TRUE,std::vector,1,297,"std::vector<raw_ptr<TestView, DanglingUntriaged>>"
 ui/views/layout/flex_layout_unittest.cc,TRUE,std::vector,1,3675,"std::vector<raw_ptr<View, DanglingUntriaged>>"
 ui/views/layout/flex_layout_unittest.cc,TRUE,std::vector,1,3776,"std::vector<raw_ptr<FlexLayout, DanglingUntriaged>>"
+ui/views/layout/layout_manager_base.h,FALSE,std::map,0,242,"std::map<const View*, ChildInfo>"
 ui/views/layout/table_layout.cc,FALSE,std::vector,1,236,"std::vector<raw_ptr<Column, DanglingUntriaged>>"
 ui/views/layout/table_layout.h,FALSE,std::vector,1,220,"std::vector<raw_ptr<ViewState, DanglingUntriaged>>"
 ui/views/test/focus_manager_test.h,TRUE,std::vector,1,65,std::vector<raw_ptr<View>>
+ui/views/view.h,FALSE,std::vector,1,2618,"std::vector<raw_ptr<ui::Layer, DanglingUntriaged>>"
+ui/views/view.h,FALSE,std::vector,1,2619,"std::vector<raw_ptr<ui::Layer, DanglingUntriaged>>"
 ui/views/views_test_suite.h,TRUE,raw_ptr,0,52,raw_ptr<char*>
+ui/views/widget/desktop_aura/desktop_window_tree_host_platform.h,FALSE,std::set,1,276,"std::set<raw_ptr<DesktopWindowTreeHostPlatform, DanglingUntriaged>>"
 ui/views/widget/desktop_aura/desktop_window_tree_host_platform_unittest.cc,TRUE,std::vector,1,545,"std::vector<raw_ptr<View, DanglingUntriaged>>"
 ui/views/widget/sublevel_manager.h,FALSE,std::vector,1,84,"std::vector<raw_ptr<Widget, DanglingUntriaged>>"
 ui/views/widget/widget_activation_delegate_unittest.cc,TRUE,base::flat_map,0,91,"base::flat_map<Widget*, bool>"
@@ -1760,5 +2022,11 @@ ui/views/widget/widget_activation_delegate_unittest.cc,TRUE,base::flat_map,0,92,
 ui/views/widget/widget_activation_delegate_unittest.cc,TRUE,base::flat_map,0,93,"base::flat_map<Widget*, bool>"
 ui/views/widget/widget_delegate_unittest.cc,TRUE,std::vector,1,160,"std::vector<raw_ptr<View, DanglingUntriaged>>"
 ui/views/widget/widget_unittest.cc,TRUE,std::set,1,180,"std::set<raw_ptr<View, DanglingUntriaged>>"
+ui/views/window/dialog_client_view.h,FALSE,std::array,0,197,"std::array<View*, kNumButtons>"
 ui/webui/examples/browser/ui/aura/aura_context.cc,FALSE,base::flat_set,1,116,base::flat_set<raw_ptr<aura::WindowTreeHost>>
 ui/webui/tracked_element/tracked_element_web_ui.h,FALSE,std::vector,1,153,std::vector<raw_ptr<AnchoredDialogRegistry::FocusTarget>>
+ui/wm/core/capture_controller.h,FALSE,std::map,1,78,"std::map<aura::Window*, raw_ptr<aura::client::CaptureDelegate, DanglingUntriaged>>"
+ui/wm/core/capture_controller.h,FALSE,std::map,0,78,"std::map<aura::Window*, raw_ptr<aura::client::CaptureDelegate, DanglingUntriaged>>"
+ui/wm/core/default_activation_client.h,FALSE,std::vector,1,63,std::vector<raw_ptr<aura::Window>>
+ui/wm/core/focus_controller.h,FALSE,std::optional,0,147,std::optional<aura::Window*>
+ui/wm/core/window_modality_controller.h,FALSE,std::vector,1,81,std::vector<raw_ptr<aura::Window>>
