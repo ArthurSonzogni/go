@@ -661,9 +661,11 @@
                 .style("font-size", "10px")
                 .style("fill", "#64748b");
 
-            // X Axis (show every 2nd label + Today so labels never collide)
+            // X Axis (adapt tick stride to point count so monthly labels never collide)
+            const stride = Math.max(1, Math.ceil(trendPoints.length / 8));
+            const lastIdx = trendPoints.length - 1;
             const tickLabels = trendPoints
-                .filter((d, i) => i % 2 === 0 || i === trendPoints.length - 1)
+                .filter((d, i) => (i % stride === 0 && lastIdx - i >= Math.ceil(stride / 2)) || i === lastIdx)
                 .map(d => d.label);
 
             g.append("g")
@@ -719,6 +721,7 @@
             const tooltip = d3.select("#chart-tooltip");
 
             // Interactive points
+            const baseRadius = trendPoints.length > 20 ? 2.8 : 3.5;
             g.selectAll("circle.enforced-pt")
                 .data(trendPoints)
                 .enter()
@@ -726,10 +729,10 @@
                 .attr("class", "enforced-pt")
                 .attr("cx", d => x(d.label))
                 .attr("cy", d => y(d.enforcedPct))
-                .attr("r", (d, i) => i === activeSnapshotIndex ? 5.5 : 3.5)
+                .attr("r", (d, i) => i === activeSnapshotIndex ? 5.5 : baseRadius)
                 .attr("fill", (d, i) => i === activeSnapshotIndex ? "#4f46e5" : "#ffffff")
                 .attr("stroke", "#4f46e5")
-                .attr("stroke-width", 2)
+                .attr("stroke-width", trendPoints.length > 20 ? 1.5 : 2)
                 .style("cursor", "pointer")
                 .on("mouseover", function(event, d) {
                     d3.select(this).attr("r", 6);
@@ -744,7 +747,7 @@
                 })
                 .on("mouseout", function(event, d) {
                     const idx = trendPoints.indexOf(d);
-                    d3.select(this).attr("r", idx === activeSnapshotIndex ? 5.5 : 3.5);
+                    d3.select(this).attr("r", idx === activeSnapshotIndex ? 5.5 : baseRadius);
                     tooltip.style("opacity", 0);
                 })
                 .on("click", function(event, d) {
@@ -754,8 +757,9 @@
         }
 
         function updateTrendActivePoint() {
+            const baseRadius = trendPoints.length > 20 ? 2.8 : 3.5;
             d3.selectAll("#trend-chart circle.enforced-pt")
-                .attr("r", (d, i) => i === activeSnapshotIndex ? 5.5 : 3.5)
+                .attr("r", (d, i) => i === activeSnapshotIndex ? 5.5 : baseRadius)
                 .attr("fill", (d, i) => i === activeSnapshotIndex ? "#4f46e5" : "#ffffff");
         }
 

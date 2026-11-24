@@ -1,107 +1,128 @@
-import subprocess
-import os
+import argparse
 import json
+import os
 import shutil
+import subprocess
 import sys
 from datetime import datetime
 
+
 def subtract_months(dt, months):
-    """Helper to safely subtract months from a datetime object."""
+    """Safely subtract months from a datetime object."""
     month = dt.month - months
     year = dt.year
     while month <= 0:
         month += 12
         year -= 1
-    # clamp day to valid range for the target month
-    day = min(dt.day, [31, 29 if year % 4 == 0 and (not year % 100 == 0 or year % 400 == 0) else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1])
-    return dt.replace(year=year, month=month, day=day)
+    days_in_month = [
+        31,
+        29 if year % 4 == 0 and (year % 100 != 0 or year % 400 == 0) else 28,
+        31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
+    ][month - 1]
+    return dt.replace(year=year, month=month, day=min(dt.day, days_in_month))
+
 
 def main():
-    print("Starting historical data generation...")
-    
-    # 1. Identify starting state to safely restore later
-    try:
-        original_branch = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).decode().strip()
-        if original_branch == 'HEAD':
-            # Detached head fallback
-            original_branch = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
-    except subprocess.CalledProcessError:
-        print("Error: Must be run inside a Git repository.")
-        return
+    parser = argparse.ArgumentParser(
+        description='Generate monthly historical CSV snapshots using script.py --rev.'
+    )
+    parser.add_argument(
+        '--repo',
+        default='.',
+        help='Path to Chromium git repository.',
+    )
+    parser.add_argument(
+        '--out-dir',
+        default='.',
+        help='Directory to write data_YYYY_MM.csv and index.json.',
+    )
+    parser.add_argument(
+        '--start',
+        default='2023-03',
+        help='Earliest YYYY-MM snapshot to generate (inclusive).',
+    )
+    parser.add_argument(
+        '--step-months',
+        type=int,
+        default=1,
+        help='Months between snapshots (default: 1 = monthly).',
+    )
+    args = parser.parse_args()
 
-    index_entries = []
+    script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'script.py')
+    os.makedirs(args.out_dir, exist_ok=True)
+
     current_date = datetime.now()
+    index_entries = []
 
-    try:
-        # 3 years = 36 months / 3 months = 12 steps (plus step 0 = current)
-        for step in range(13):
-            target_date = subtract_months(current_date, step * 3)
-            date_label = target_date.strftime('%Y-%m')
-            
-            # Format date for Git before-query (e.g. 2025-05-01 23:59:59)
-            git_date_str = target_date.strftime('%Y-%m-%d 23:59:59')
-            
-            # Find the last commit before this target date
-            try:
-                commit_cmd = ['git', 'rev-list', '-1', f'--before="{git_date_str}"', original_branch]
-                commit_hash = subprocess.check_output(commit_cmd).decode().strip()
-            except subprocess.CalledProcessError:
-                print(f"[{date_label}] No commit found before {git_date_str}. Stopping history traversal.")
-                break
-                
-            if not commit_hash:
-                print(f"[{date_label}] Reached end of history before {git_date_str}. Stopping.")
-                break
+    # Step 0: Today (HEAD)
+    head_hash = subprocess.check_output(
+        ['git', 'rev-parse', 'HEAD'], cwd=args.repo, text=True
+    ).strip()
+    today_csv = os.path.join(args.out_dir, 'data_today.csv')
+    today_instances = os.path.join(args.out_dir, 'instances_today.csv')
+    print(f"[Today] Scanning HEAD ({head_hash[:8]})...")
+    subprocess.run(
+        [
+            sys.executable, script_path,
+            '--repo', args.repo,
+            '--rev', head_hash,
+            '--counts-out', today_csv,
+            '--instances-out', today_instances,
+        ],
+        check=True,
+    )
+    shutil.copyfile(today_csv, os.path.join(args.out_dir, 'data.csv'))
+    shutil.copyfile(today_instances, os.path.join(args.out_dir, 'instances.csv'))
+    index_entries.append({
+        'date': 'Today',
+        'full_date': current_date.strftime('%Y-%m-%d'),
+        'file': 'data_today.csv',
+    })
 
-            if step == 0:
-                csv_filename = "data_today.csv"
-                entry = {
-                    "date": "Today",
-                    "full_date": target_date.strftime('%Y-%m-%d'),
-                    "file": csv_filename
-                }
-            else:
-                csv_filename = f"data_{date_label.replace('-', '_')}.csv"
-                entry = {
-                    "date": date_label,
-                    "file": csv_filename
-                }
-            
-            print(f"[{date_label}] Checking out commit {commit_hash[:8]}...")
-            subprocess.run(['git', 'checkout', '-q', commit_hash], check=True)
-            
-            print(f"[{date_label}] Running script.py...")
-            try:
-                # Use sys.executable to ensure we use the same Python environment (venv)
-                subprocess.run([sys.executable, 'script.py'], check=True)
-                
-                # script.py generates 'template_member_counts.csv' by default
-                if os.path.exists('template_member_counts.csv'):
-                    shutil.move('template_member_counts.csv', csv_filename)
-                    
-                    # Append to our tracking array for the JSON output
-                    index_entries.append(entry)
-                else:
-                    print(f"[{date_label}] Warning: script.py did not produce 'template_member_counts.csv'")
-            except subprocess.CalledProcessError as e:
-                print(f"[{date_label}] Error running script.py: {e}")
+    # Monthly steps going backwards from the 1st of the previous month down to args.start
+    first_of_this_month = current_date.replace(day=1)
+    step = args.step_months
+    while True:
+        target_date = subtract_months(first_of_this_month, step)
+        date_label = target_date.strftime('%Y-%m')
+        if date_label < args.start:
+            break
 
-    except KeyboardInterrupt:
-        print("\n\nProcess interrupted by user! Halting history traversal.")
+        git_date_str = target_date.strftime('%Y-%m-%d 23:59:59')
+        commit_hash = subprocess.check_output(
+            ['git', 'rev-list', '-1', f'--before={git_date_str}', 'HEAD'],
+            cwd=args.repo,
+            text=True,
+        ).strip()
+        if not commit_hash:
+            print(f"[{date_label}] No commit found before {git_date_str}. Stopping.")
+            break
 
-    finally:
-        # 2. Restore repository to its original state (always executes, even on Ctrl+C)
-        print(f"\nRestoring repository to {original_branch}...")
-        subprocess.run(['git', 'checkout', '-q', original_branch], check=True)
-        
-        # 3. Write index.json (saves whatever progress was made before interrupt)
-        if index_entries:
-            print("Writing index.json mapping file...")
-            with open('index.json', 'w') as f:
-                json.dump(index_entries, f, indent=4)
-            print("\nProcess complete!")
-        else:
-            print("\nProcess finished without generating any data.")
+        csv_filename = f"data_{date_label.replace('-', '_')}.csv"
+        csv_path = os.path.join(args.out_dir, csv_filename)
+        print(f"[{date_label}] Scanning commit {commit_hash[:8]} (before {git_date_str})...")
+        subprocess.run(
+            [
+                sys.executable, script_path,
+                '--repo', args.repo,
+                '--rev', commit_hash,
+                '--counts-out', csv_path,
+                '--instances-out', '',
+            ],
+            check=True,
+        )
+        index_entries.append({
+            'date': date_label,
+            'file': csv_filename,
+        })
+        step += args.step_months
 
-if __name__ == "__main__":
+    index_path = os.path.join(args.out_dir, 'index.json')
+    with open(index_path, 'w', encoding='utf8') as f:
+        json.dump(index_entries, f, indent=4)
+    print(f"\nDone! Generated {len(index_entries)} snapshots and updated {index_path}.")
+
+
+if __name__ == '__main__':
     main()
