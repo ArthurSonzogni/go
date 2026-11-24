@@ -92,6 +92,16 @@ VALID_CPP_IDENT_RE = re.compile(
     r'^(?:::)?[A-Za-z_][A-Za-z0-9_]*(?:::[A-Za-z_][A-Za-z0-9_]*)*$'
 )
 CV_QUALIFIER_RE = re.compile(r'\b(?:const|volatile)\b')
+OBJC_CLASS_RE = re.compile(r'^NS[A-Z][A-Za-z0-9_]*$')
+OBJC_CONTAINERS = frozenset({
+    'NSArray',
+    'NSCache',
+    'NSDictionary',
+    'NSMutableArray',
+    'NSMutableDictionary',
+    'NSMutableSet',
+    'NSSet',
+})
 CLASS_OR_STRUCT_WORD_RE = re.compile(rb'\b(?:class|struct|union)\b')
 # Strip Chromium export/thread-safety macros that break Tree-sitter's class/field
 # parsing, replacing with spaces of the same length so line numbers stay exact.
@@ -265,6 +275,14 @@ def is_raw_pointer_type(node, root=None):
     return False
 
 
+def is_static_member(field_node):
+    """Checks if a class member declaration is static (global storage, not a FieldDecl)."""
+    for child in field_node.children:
+        if child.type == 'storage_class_specifier' and child.text == b'static':
+            return True
+    return False
+
+
 def is_method_declaration(field_node):
     type_node = field_node.child_by_field_name('type')
     for child in field_node.children:
@@ -312,7 +330,12 @@ def is_ignored_ptr_type(node):
     # Normalize cv-qualifiers, pointers/references, and leading :: for handle lookup
     base_type = CV_QUALIFIER_RE.sub('', raw_text)
     base_type = ''.join(base_type.split()).rstrip('*&').lstrip(':')
-    return base_type in EXCLUDED_POINTER_TYPES
+    if base_type in EXCLUDED_POINTER_TYPES:
+        return True
+    # Ignore Objective-C object pointers (e.g. NSWindow*, NSView*, NSMenuItem*)
+    if OBJC_CLASS_RE.match(base_type):
+        return True
+    return False
 
 
 def get_default_counts():
@@ -365,7 +388,7 @@ def process_file(args):
             if has_stack_allocated_macro(class_body) or b'RAW_PTR_EXCLUSION' in field_node.text:
                 continue
 
-            if is_method_declaration(field_node):
+            if is_method_declaration(field_node) or is_static_member(field_node):
                 continue
 
             args_node = tmpl_node.child_by_field_name('arguments')
@@ -373,7 +396,7 @@ def process_file(args):
                 continue
 
             container_name = get_container_name(field_node)
-            if not container_name:
+            if not container_name or container_name in OBJC_CONTAINERS:
                 continue
 
             found_raw_ptr_or_ref = False

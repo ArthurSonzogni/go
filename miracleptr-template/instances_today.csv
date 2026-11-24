@@ -62,7 +62,6 @@ ash/quick_pair/fast_pair_handshake/fast_pair_gatt_service_client_lookup_impl.h,F
 ash/quick_pair/keyed_service/battery_update_message_handler.h,FALSE,base::flat_map,1,68,"base::flat_map<std::string, raw_ptr<MessageStream>>"
 ash/quick_pair/message_stream/fake_message_stream_lookup.h,FALSE,base::flat_map,1,46,"base::flat_map<std::string, raw_ptr<MessageStream>>"
 ash/quick_pair/pairing/retroactive_pairing_detector_impl.h,FALSE,base::flat_map,1,175,"base::flat_map<std::string, raw_ptr<MessageStream>>"
-ash/root_window_controller.h,FALSE,std::vector,1,364,std::vector<raw_ptr<RootWindowController>>
 ash/sensor_info/sensor_provider_unittest.cc,TRUE,std::map,1,144,"std::map<int32_t, raw_ptr<chromeos::sensors::FakeSensorDevice>>"
 ash/session/test_pref_service_provider.h,TRUE,base::flat_map,1,52,"base::flat_map<AccountId, raw_ptr<PrefService>>"
 ash/shelf/drag_window_from_shelf_controller.cc,FALSE,std::vector,1,208,"std::vector<raw_ptr<aura::Window, DanglingUntriaged>>"
@@ -78,9 +77,7 @@ ash/system/audio/unified_audio_detailed_view_controller_unittest.cc,TRUE,std::ma
 ash/system/audio/unified_audio_detailed_view_controller_unittest.cc,TRUE,std::map,1,343,"std::map<uint64_t, raw_ptr<views::View, DanglingUntriaged>>"
 ash/system/audio/unified_audio_detailed_view_controller_unittest.cc,TRUE,std::map,1,345,"std::map<uint64_t, raw_ptr<views::View, DanglingUntriaged>>"
 ash/system/audio/unified_audio_detailed_view_controller_unittest.cc,TRUE,std::map,1,346,"std::map<uint64_t, raw_ptr<views::View, DanglingUntriaged>>"
-ash/system/audio/unified_volume_view.h,FALSE,std::array,0,56,"std::array<const gfx::VectorIcon*, 3>"
 ash/system/bluetooth/bluetooth_device_list_controller_impl.h,FALSE,base::flat_map,1,70,"base::flat_map<std::string, raw_ptr<BluetoothDeviceListItemView, DanglingUntriaged>>"
-ash/system/brightness/unified_brightness_view.h,FALSE,std::array,0,47,"std::array<const gfx::VectorIcon*, 3>"
 ash/system/cast/cast_detailed_view.h,FALSE,std::map,0,92,"std::map<views::View*, std::string>"
 ash/system/focus_mode/focus_mode_detailed_view.cc,FALSE,std::vector,1,243,std::vector<raw_ptr<views::View>>
 ash/system/focus_mode/sounds/sound_section_view.h,FALSE,std::vector,1,65,std::vector<raw_ptr<PlaylistView>>
@@ -176,7 +173,6 @@ ash/wm/workspace/workspace_event_handler_unittest.cc,TRUE,std::vector,1,107,std:
 ash/wm/workspace/workspace_layout_manager.h,FALSE,std::set,1,183,"std::set<raw_ptr<aura::Window, DanglingUntriaged>>"
 ash/wm/workspace/workspace_window_resizer.h,FALSE,std::vector,1,182,"std::vector<raw_ptr<aura::Window, DanglingUntriaged>>"
 base/allocator/dispatcher/initializer_unittest.cc,TRUE,std::map,0,52,"std::map<void*, std::function<void()>>"
-base/allocator/dispatcher/internal/dispatcher_internal.h,FALSE,std::tuple,0,400,std::tuple<ObserverTypes*...>
 base/allocator/dispatcher/tls.h,FALSE,std::atomic,0,291,std::atomic<ChunkT*>
 base/allocator/dispatcher/tls.h,FALSE,std::atomic,0,469,std::atomic<Chunk*>
 base/allocator/partition_allocator/src/partition_alloc/pointers/instance_tracer.cc,FALSE,std::array,0,39,"std::array<const void*, 32>"
@@ -458,7 +454,6 @@ chrome/browser/media/redirection_connector.h,FALSE,std::map,0,85,"std::map<Remot
 chrome/browser/media/router/discovery/mdns/dns_sd_registry_unittest.cc,TRUE,std::map,1,66,"std::map<std::string, raw_ptr<MockDnsSdDeviceLister, DanglingUntriaged>>"
 chrome/browser/media/router/logger_list.h,FALSE,std::set,1,59,std::set<raw_ptr<LoggerImpl>>
 chrome/browser/media/router/mojo/media_router_desktop.h,FALSE,std::vector,1,429,std::vector<raw_ptr<MediaRoutesObserver>>
-chrome/browser/media/router/providers/cast/cast_activity_test_base.h,TRUE,std::vector,1,71,std::vector<raw_ptr<MockCastSessionClient>>
 chrome/browser/media/webrtc/capture_handle_browsertest.cc,TRUE,std::vector,1,321,"std::vector<raw_ptr<WebContents, DanglingUntriaged>>"
 chrome/browser/media/webrtc/media_stream_capture_indicator.h,FALSE,std::unordered_map,0,148,"std::unordered_map<content::WebContents*, std::unique_ptr<WebContentsDeviceUsage>>"
 chrome/browser/media/webrtc/permission_bubble_media_access_handler.h,FALSE,std::map,0,96,"std::map<content::WebContents*, std::vector<DismissalRecord>>"
@@ -676,11 +671,8 @@ chrome/browser/ui/browser_window/public/global_browser_collection.h,FALSE,std::v
 chrome/browser/ui/browser_window/public/global_browser_collection.h,FALSE,std::vector,1,93,std::vector<raw_ptr<BrowserWindowInterface>>
 chrome/browser/ui/cocoa/bookmarks/bookmark_menu_bridge.h,FALSE,std::map,0,213,"std::map<const bookmarks::BookmarkNode*, NSMenuItem*>"
 chrome/browser/ui/cocoa/history_menu_bridge.h,FALSE,std::vector,1,112,"std::vector<raw_ptr<HistoryItem, DanglingUntriaged>>"
-chrome/browser/ui/cocoa/history_menu_bridge.h,FALSE,std::map,0,306,"std::map<NSMenuItem*, std::unique_ptr<HistoryItem>>"
 chrome/browser/ui/cocoa/tab_menu_bridge.h,FALSE,std::map,1,96,"std::map<NSMenuItem*, raw_ptr<tabs::TabInterface>>"
-chrome/browser/ui/cocoa/tab_menu_bridge.h,FALSE,std::map,0,96,"std::map<NSMenuItem*, raw_ptr<tabs::TabInterface>>"
 chrome/browser/ui/cocoa/tab_menu_bridge.h,FALSE,std::map,1,99,"std::map<raw_ptr<tabs::TabInterface>, NSMenuItem*>"
-chrome/browser/ui/cocoa/tab_menu_bridge.h,FALSE,std::map,0,99,"std::map<raw_ptr<tabs::TabInterface>, NSMenuItem*>"
 chrome/browser/ui/exclusive_access/exclusive_access_manager.h,FALSE,base::flat_set,1,129,base::flat_set<raw_ptr<ExclusiveAccessControllerBase>>
 chrome/browser/ui/fuzzy_search/fuzzy_finder.h,FALSE,std::vector,1,138,std::vector<raw_ptr<FuzzySearchItem>>
 chrome/browser/ui/global_error/global_error_service.h,FALSE,std::map,0,83,"std::map<GlobalError*, std::unique_ptr<GlobalError>>"
@@ -719,16 +711,6 @@ chrome/browser/ui/thumbnails/thumbnail_scheduler_impl.h,FALSE,std::map,0,58,"std
 chrome/browser/ui/thumbnails/thumbnail_tracker.h,FALSE,base::flat_map,0,63,"base::flat_map<content::WebContents*, std::unique_ptr<ContentsData>>"
 chrome/browser/ui/thumbnails/thumbnail_tracker_unittest.cc,TRUE,std::map,0,88,"std::map<content::WebContents*, ThumbnailData>"
 chrome/browser/ui/views/app_menu/action_app_menu.h,FALSE,base::flat_map,1,201,"base::flat_map<int, raw_ptr<actions::BaseAction>>"
-chrome/browser/ui/views/app_menu/app_menu_action_item.h,FALSE,ui::ClassProperty,0,78,ui::ClassProperty<std::u16string*>
-chrome/browser/ui/views/app_menu/app_menu_action_item.h,FALSE,ui::ClassProperty,0,79,ui::ClassProperty<gfx::Range*>
-chrome/browser/ui/views/app_menu/app_menu_action_item.h,FALSE,ui::ClassProperty,0,80,ui::ClassProperty<ui::ImageModel*>
-chrome/browser/ui/views/app_menu/app_menu_action_item.h,FALSE,ui::ClassProperty,0,81,ui::ClassProperty<ui::ImageModel*>
-chrome/browser/ui/views/app_menu/app_menu_action_item.h,FALSE,ui::ClassProperty,0,82,ui::ClassProperty<std::u16string*>
-chrome/browser/ui/views/app_menu/app_menu_action_item.h,FALSE,ui::ClassProperty,0,83,ui::ClassProperty<std::u16string*>
-chrome/browser/ui/views/app_menu/app_menu_action_item.h,FALSE,ui::ClassProperty,0,84,ui::ClassProperty<std::u16string*>
-chrome/browser/ui/views/app_menu/app_menu_action_item.h,FALSE,ui::ClassProperty,0,86,ui::ClassProperty<std::u16string*>
-chrome/browser/ui/views/app_menu/app_menu_action_item.h,FALSE,ui::ClassProperty,0,90,ui::ClassProperty<const base::Feature*>
-chrome/browser/ui/views/app_menu/app_menu_action_item.h,FALSE,ui::ClassProperty,0,94,ui::ClassProperty<AppMenuDragAndDropDelegate*>
 chrome/browser/ui/views/app_menu/bookmarks_dynamic_menu.h,FALSE,std::variant,1,54,"std::variant<BookmarkParentFolder, raw_ptr<const bookmarks::BookmarkNode>>"
 chrome/browser/ui/views/autofill/address_editor_view.h,FALSE,std::unordered_map,0,99,"std::unordered_map<views::Textfield*, const EditorField>"
 chrome/browser/ui/views/autofill/payments/filled_card_information_bubble_views.h,FALSE,std::map,1,90,"std::map<FilledCardInformationBubbleField, raw_ptr<views::MdTextButton>>"
@@ -875,7 +857,6 @@ chrome/test/interaction/interactive_browser_test_interactive_uitest.cc,TRUE,std:
 chrome/test/media_router/access_code_cast/access_code_cast_integration_browsertest.h,TRUE,std::vector,1,168,std::vector<raw_ptr<MediaSinksObserver>>
 chrome/test/media_router/access_code_cast/access_code_cast_integration_browsertest.h,TRUE,std::vector,1,169,std::vector<raw_ptr<media_router::MediaRoutesObserver>>
 chrome/test/user_education/interactive_feature_promo_test_internal.h,TRUE,std::map,0,116,"std::map<Profile*, ProfileData>"
-chrome/updater/net/chunk_queue.h,FALSE,NSMutableArray,0,66,NSMutableArray<NSData*>
 chrome/updater/win/ui/message_loop.h,FALSE,std::vector,1,52,std::vector<raw_ptr<MessageFilter>>
 chrome/utility/importer/edge_importer_win.cc,FALSE,std::vector,1,61,"std::vector<raw_ptr<const EdgeFavoriteEntry, DanglingUntriaged>>"
 chrome/windows_services/elevated_tracing_service/session_registry.cc,FALSE,std::atomic,0,41,std::atomic<IUnknown*>
@@ -1172,7 +1153,6 @@ components/push_notification/push_notification_client_manager.h,FALSE,base::flat
 components/regional_capabilities/regional_capabilities_service.h,FALSE,std::optional,1,291,std::optional<raw_ref<const ProgramSettings>>
 components/regional_capabilities/regional_capabilities_utils.h,FALSE,std::vector,1,121,std::vector<raw_ptr<const TemplateURLPrepopulateData::PrepopulatedEngine>>
 components/regional_capabilities/regional_capabilities_utils.h,FALSE,std::vector,1,123,std::vector<raw_ptr<const TemplateURLPrepopulateData::PrepopulatedEngine>>
-components/remote_cocoa/app_shim/immersive_mode_controller_cocoa.h,FALSE,std::set,0,214,std::set<NSWindow*>
 components/remote_cocoa/app_shim/native_widget_ns_window_bridge.h,FALSE,std::vector,1,516,std::vector<raw_ptr<NativeWidgetNSWindowBridge>>
 components/safe_browsing/content/browser/navigation_observer/safe_browsing_navigation_observer_manager.h,FALSE,base::flat_map,0,198,"base::flat_map<content::NavigationHandle*, std::unique_ptr<NavigationEvent>>"
 components/safe_browsing/content/browser/password_protection/password_protection_request_content.h,FALSE,std::set,1,166,std::set<raw_ptr<PasswordProtectionCommitDeferringCondition>>
@@ -1707,9 +1687,7 @@ printing/backend/cups_ipp_helper_unittest.cc,TRUE,std::map,1,128,"std::map<std::
 remoting/host/audio_capturer_mac.cc,FALSE,base::flat_set,1,62,base::flat_set<raw_ptr<AudioCapturerMac>>
 remoting/host/ftl_echo_message_listener_unittest.cc,TRUE,std::set,1,96,std::set<raw_ptr<FtlSignalStrategy::FtlListener>>
 remoting/host/ftl_host_change_notification_listener_unittest.cc,TRUE,std::set,1,87,std::set<raw_ptr<FtlSignalStrategy::FtlListener>>
-remoting/host/privacy_overlay_mac.h,FALSE,NSMutableArray,0,227,NSMutableArray<PrivacyOverlayBackdropWindow*>
 remoting/host/win/rdp_client_window.cc,FALSE,base::AutoReset,0,144,base::AutoReset<WindowHook*>
-remoting/protocol/data_channel_manager_unittest.cc,TRUE,std::map,0,58,"std::map<std::string, FakeNamedMessagePipeHandler*>"
 remoting/protocol/fake_webrtc_audio_classes.h,FALSE,std::vector,1,39,std::vector<raw_ptr<webrtc::AudioTrackSinkInterface>>
 remoting/protocol/jingle_session.h,FALSE,std::vector,1,187,std::vector<raw_ptr<SessionPlugin>>
 sandbox/win/src/top_level_dispatcher.h,FALSE,base::flat_map,0,53,"base::flat_map<IpcTag, Dispatcher*>"
@@ -1915,7 +1893,6 @@ ui/base/interaction/anchored_dialog_registry_unittest.cc,TRUE,std::vector,1,88,s
 ui/base/interaction/element_tracker.cc,FALSE,std::list,1,156,"std::list<raw_ptr<TrackedElement, DanglingUntriaged>>"
 ui/base/interaction/element_tracker.cc,FALSE,std::set,1,220,"std::set<raw_ptr<ElementData, DanglingUntriaged>>"
 ui/base/interaction/element_tracker.h,FALSE,std::list,1,289,"std::list<raw_ptr<TrackedElement, DanglingUntriaged>>"
-ui/base/interaction/element_tracker_mac.h,FALSE,std::map,0,90,"std::map<NSMenu*, MenuData>"
 ui/base/interaction/interactive_test_internal.h,TRUE,std::list,1,415,std::list<raw_ptr<InteractionSequence>>
 ui/base/metadata/metadata_cache.h,FALSE,std::vector,1,41,std::vector<raw_ptr<ClassMetaData>>
 ui/base/metadata/metadata_types.h,FALSE,std::vector,1,179,std::vector<raw_ptr<MemberMetaDataBase>>
