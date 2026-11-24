@@ -92,6 +92,7 @@ VALID_CPP_IDENT_RE = re.compile(
     r'^(?:::)?[A-Za-z_][A-Za-z0-9_]*(?:::[A-Za-z_][A-Za-z0-9_]*)*$'
 )
 CV_QUALIFIER_RE = re.compile(r'\b(?:const|volatile)\b')
+CLASS_OR_STRUCT_WORD_RE = re.compile(rb'\b(?:class|struct|union)\b')
 
 # ==========================================
 # 2. Helper Functions
@@ -161,25 +162,39 @@ def get_container_name(node):
     return name
 
 
-def is_local_variable(node):
-    """Checks if a declaration is inside a method/function body."""
+def has_stack_allocated_macro(body_node):
+    """Checks if a class/struct body directly contains STACK_ALLOCATED()."""
+    if body_node is None:
+        return False
+    for child in body_node.children:
+        if child.type in ('class_specifier', 'struct_specifier', 'union_specifier'):
+            continue
+        if b'STACK_ALLOCATED' in child.text:
+            return True
+    return False
+
+
+def get_enclosing_class_body(node):
+    """
+    Returns the enclosing class/struct/union body node if this declaration is a
+    member field, or None if it is a local variable or namespace/file-scope global.
+    """
     parent = node.parent
     while parent:
-        # If we hit a block scope before a class scope, it's a local variable.
         if parent.type == 'compound_statement':
-            # Check if this compound statement belongs to a function that's actually a class
-            # because of misparsing (e.g. class CONTENT_EXPORT MyClass { ... })
+            # Handle misparsed classes like `class CONTENT_EXPORT MyClass { ... }`
             grandparent = parent.parent
             if grandparent and grandparent.type == 'function_definition':
                 ret_type = grandparent.child_by_field_name('type')
-                if ret_type and (b'class' in ret_type.text or b'struct' in ret_type.text):
-                    return False
-            return True
-        # If we hit a class/struct first, it's a member field (even if parsed poorly).
+                if ret_type and CLASS_OR_STRUCT_WORD_RE.search(ret_type.text):
+                    return parent
+            return None
+        if parent.type == 'field_declaration_list':
+            return parent
         if parent.type in ('class_specifier', 'struct_specifier', 'union_specifier'):
-            return False
+            return parent.child_by_field_name('body') or parent
         parent = parent.parent
-    return False
+    return None
 
 
 def is_raw_ptr_or_ref(node):
@@ -328,8 +343,13 @@ def process_file(args):
             field_node = field_nodes[0] if isinstance(field_nodes, list) else field_nodes
             tmpl_node = tmpl_nodes[0] if isinstance(tmpl_nodes, list) else tmpl_nodes
 
-            # Filter out variables declared inside function bodies
-            if field_node.type == 'declaration' and is_local_variable(field_node):
+            # Must be a class/struct/union member (skip locals and namespace/file globals)
+            class_body = get_enclosing_class_body(field_node)
+            if class_body is None:
+                continue
+
+            # Skip STACK_ALLOCATED() classes/structs and RAW_PTR_EXCLUSION fields
+            if has_stack_allocated_macro(class_body) or b'RAW_PTR_EXCLUSION' in field_node.text:
                 continue
 
             if is_method_declaration(field_node):
